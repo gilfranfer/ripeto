@@ -1,4 +1,4 @@
-var ripetoApp = angular.module('ripetoApp',['ngRoute']);
+var ripetoApp = angular.module('ripetoApp',['ngRoute','firebase']);
 
 /*
 Basic controller example:
