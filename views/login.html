@@ -1,9 +1,10 @@
 <section>
 <div class="card">
-	<form name="loginForm" novalidate>
+	<form name="loginForm" novalidate ng-submit="login()">
 		<div class="textintro">
 			<h1>Hi There Oompa Loompa!</h1>
 			<p>Log-in to access the awesomeness!</p>
+			<p ng-show="message">{{message}}</p>
 		</div>
 		<fieldset>
 			<input type="email" name="email" placeholder="Email"
@@ -22,10 +23,12 @@
 			</p>
 		</fieldset>
 
-		<button type="submit" class="btn">Go In!</button>
+		<button type="submit" class="btn" ng-disabled="loginForm.$invalid">
+			Go In!
+		</button>
 		<p>
 			or Register 
-			<a href="#!/register">HERE!</a>
+			<a ng-href="#!/register">HERE!</a>
 		</p>
 	</form>
 </div>
