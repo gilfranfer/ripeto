@@ -1,14 +1,23 @@
-ripetoApp.factory( 'AuthenticationSvc', ['$rootScope', '$firebaseAuth',
+ripetoApp.factory( 'AuthenticationSvc', ['$rootScope', '$location','$firebaseAuth',
 	
-	function($rootScope, $firebaseAuth){
+	function($rootScope, $location,$firebaseAuth){
 		
 		var ref = firebase.database().ref();
 		var auth = $firebaseAuth();
-		var users_folder = 'users';
+		var usersFolder = 'users';
+		var loginSuccessPage = '/success';
 
 		return{
 			login: function(user){
-				$rootScope.message = "Welcome " + user.email;
+				auth.$signInWithEmailAndPassword(
+					user.email,user.pwd
+				).then( function (user){
+					$location.path( loginSuccessPage );
+				}).catch( function(error){
+					$rootScope.message = error.message;
+				});
+
+				//$rootScope.message = "Welcome " + user.email;
 			},
 			register: function(user){
 				auth.$createUserWithEmailAndPassword(
@@ -19,7 +28,7 @@ ripetoApp.factory( 'AuthenticationSvc', ['$rootScope', '$firebaseAuth',
 				function(regUser){
 					console.log(user);
 					console.log(firebase.database.ServerValue.TIMESTAMP);
-					var regRef = ref.child(users_folder).child(regUser.uid).set({
+					var regRef = ref.child(usersFolder).child(regUser.uid).set({
 						firstname: user.firstname,
 						lastname: user.lastname,
 						email: user.email,
