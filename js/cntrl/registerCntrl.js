@@ -1,29 +1,18 @@
 ripetoApp.controller('RegisterCntrl',
-	['$scope', '$firebase', '$firebaseAuth',
+	['$scope', 'AuthenticationSvc',
 
-	function($scope,$firebase,$firebaseAuth){
+	function($scope, AuthenticationSvc){
 		
 		$scope.login = function(){
-			$scope.message = "Welcome again!";
+			AuthenticationSvc.login($scope.user);
 		};
 		
 
-		var ref = firebase.database().ref();
-		var auth = $firebaseAuth();
-
 		$scope.register = function(){
-			
-			auth.$createUserWithEmailAndPassword(
-					$scope.user.email, $scope.user.pwd
-				).then( function(regUser){
-					$scope.message = $scope.user.firstname + 
-						" you are now part of the awesomeness";
-				} ).catch( function(error){
-					$scope.message = error.message;
-				});
+			AuthenticationSvc.register($scope.user);
 		};
-	}]
-);
+	}]//function
+);//controller
 
 ripetoApp.controller('SuccessCntrl',['$scope',
 	function($scope){
