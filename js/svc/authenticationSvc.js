@@ -1,11 +1,24 @@
-ripetoApp.factory( 'AuthenticationSvc', ['$rootScope', '$location','$firebaseAuth',
+ripetoApp.factory( 'AuthenticationSvc', ['$rootScope', '$location','$firebaseObject','$firebaseAuth', 
 	
-	function($rootScope, $location,$firebaseAuth){
+	function($rootScope, $location,$firebaseObject,$firebaseAuth){
 		
 		var ref = firebase.database().ref();
 		var auth = $firebaseAuth();
 		var usersFolder = 'users';
 		var loginSuccessPage = '/success';
+
+		auth.$onAuthStateChanged( function(authUser){
+			if(authUser){
+				var userRef = ref.child(usersFolder).child(authUser.uid);
+				var userObj = $firebaseObject(userRef);
+				$rootScope.currentUser = userObj;
+    			
+    			//console.log(userObj);
+
+			}else{
+				$rootScope.currentUser = '';				
+			}
+		} );
 
 		return{
 			login: function(user){
@@ -19,6 +32,7 @@ ripetoApp.factory( 'AuthenticationSvc', ['$rootScope', '$location','$firebaseAut
 
 				//$rootScope.message = "Welcome " + user.email;
 			},
+			//logout: function(){},
 			register: function(user){
 				auth.$createUserWithEmailAndPassword(
 						user.email, user.pwd
@@ -26,8 +40,6 @@ ripetoApp.factory( 'AuthenticationSvc', ['$rootScope', '$location','$firebaseAut
 				/* Use firebase uid from the record created to
 				 * save more user details in our users folder */ 
 				function(regUser){
-					console.log(user);
-					console.log(firebase.database.ServerValue.TIMESTAMP);
 					var regRef = ref.child(usersFolder).child(regUser.uid).set({
 						firstname: user.firstname,
 						lastname: user.lastname,
@@ -38,6 +50,7 @@ ripetoApp.factory( 'AuthenticationSvc', ['$rootScope', '$location','$firebaseAut
 
 					$rootScope.message = user.firstname + 
 						" you are now part of the awesomeness";
+					//Clean Form
 				} 
 				).catch( function(error){
 					$rootScope.message = error.message;
