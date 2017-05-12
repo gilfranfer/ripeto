@@ -1,4 +1,4 @@
-ripetoApp.controller('RegisterCntrl',
+ripetoApp.controller('AuthenticationCntrl',
 	['$scope', 'AuthenticationSvc',
 
 	function($scope, AuthenticationSvc){
@@ -7,14 +7,17 @@ ripetoApp.controller('RegisterCntrl',
 			AuthenticationSvc.login($scope.user);
 		};
 		
-
+		$scope.logout = function(){
+			AuthenticationSvc.logout();
+		};
+		
 		$scope.register = function(){
 			AuthenticationSvc.register($scope.user);
 		};
 	}]//function
 );//controller
 
-ripetoApp.controller('SuccessCntrl',['$scope',
+ripetoApp.controller('HomeCntrl',['$scope',
 	function($scope){
 
 	}

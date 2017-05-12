@@ -16,18 +16,22 @@ ripetoApp.config(['$routeProvider',
 		$routeProvider.
 			when('/login',{
 				templateUrl: 'views/login.html',
-				controller: 'RegisterCntrl'
+				controller: 'AuthenticationCntrl'
 			}).
 			when('/register',{
 				templateUrl: 'views/register.html',
-				controller: 'RegisterCntrl'
+				controller: 'AuthenticationCntrl'
 			}).
-			when('/success', {
-				templateUrl: 'views/success.html',
-				controller: 'SuccessCntrl'
+			when('/home', {
+				templateUrl: 'views/home.html',
+				controller: 'HomeCntrl'
+			}).
+			when('/index', {
+				templateUrl: 'views/index.html',
+				controller: 'HomeCntrl'
 			}).
 			otherwise({
-				redirectTo: 'login'
+				redirectTo: 'index'
 			});
 	}
 ]);

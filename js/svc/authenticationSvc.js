@@ -5,17 +5,17 @@ ripetoApp.factory( 'AuthenticationSvc', ['$rootScope', '$location','$firebaseObj
 		var ref = firebase.database().ref();
 		var auth = $firebaseAuth();
 		var usersFolder = 'users';
-		var loginSuccessPage = '/success';
+		var loginSuccessPage = '/home';
 
 		auth.$onAuthStateChanged( function(authUser){
+    		console.log("on AuthStateChanged ");
 			if(authUser){
 				var userRef = ref.child(usersFolder).child(authUser.uid);
 				var userObj = $firebaseObject(userRef);
 				$rootScope.currentUser = userObj;
-    			
-    			//console.log(userObj);
-
+    		
 			}else{
+				console.log("on AuthStateChanged - Not Authorized ");
 				$rootScope.currentUser = '';				
 			}
 		} );
@@ -25,14 +25,21 @@ ripetoApp.factory( 'AuthenticationSvc', ['$rootScope', '$location','$firebaseObj
 				auth.$signInWithEmailAndPassword(
 					user.email,user.pwd
 				).then( function (user){
+					//update last login value
+					ref.child(usersFolder).child(user.uid).update({
+						lastlogin: firebase.database.ServerValue.TIMESTAMP						
+					});
+					//redirect
 					$location.path( loginSuccessPage );
 				}).catch( function(error){
-					$rootScope.message = error.message;
+					$rootScope.errormessage = error.message;
 				});
 
-				//$rootScope.message = "Welcome " + user.email;
 			},
-			//logout: function(){},
+			logout: function(){
+				console.log("logout");
+				return auth.$signOut();
+			},
 			register: function(user){
 				auth.$createUserWithEmailAndPassword(
 						user.email, user.pwd
@@ -45,15 +52,14 @@ ripetoApp.factory( 'AuthenticationSvc', ['$rootScope', '$location','$firebaseObj
 						lastname: user.lastname,
 						email: user.email,
 						uderid: regUser.uid,
-						date: firebase.database.ServerValue.TIMESTAMP						
+						date: firebase.database.ServerValue.TIMESTAMP,
+						lastlogin: firebase.database.ServerValue.TIMESTAMP						
 					});
-
-					$rootScope.message = user.firstname + 
-						" you are now part of the awesomeness";
-					//Clean Form
+					
+					//$location.path( loginSuccessPage );
 				} 
 				).catch( function(error){
-					$rootScope.message = error.message;
+					$rootScope.errormessage = error.message;
 				});
 			}
 		};//return
