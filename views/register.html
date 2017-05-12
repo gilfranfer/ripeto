@@ -1,19 +1,46 @@
 <section class="card register">
-  <form name="myform" novalidate>
+  <form name="registerForm" novalidate ng-submit="register()">
 
     <div class="textintro">
       <h1>Register</h1>
-      <p>To access site features</p>
+      <p>To be part of Chocolate's Factory</p>
+      <p ng-show="errormessage">{{errormessage}}</p>
     </div>
 
     <fieldset>
-      <input type="text" name="firstname" placeholder="First Name">
-      <input type="text" name="lastname" placeholder="Last Name">
-      <input type="email" name="email" placeholder="Email">
-      <input type="password" name="password" placeholder="Password">
+      <input type="text" name="firstname" placeholder="First Name"
+        ng-model="user.firstname" ng-required="true"/>
+      <p class="error validationerror"
+        ng-show="registerForm.firstname.$invalid &&
+            registerForm.firstname.$touched">
+        First name required
+      </p>
+      <input type="text" name="lastname" placeholder="Last Name"
+        ng-model="user.lastname" ng-required="true"/>
+      <p class="error validationerror"
+        ng-show="registerForm.lastname.$invalid &&
+            registerForm.lastname.$touched">
+        Last name required
+      </p>
+      <input type="email" name="email" placeholder="Email"
+        ng-model="user.email" ng-required="true"/>
+      <p class="error validationerror"
+        ng-show="registerForm.email.$invalid &&
+            registerForm.email.$touched">
+        Must be a valid email
+      </p>
+      <input type="password" name="password" placeholder="Password"
+        ng-model="user.pwd" ng-required="true"/>
+      <p class="error validationerror"
+        ng-show="registerForm.password.$invalid &&
+            registerForm.password.$touched">
+        Password is required
+      </p>
     </fieldset>
 
-    <button type="submit" class="btn">Register</button>
-    <p>or <a href="#/login">login</a></p>
+    <button type="submit" class="btn" ng-disabled="registerForm.$invalid">
+      Register!
+    </button>
+    <p>or <a ng-href="#!/login">login</a></p>
   </form>
 </section>
