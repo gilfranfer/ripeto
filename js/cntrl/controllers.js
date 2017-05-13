@@ -22,3 +22,9 @@ ripetoApp.controller('HomeCntrl',['$scope',
 
 	}
 ]);
+
+ripetoApp.controller('ErrorCntrl',['$scope',
+	function($scope){
+
+	}
+]);

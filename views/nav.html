@@ -1,6 +1,6 @@
 <nav class="cf" ng-controller="AuthenticationCntrl">
   <div class="branding">
-  	<a ng-href="#!/index">Ripeto!</a>
+  	<a ng-href="#!/init">Ripeto!</a>
   </div>
 
   <ul ng-if="!currentUser" >
@@ -9,7 +9,7 @@
   </ul>
   <ul ng-if="currentUser" >
     <li><a ng-href="#!/home">Hi {{currentUser.firstname}}</a></li>
-    <li><a ng-href="#!/index" ng-click="logout()">Logout</a></li>
+    <li><a ng-href="#!/init" ng-click="logout()">Logout</a></li>
   </ul>
   
 </nav>

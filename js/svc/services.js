@@ -8,14 +8,14 @@ ripetoApp.factory( 'AuthenticationSvc', ['$rootScope', '$location','$firebaseObj
 		var loginSuccessPage = '/home';
 
 		auth.$onAuthStateChanged( function(authUser){
-    		console.log("on AuthStateChanged ");
-			if(authUser){
+    		if(authUser){
+				console.log("Auth State Changed - Authorized ");
 				var userRef = ref.child(usersFolder).child(authUser.uid);
 				var userObj = $firebaseObject(userRef);
 				$rootScope.currentUser = userObj;
     		
 			}else{
-				console.log("on AuthStateChanged - Not Authorized ");
+				console.log("Auth State Changed - Not Authorized ");
 				$rootScope.currentUser = '';				
 			}
 		} );
@@ -39,6 +39,11 @@ ripetoApp.factory( 'AuthenticationSvc', ['$rootScope', '$location','$firebaseObj
 			logout: function(){
 				console.log("logout");
 				return auth.$signOut();
+			},
+			isUserLoggedIn: function(){
+				//return auth.$getCurrentUser() != null;
+				return auth.$requireSignIn();
+
 			},
 			register: function(user){
 				auth.$createUserWithEmailAndPassword(
