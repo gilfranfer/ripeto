@@ -328,3 +328,23 @@ input.ng-valid.ng-touched {
   color: red;
   padding-bottom: 10px;
 }
+
+/*  */
+.addActivity {
+    width:100%;
+}
+
+.addActivity .iwrap {
+  margin-right:80px;
+}
+
+.addActivity .iwrap input {
+    float: left;
+    width: 100%;
+}
+
+.addActivity button {
+  width: 60px;
+  margin-left: 20px;
+  vertical-align: center;
+}

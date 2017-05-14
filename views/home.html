@@ -1,16 +1,29 @@
-<section>
+<section class="card cf">
+	<article>
+		<div class="textintro">
+			<h1>Welcome {{currentUser.firstname}}</h1>
+		</div>
 
-<div class="card cf">
-
-  <div class="textintro">
-    <h1>Welcome {{currentUser.firstname}}</h1>
-  </div>
-  <article>
-
-  Home Area of Ripeto
-  	
-
-  </article>
-</div>
-
+		<div class="textintro">
+			<h1>Your Activities</h1>
+		</div>
+		<form class="formgroup addActivity cf" name="addActivityForm"
+			novalidate ng-submit="addActivity()">
+			<div class="iwrap" >
+				<input type="text" name="activityName" 
+					placeholder="Activity Name"
+					ng-model="activityName" ng-required="true"/>
+				
+			</div>
+			<button type="submit" class="btn" 
+				ng-disabled="addActivityForm.$invalid">
+			+
+			</button>
+		</form>
+	</article>
+<script type="text/javascript">
+	function addActivity(){
+		console.log("Hi There");
+	}
+</script>
 </section>
