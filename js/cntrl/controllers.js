@@ -30,15 +30,19 @@ ripetoApp.controller('HomeCntrl',
 							ref.child('users').child(user.uid).child('activities')
 						);
 				
+				$scope.allActivities = allActivities;
+
 				$scope.addActivity = function(){
-					console.log("activities:");
-					console.log(allActivities);
 					allActivities.$add({
 						name: $scope.activityName,
 						date: firebase.database.ServerValue.TIMESTAMP
 					}).then( function(){
 						$scope.activityName = '';
 					});
+				};
+
+				$scope.deleteActivity = function(key){
+					allActivities.$remove(key);
 				};
     		
 			}

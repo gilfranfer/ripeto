@@ -1,29 +1,34 @@
-<section class="card cf">
-	<article>
-		<div class="textintro">
-			<h1>Welcome {{currentUser.firstname}}</h1>
-		</div>
+<article class="card cf">
+	<div class="textintro">
+		<h1>Welcome {{currentUser.firstname}}</h1>
+	</div>
 
-		<div class="textintro">
-			<h1>Your Activities</h1>
+	<div class="textintro">
+		<h1>Add an Activity</h1>
+		<p>Just type the activity name and hit +</p>
+	</div>
+	<form class="formgroup addActivity cf" name="addActivityForm"
+		novalidate ng-submit="addActivity()">
+		<div class="iwrap" >
+			<input type="text" name="activityName" 
+				placeholder="Activity Name"
+				ng-model="activityName" ng-required="true"/>
+			
 		</div>
-		<form class="formgroup addActivity cf" name="addActivityForm"
-			novalidate ng-submit="addActivity()">
-			<div class="iwrap" >
-				<input type="text" name="activityName" 
-					placeholder="Activity Name"
-					ng-model="activityName" ng-required="true"/>
-				
-			</div>
-			<button type="submit" class="btn" 
-				ng-disabled="addActivityForm.$invalid">
-			+
-			</button>
-		</form>
-	</article>
-<script type="text/javascript">
-	function addActivity(){
-		console.log("Hi There");
-	}
-</script>
-</section>
+		<button type="submit" class="btn" 
+			ng-disabled="addActivityForm.$invalid">
+		+
+		</button>
+	</form>
+</article>
+
+<article class="card cf activities">
+	<h2> Your Activities </h2>
+	<div class="activity" ng-repeat="(key,activity) in allActivities">
+		<button class="btn btn-delete tooltip"
+			ng-click="deleteActivity(key)">
+			<span>Delete this Activity?</span>
+		</button>
+		<span class="text">{{activity.name}}</span>
+	</div>
+</article>
