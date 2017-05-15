@@ -10,34 +10,46 @@
     <fieldset>
       <input type="text" name="firstname" placeholder="First Name"
         ng-model="user.firstname" ng-required="true"/>
-      <p class="error validationerror"
-        ng-show="registerForm.firstname.$invalid &&
-            registerForm.firstname.$touched">
-        First name required
-      </p>
+        <p class="error validationerror"
+          ng-show="registerForm.firstname.$invalid &&
+              registerForm.firstname.$touched">
+          First name required
+        </p>
       <input type="text" name="lastname" placeholder="Last Name"
         ng-model="user.lastname" ng-required="true"/>
-      <p class="error validationerror"
-        ng-show="registerForm.lastname.$invalid &&
-            registerForm.lastname.$touched">
-        Last name required
-      </p>
+        <p class="error validationerror"
+          ng-show="registerForm.lastname.$invalid &&
+              registerForm.lastname.$touched">
+          Last name required
+        </p>
       <input type="email" name="email" placeholder="Email"
         ng-model="user.email" ng-required="true"/>
-      <p class="error validationerror"
-        ng-show="registerForm.email.$invalid &&
-            registerForm.email.$touched">
-        Must be a valid email
-      </p>
+        <p class="error validationerror"
+          ng-show="registerForm.email.$invalid &&
+              registerForm.email.$touched">
+          Must be a valid email
+        </p>
       <input type="password" name="password" placeholder="Password"
-        ng-model="user.pwd" ng-required="true"/>
-      <p class="error validationerror"
-        ng-show="registerForm.password.$invalid &&
-            registerForm.password.$touched">
-        Password is required
-      </p>
-    </fieldset>
+        ng-model="user.pwd" ng-required="true" ng-minlength="8"/>
+        <p class="error validationerror"
+          ng-show="registerForm.password.$invalid &&
+              registerForm.password.$touched">
+          Password is Required
+        </p>
+        <p class="error validationerror"
+          ng-show="registerForm.password.$error.minlength">
+          Password must be 8 chars or more
+        </p>
 
+      <input type="password" name="passwordConfirm" placeholder="Confirm Password"
+        ng-model="user.pwdconf" ng-required="true" ng-pattern="user.pwd"/>
+        <p class="error validationerror"
+          ng-show="registerForm.passwordConfirm.$invalid &&
+              registerForm.passwordConfirm.$touched">
+          Password must match
+        </p>
+    </fieldset>
+    
     <button type="submit" class="btn" ng-disabled="registerForm.$invalid">
       Register!
     </button>
