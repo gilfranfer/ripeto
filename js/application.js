@@ -41,7 +41,6 @@ ripetoApp.config(['$routeProvider',
 ripetoApp.run( ['$rootScope', '$location', function($rootScope,$location){
 
 	$rootScope.$on('$routeChangeError', function( event, next, previous, error){
-		console.log("RUN:"+error);
 		if(error == 'AUTH_REQUIRED'){
 			$location.path('/error-login');
 		}else{		

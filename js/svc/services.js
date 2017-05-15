@@ -37,13 +37,10 @@ ripetoApp.factory( 'AuthenticationSvc', ['$rootScope', '$location','$firebaseObj
 
 			},
 			logout: function(){
-				console.log("logout");
 				return auth.$signOut();
 			},
 			isUserLoggedIn: function(){
-				//return auth.$getCurrentUser() != null;
 				return auth.$requireSignIn();
-
 			},
 			register: function(user){
 				auth.$createUserWithEmailAndPassword(
@@ -61,7 +58,7 @@ ripetoApp.factory( 'AuthenticationSvc', ['$rootScope', '$location','$firebaseObj
 						lastlogin: firebase.database.ServerValue.TIMESTAMP						
 					});
 					
-					//$location.path( loginSuccessPage );
+					$location.path( loginSuccessPage );
 				} 
 				).catch( function(error){
 					$rootScope.errormessage = error.message;

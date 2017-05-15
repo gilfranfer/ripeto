@@ -49,8 +49,8 @@
           Password must match
         </p>
     </fieldset>
-{{user.firstname == user.lastname}}
-    <button type="submit" class="btn" ng-enabled="registerForm.$valid">
+    
+    <button type="submit" class="btn" ng-disabled="registerForm.$invalid">
       Register!
     </button>
     <p>or <a ng-href="#!/login">login</a></p>
