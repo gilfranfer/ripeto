@@ -428,3 +428,21 @@ input.ng-valid.ng-touched {
        -o-transform: translateY(0px);
           transform: translateY(0px);
 }
+
+.badge {
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  background-color: #E76C5A;
+  border-radius: 10px;
+}
+.badge:empty {
+  display: none;
+}

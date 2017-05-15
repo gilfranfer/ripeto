@@ -18,8 +18,8 @@ ripetoApp.controller('AuthenticationCntrl',
 );//controller
 
 ripetoApp.controller('HomeCntrl',
-	['$scope', '$firebaseAuth', '$firebaseArray',
-	function($scope, $firebaseAuth, $firebaseArray){
+	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray',
+	function($scope, $rootScope, $firebaseAuth, $firebaseArray){
 
 		var ref = firebase.database().ref();
 		var auth = $firebaseAuth();
@@ -31,6 +31,14 @@ ripetoApp.controller('HomeCntrl',
 						);
 				
 				$scope.allActivities = allActivities;
+				
+				allActivities.$loaded().then( function(data){
+					$rootScope.activitiesCounter = allActivities.length;
+				} );
+
+				allActivities.$watch( function(data){
+					$rootScope.activitiesCounter = allActivities.length;
+				} );
 
 				$scope.addActivity = function(){
 					allActivities.$add({
