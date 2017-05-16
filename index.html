@@ -38,9 +38,10 @@
 		
 	</head>
 	<body>
-		<header ng-include="'views/nav.html'" ></header>
+		<header ng-include="'views/nav.html'" ng-controller="ActivityCntrl"></header>
 		<div class="page">
 			<main class="cf" ng-view></main>
 		</div>
+		<footer ng-include="'views/footer.html'"></footer>
 	</body>
 </html>
