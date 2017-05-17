@@ -5,6 +5,17 @@
 	<div class="textintro">
     	<h1>Your List</h1>
   	</div>
+  	<br/>
+  	<div class="card cf activities">
+		<h2> Tasks </h2>
+		<div class="activity" ng-repeat="(key,task) in allTasks">
+			<button class="btn btn-checkin tooltip"
+				ng-click="deleteTask(key)">
+				<span>Complete this Task?</span>
+			</button>
+			<span class="text">{{task.name}}</span>
+		</div>
+	</div>
 	<br/>
   	<div class="card cf activities">
 		<h2> Recurrent Activities </h2>
@@ -21,16 +32,6 @@
 		</div>
 	</div>
 
-	<div class="card cf activities">
-		<h2> Tasks </h2>
-		<div class="activity" ng-repeat="(key,task) in allTasks">
-			<button class="btn btn-checkin tooltip"
-				ng-click="deleteTask(key)">
-				<span>Complete this Task?</span>
-			</button>
-			<span class="text">{{task.name}}</span>
-		</div>
-	</div>
 
 </article>
 
