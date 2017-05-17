@@ -8,8 +8,13 @@
     <li><a ng-href="#!/login">Login</a></li>
   </ul>
   <ul ng-if="currentUser" >
-    <li><a ng-href="#!/home">Hi {{currentUser.firstname}}</a></li>
     <li><a ng-href="#!/init" ng-click="logout()">Logout</a></li>
+    <li><a ng-href="#!/config">Hi {{currentUser.firstname}}</a></li>
+    <li><a ng-href="#!/activities">
+      Activities
+      <span ng-show="activitiesCounter" class="badge">{{totalCounter}}</span>
+        </a>
+    </li>
   </ul>
   
 </nav>

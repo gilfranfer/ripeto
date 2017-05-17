@@ -11,9 +11,18 @@ ripetoApp.config(['$routeProvider',
 				templateUrl: 'views/register.html',
 				controller: 'AuthenticationCntrl'
 			}).
-			when('/home', {
-				templateUrl: 'views/home.html',
-				controller: 'HomeCntrl',
+			when('/config', {
+				templateUrl: 'views/addactivities.html',
+				controller: 'ActivityCntrl',
+				resolve: {
+					currentAuth: function(AuthenticationSvc){
+						return AuthenticationSvc.isUserLoggedIn();
+					}
+				}
+			}).
+			when('/activities', {
+				templateUrl: 'views/activities.html',
+				controller: 'ActivityCntrl',
 				resolve: {
 					currentAuth: function(AuthenticationSvc){
 						return AuthenticationSvc.isUserLoggedIn();

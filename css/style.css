@@ -110,7 +110,7 @@ body  {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Lato', serif;
+  font-family: Lato, 'Helvetica Nueue', Helvetica, Arial, sans-serif;
   font-weight: 100;
   text-shadow: 1px 1px rgb(255,255,255, 1);
 }
@@ -131,7 +131,7 @@ h1{
   margin-bottom: 10px;
   padding-top: 10px;
   font-weight: 700;
-    font-family: Lato,appleLogo,sans-serif;
+    font-family: Lato, 'Helvetica Nueue', Helvetica, Arial, sans-serif;
     margin: 0 0 1rem;
 }
 
@@ -294,6 +294,13 @@ input[type=radio] {
 .btn .btn-right { float: right; }
 .btn:hover { background-color: #DC322F; }
 
+.btn-list { background-image: url(../images/icons/icon_list.png); }
+.btn-checkin { background-color: #859835; background-image: url(../images/icons/icon_checkmark.png); }
+.btn-delete { background-color: #C94C24; background-image: url(../images/icons/icon_trash.png); }
+.btn-love { background-image: url(../images/icons/icon_heart.png); }
+.btn-email { background-image: url(../images/icons/icon_email.png); }
+.btn-meeting { background-image:  url(../images/icons/icon_meeting.png); }
+
 .btn-pick {
   background: #2D8BCF url(../images/icons/icon_dice.png) 5px center no-repeat;
   background-size: 20px 20px;
@@ -327,4 +334,115 @@ input.ng-valid.ng-touched {
 .error {
   color: red;
   padding-bottom: 10px;
+}
+
+/*  */
+.addActivity {
+    width:100%;
+}
+
+.addActivity .iwrap {
+  margin-right:80px;
+}
+
+.addActivity .iwrap input {
+    float: left;
+    width: 100%;
+}
+
+.addActivity button {
+  width: 60px;
+  margin-left: 20px;
+  vertical-align: center;
+}
+
+.activities {
+  padding-top: 10px;
+}
+
+.activities h2 {
+  padding-bottom: 5px;
+}
+
+.activities .activity {
+  display: inline-block;
+  padding: 10px 20px 10px 15px;
+  margin: 3px 10px;
+  border-radius: 4px;
+  border: 1px solid #C5C5C5;
+
+
+}
+
+.activities .activity .btn {
+  margin-right: 4px;
+  padding: 1px 8px;
+}
+
+.activities .activity .text {
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.activities .activity .text a{
+  text-decoration: none;
+}
+
+.tooltip {
+  position: relative;
+}
+
+.tooltip span {
+  background: #FFF;
+  color: #000;
+  font-size: .8em;
+  bottom: 100%;
+  display: block;
+  left: -20px;
+  opacity: 0;
+  padding: 2px 13px;
+  margin-bottom: 5px;
+  pointer-events: none;
+  position: absolute;
+  border-radius: 4px;
+  box-shadow: none;
+  border: 1px solid #C5C5C5;
+  -webkit-transform: translateY(25px);
+     -moz-transform: translateY(25px);
+      -ms-transform: translateY(25px);
+       -o-transform: translateY(25px);
+          transform: translateY(25px);
+  -webkit-transition: all .25s ease-out;
+     -moz-transition: all .25s ease-out;
+      -ms-transition: all .25s ease-out;
+       -o-transition: all .25s ease-out;
+          transition: all .25s ease-out;
+}
+
+.tooltip:hover span {
+  opacity: 1;
+  pointer-events: auto;
+  -webkit-transform: translateY(0px);
+     -moz-transform: translateY(0px);
+      -ms-transform: translateY(0px);
+       -o-transform: translateY(0px);
+          transform: translateY(0px);
+}
+
+.badge {
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  background-color: #E76C5A;
+  border-radius: 10px;
+}
+.badge:empty {
+  display: none;
 }

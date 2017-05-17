@@ -5,7 +5,7 @@ ripetoApp.factory( 'AuthenticationSvc', ['$rootScope', '$location','$firebaseObj
 		var ref = firebase.database().ref();
 		var auth = $firebaseAuth();
 		var usersFolder = 'users';
-		var loginSuccessPage = '/home';
+		var loginSuccessPage = '/activities';
 
 		auth.$onAuthStateChanged( function(authUser){
     		if(authUser){

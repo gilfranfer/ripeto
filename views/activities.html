@@ -1,0 +1,38 @@
+<section>
+
+<article class="card cf">
+
+	<div class="textintro">
+    	<h1>Your List</h1>
+  	</div>
+  	<br/>
+  	<div class="card cf activities">
+		<h2> Tasks </h2>
+		<div class="activity" ng-repeat="(key,task) in allTasks">
+			<button class="btn btn-checkin tooltip"
+				ng-click="deleteTask(key)">
+				<span>Complete this Task?</span>
+			</button>
+			<span class="text">{{task.name}}</span>
+		</div>
+	</div>
+	<br/>
+  	<div class="card cf activities">
+		<h2> Recurrent Activities </h2>
+		<div class="activity" ng-repeat="(key,activity) in allActivities">
+			<button class="btn btn-checkin tooltip"
+				ng-click="completeActivity(key)">
+				<span>Complete this Activity?</span>
+			</button>
+			<button class="btn btn-reset tooltip"
+				ng-click="ignoreActivity(key)">
+				<span>Ignore this Activity?</span>
+			</button>
+			<span class="text">{{activity.name}}</span>
+		</div>
+	</div>
+
+
+</article>
+
+</section>
