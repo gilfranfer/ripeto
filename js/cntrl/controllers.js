@@ -17,7 +17,7 @@ ripetoApp.controller('AuthenticationCntrl',
 	}]//function
 );//controller
 
-ripetoApp.controller('ActivityCntrl',
+ripetoApp.controller('TasksCntrl',
 	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray',
 	function($scope, $rootScope, $firebaseAuth, $firebaseArray){
 
@@ -27,25 +27,13 @@ ripetoApp.controller('ActivityCntrl',
 		
 		auth.$onAuthStateChanged( function(user){
     		if(user){
-				var allActivities = $firebaseArray(
-							ref.child('users').child(user.uid).child('activities'));
-
 				var allTasks = $firebaseArray(
 							ref.child('users').child(user.uid).child('tasks'));
 				
+				$scope.allTasks = allTasks;
 				var updateBadge = function(){
-					$rootScope.activitiesCounter = allActivities.length;
-					$rootScope.tasksCounter = allTasks.length;
-					$rootScope.totalCounter = allActivities.length + allTasks.length;
+					$rootScope.totalCount = allTasks.length;
 				};
-				
-				allActivities.$loaded().then( function(data){
-					updateBadge();
-				} );
-
-				allActivities.$watch( function(data){
-					updateBadge();
-				} );
 
 				allTasks.$loaded().then( function(data){
 					updateBadge();
@@ -55,22 +43,6 @@ ripetoApp.controller('ActivityCntrl',
 					updateBadge();
 				} );
 
-				$scope.allActivities = allActivities;
-				$scope.allTasks = allTasks;
-
-				$scope.addActivity = function(){
-					allActivities.$add({
-						name: $scope.activityName,
-						date: firebase.database.ServerValue.TIMESTAMP
-					}).then( function(){
-						$scope.activityName = '';
-					});
-				};
-
-				$scope.deleteActivity = function(key){
-					allActivities.$remove(key);
-				};
-    		
     			$scope.addTask = function(){
 					allTasks.$add({
 						name: $scope.taskName,
@@ -80,18 +52,9 @@ ripetoApp.controller('ActivityCntrl',
 					});
 				};
 
-				$scope.deleteTask = function(key){
+				$scope.completeTask = function(key){
 					allTasks.$remove(key);
 				};
-
-				$scope.ignoreActivity = function(key){
-					//allTasks.$remove(key);
-				};
-
-				$scope.completeActivity = function(key){
-					//allTasks.$remove(key);
-				};
-
 
 			}
 		}); //onAuthStateChanged
@@ -102,6 +65,23 @@ ripetoApp.controller('ActivityCntrl',
 ripetoApp.controller('ErrorCntrl',['$scope',
 	function($scope){
 
+	}
+]);
+
+ripetoApp.controller('ProfileCntrl', ['$routeParams', '$rootScope', 'AuthenticationSvc',
+	function($routeParams, $rootScope, AuthenticationSvc){
+
+		var uid =$routeParams.uid;
+		$rootScope.profileData = AuthenticationSvc.loadUserProfileData(uid);
+		/*var ref = firebase.database().ref();
+		var auth = $firebaseAuth();
+		
+		auth.$onAuthStateChanged( function(user){
+    		if(user){
+				
+			}
+		}); //onAuthStateChanged
+		*/
 	}
 ]);
 

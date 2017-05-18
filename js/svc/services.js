@@ -1,40 +1,38 @@
-ripetoApp.factory( 'AuthenticationSvc', ['$rootScope', '$location','$firebaseObject','$firebaseAuth', 
+ripetoApp.factory( 'AuthenticationSvc', 
+	['$rootScope','$location','$firebaseObject','$firebaseAuth', 
 	
 	function($rootScope, $location,$firebaseObject,$firebaseAuth){
 		
 		var ref = firebase.database().ref();
 		var auth = $firebaseAuth();
-		var usersFolder = 'users';
-		var loginSuccessPage = '/activities';
+		var usersFolder = ref.child('users');
+		var loginSuccessPage = '/tasks';
 
 		auth.$onAuthStateChanged( function(authUser){
     		if(authUser){
-				console.log("Auth State Changed - Authorized ");
-				var userRef = ref.child(usersFolder).child(authUser.uid);
+				var userRef = usersFolder.child(authUser.uid);
 				var userObj = $firebaseObject(userRef);
 				$rootScope.currentUser = userObj;
-    		
 			}else{
-				console.log("Auth State Changed - Not Authorized ");
 				$rootScope.currentUser = '';				
 			}
 		} );
+		
+		var updateLastLogin = function(user){
+				usersFolder.child(user.uid).update(
+					{lastlogin: firebase.database.ServerValue.TIMESTAMP});
+			};
 
 		return{
 			login: function(user){
-				auth.$signInWithEmailAndPassword(
+				auth.$signInWithEmailAndPassword( 
 					user.email,user.pwd
 				).then( function (user){
-					//update last login value
-					ref.child(usersFolder).child(user.uid).update({
-						lastlogin: firebase.database.ServerValue.TIMESTAMP						
-					});
-					//redirect
+					updateLastLogin(user);
 					$location.path( loginSuccessPage );
 				}).catch( function(error){
 					$rootScope.errormessage = error.message;
 				});
-
 			},
 			logout: function(){
 				return auth.$signOut();
@@ -42,29 +40,27 @@ ripetoApp.factory( 'AuthenticationSvc', ['$rootScope', '$location','$firebaseObj
 			isUserLoggedIn: function(){
 				return auth.$requireSignIn();
 			},
+			loadUserProfileData: function(uid){
+				return $firebaseObject(usersFolder.child(uid));
+			},
 			register: function(user){
-				auth.$createUserWithEmailAndPassword(
-						user.email, user.pwd
+				auth.$createUserWithEmailAndPassword(user.email, user.pwd
 				).then(
-				/* Use firebase uid from the record created to
-				 * save more user details in our users folder */ 
-				function(regUser){
-					var regRef = ref.child(usersFolder).child(regUser.uid).set({
-						firstname: user.firstname,
-						lastname: user.lastname,
-						email: user.email,
-						uderid: regUser.uid,
-						date: firebase.database.ServerValue.TIMESTAMP,
-						lastlogin: firebase.database.ServerValue.TIMESTAMP						
-					});
-					
-					$location.path( loginSuccessPage );
-				} 
+					function(regUser){
+						usersFolder.child(regUser.uid).set({
+							firstname: user.firstname,
+							lastname: user.lastname,
+							email: user.email,
+							userid: regUser.uid,
+							date: firebase.database.ServerValue.TIMESTAMP,
+							lastlogin: firebase.database.ServerValue.TIMESTAMP						
+						});
+						$location.path( loginSuccessPage );
+					} 
 				).catch( function(error){
 					$rootScope.errormessage = error.message;
 				});
 			}
 		};//return
 	}
-
 ]);

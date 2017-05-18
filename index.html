@@ -1,14 +1,13 @@
 <!doctype html>
 <html lang="en"  ng-app="ripetoApp">
 	<head>
-		<title>RIPETO - Registration</title>
-		
-		<meta charset="UTF-8">
-		<meta name="viewport" 
-			content="width=device-width, initial-scale=1, user-scalable=no">
+		<title>RIPETO</title>
 
-		<!--link rel="stylesheet" type="text/css" href="css/bs3/bootstrap.min.css"-->
-		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+		<link rel="stylesheet" type="text/css" href="css/baseStyle.css">
+		<link rel="stylesheet" type="text/css" href="css/appStyle.css">
 		
 		<script src="js/lib/angular.min.js"></script>
 		<script src="js/lib/angular-route.min.js"></script>
@@ -38,7 +37,7 @@
 		
 	</head>
 	<body>
-		<header ng-include="'views/nav.html'" ng-controller="ActivityCntrl"></header>
+		<header ng-include="'views/nav.html'"></header>
 		<div class="page">
 			<main class="cf" ng-view></main>
 		</div>

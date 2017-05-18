@@ -2,19 +2,19 @@
   <div class="branding">
   	<a ng-href="#!/init">Ripeto!</a>
   </div>
-
-  <ul ng-if="!currentUser" >
-    <li><a ng-href="#!/register">Register</a></li>
-    <li><a ng-href="#!/login">Login</a></li>
-  </ul>
-  <ul ng-if="currentUser" >
-    <li><a ng-href="#!/init" ng-click="logout()">Logout</a></li>
-    <li><a ng-href="#!/config">Hi {{currentUser.firstname}}</a></li>
-    <li><a ng-href="#!/activities">
-      Activities
-      <span ng-show="activitiesCounter" class="badge">{{totalCounter}}</span>
-        </a>
-    </li>
-  </ul>
-  
+  <div  ng-controller="TasksCntrl">
+    <ul ng-if="!currentUser" >
+      <li><a ng-href="#!/register">Register</a></li>
+      <li><a ng-href="#!/login">Login</a></li>
+    </ul>
+    <ul ng-if="currentUser" >
+      <li><a ng-href="#!/home" ng-click="logout()">Logout</a></li>
+      <li><a ng-href="#!/profile/{{currentUser.userid}}">{{currentUser.firstname}}</a></li>
+      <li><a ng-href="#!/tasks">
+        Your Tasks
+        <span ng-show="totalCount" class="badge">{{totalCount}}</span>
+          </a>
+      </li>
+    </ul>
+  </div>
 </nav>
