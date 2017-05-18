@@ -16,15 +16,34 @@
 		<button type="submit" class="btn" ng-disabled="addTaskForm.$invalid">
 		+
 		</button>
+		<br/>
+		<div class="" >
+			<label class="formgroup">
+			Order by:
+			<select ng-model="tasksOrder">
+				<option value="date">Date</option>
+				<option value="priority">Priority</option>
+				<option value="name">Name</option>
+			</select>
+			</label>
+			<label class="formgroup">asc
+				<input type="radio" name="direction" ng-model="direction" />
+			</label>
+			<label class="formgroup">desc
+				<input type="radio" name="direction" ng-model="direction" value="reverse" checked/>
+			</label>
+		</div>
 	</form>
-
+	<br/><br/>
 	<div class="card cf activities" ng-show="allTasks.length">
-		<div class="activity" ng-repeat="(key,task) in allTasks | filter: taskName">
+		<div class="activity" 
+		ng-repeat="(key,task) in allTasks | filter: taskName | orderBy: tasksOrder:direction ">
+			<span ng-show="false">{{task.priority}}</span>
+			<span class="text">{{task.name}}</span>
 			<button class="btn btn-checkin tooltip"
 				ng-click="completeTask(key)">
 				<span>Complete this Task?</span>
 			</button>
-			<span class="text">{{task.name}}</span>
 		</div>
 	</div>
 	<br/>
