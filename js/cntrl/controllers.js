@@ -20,7 +20,8 @@ ripetoApp.controller('AuthenticationCntrl',
 ripetoApp.controller('TasksCntrl',
 	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray',
 	function($scope, $rootScope, $firebaseAuth, $firebaseArray){
-
+		$scope.tasksOrder= "date";
+		
 		var ref = firebase.database().ref();
 		var auth = $firebaseAuth();
 
