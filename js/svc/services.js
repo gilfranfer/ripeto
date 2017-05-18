@@ -64,3 +64,14 @@ ripetoApp.factory( 'AuthenticationSvc',
 		};//return
 	}
 ]);
+
+ripetoApp.factory( 'TasksSvc', 
+	['$rootScope','$location','$firebaseObject','$firebaseAuth', 
+	
+	function($rootScope, $location,$firebaseObject,$firebaseAuth){
+		
+		return{
+			
+		};
+	}
+]);

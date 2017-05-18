@@ -23,14 +23,26 @@ ripetoApp.controller('TasksCntrl',
 
 		var ref = firebase.database().ref();
 		var auth = $firebaseAuth();
-		
+
+		$scope.addTask = function(){
+			$rootScope.allTasks.$add({
+				name: $scope.taskName,
+				date: firebase.database.ServerValue.TIMESTAMP
+			}).then( function(){
+				$scope.taskName = '';
+			});
+		};
+
+		$scope.completeTask = function(key){
+			$rootScope.allTasks.$remove(key);
+		};
 		
 		auth.$onAuthStateChanged( function(user){
     		if(user){
 				var allTasks = $firebaseArray(
 							ref.child('users').child(user.uid).child('tasks'));
 				
-				$scope.allTasks = allTasks;
+				$rootScope.allTasks = allTasks;
 				var updateBadge = function(){
 					$rootScope.totalCount = allTasks.length;
 				};
@@ -42,20 +54,6 @@ ripetoApp.controller('TasksCntrl',
 				allTasks.$watch( function(data){
 					updateBadge();
 				} );
-
-    			$scope.addTask = function(){
-					allTasks.$add({
-						name: $scope.taskName,
-						date: firebase.database.ServerValue.TIMESTAMP
-					}).then( function(){
-						$scope.taskName = '';
-					});
-				};
-
-				$scope.completeTask = function(key){
-					allTasks.$remove(key);
-				};
-
 			}
 		}); //onAuthStateChanged
 
@@ -73,15 +71,6 @@ ripetoApp.controller('ProfileCntrl', ['$routeParams', '$rootScope', 'Authenticat
 
 		var uid =$routeParams.uid;
 		$rootScope.profileData = AuthenticationSvc.loadUserProfileData(uid);
-		/*var ref = firebase.database().ref();
-		var auth = $firebaseAuth();
-		
-		auth.$onAuthStateChanged( function(user){
-    		if(user){
-				
-			}
-		}); //onAuthStateChanged
-		*/
 	}
 ]);
 
