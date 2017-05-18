@@ -9,28 +9,28 @@ ripetoApp.config(['$routeProvider',
 			}).
 			when('/register',{
 				templateUrl: 'views/register.html',
-				controller: 'AuthenticationCntrl'
+				controller:  'AuthenticationCntrl'
 			}).
-			when('/config', {
-				templateUrl: 'views/addactivities.html',
-				controller: 'ActivityCntrl',
+			when('/profile/:uid', {
+				templateUrl: 'views/profile.html',
+				controller:  'ProfileCntrl',
 				resolve: {
 					currentAuth: function(AuthenticationSvc){
 						return AuthenticationSvc.isUserLoggedIn();
 					}
 				}
 			}).
-			when('/activities', {
-				templateUrl: 'views/activities.html',
-				controller: 'ActivityCntrl',
+			when('/tasks', {
+				templateUrl: 'views/tasks.html',
+				controller:  'TasksCntrl',
 				resolve: {
 					currentAuth: function(AuthenticationSvc){
 						return AuthenticationSvc.isUserLoggedIn();
 					}
 				}
 			}).
-			when('/init', {
-				templateUrl: 'views/index.html',
+			when('/home', {
+				templateUrl: 'views/home.html',
 				controller: 'HomeCntrl'
 			}).
 			when('/error', {
@@ -42,7 +42,7 @@ ripetoApp.config(['$routeProvider',
 				controller: 'ErrorCntrl'
 			}).
 			otherwise({
-				redirectTo: 'init'
+				redirectTo: 'home'
 			});
 	}
 ]);

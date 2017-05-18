@@ -1,0 +1,28 @@
+<section class="card register">
+  <form name="profileForm" novalidate>
+
+    <div class="textintro">
+      <h1>Profile</h1>
+      <p>Update your details</p>
+      <p ng-show="errormessage">{{errormessage}}</p>
+    </div>
+
+    <fieldset>
+      <input type="text" name="firstname" placeholder="First Name"
+        ng-model="profileData.firstname" ng-required="true" ng-enabled="false"/>
+        <p class="error validationerror"
+          ng-show="profileForm.firstname.$invalid &&
+              profileForm.firstname.$touched">
+          First name required
+        </p>
+      <input type="text" name="lastname" placeholder="Last Name"
+        ng-model="profileData.lastname" ng-required="true" ng-enabled="false"/>
+        <p class="error validationerror"
+          ng-show="profileForm.lastname.$invalid &&
+              profileForm.lastname.$touched">
+          Last name required
+        </p>
+    </fieldset>
+    
+  </form>
+</section>
