@@ -18,41 +18,50 @@ ripetoApp.controller('AuthenticationCntrl',
 );//controller
 
 ripetoApp.controller('TasksCntrl',
-	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray',
-	function($scope, $rootScope, $firebaseAuth, $firebaseArray){
+	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray','$firebaseObject',
+	function($scope, $rootScope, $firebaseAuth, $firebaseArray, $firebaseObject){
 		$scope.tasksOrder= "date";
+		
+		var baseRef = firebase.database().ref();
+		var userRef = undefined;
+		var userTasksRef = undefined;
 		
 		var ref = firebase.database().ref();
 		var auth = $firebaseAuth();
 
 		$scope.addTask = function(){
-			$rootScope.allTasks.$add({
+			$rootScope.userTasks.$add({
 				name: $scope.taskName,
-				date: firebase.database.ServerValue.TIMESTAMP
+				date: firebase.database.ServerValue.TIMESTAMP,
+				important: 1
 			}).then( function(){
 				$scope.taskName = '';
 			});
 		};
 
-		$scope.completeTask = function(key){
-			$rootScope.allTasks.$remove(key);
+		$scope.completeTask = function(id){
+			var refDel = userTasksRef.child(id);
+		    var record = $firebaseObject(refDel);
+		    record.$remove(id);
+			//$rootScope.userTasks.$remove(key);
 		};
 		
 		auth.$onAuthStateChanged( function(user){
     		if(user){
-				var allTasks = $firebaseArray(
-							ref.child('users').child(user.uid).child('tasks'));
+    			userRef = baseRef.child('users').child(user.uid);
+    			userTasksRef = userRef.child('tasks');
+				var userTasks = $firebaseArray(userTasksRef);
 				
-				$rootScope.allTasks = allTasks;
+				$rootScope.userTasks = userTasks;
 				var updateBadge = function(){
-					$rootScope.totalCount = allTasks.length;
+					$rootScope.totalCount = userTasks.length;
 				};
 
-				allTasks.$loaded().then( function(data){
+				userTasks.$loaded().then( function(data){
 					updateBadge();
 				} );
 
-				allTasks.$watch( function(data){
+				userTasks.$watch( function(data){
 					updateBadge();
 				} );
 			}
