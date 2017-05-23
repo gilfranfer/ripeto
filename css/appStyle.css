@@ -171,6 +171,16 @@ input[type=radio] {
 .btn-email { background-image: url(../images/icons/icon_email.png); }
 .btn-meeting { background-image:  url(../images/icons/icon_meeting.png); }
 
+.btn-important {
+  background-color: #C94C24; 
+  background-image: url(../images/icons/icon_heart.png);
+}
+
+.btn-notimportant {
+  background-color: #fcdf23; 
+  background-image: url(../images/icons/icon_heart.png);
+}
+
 .btn-pick {
   background: #2D8BCF url(../images/icons/icon_dice.png) 5px center no-repeat;
   background-size: 20px 20px;

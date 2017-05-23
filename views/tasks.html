@@ -3,9 +3,10 @@
 
 	<div class="textintro">
 		<h1>Welcome {{currentUser.firstname}}</h1>
-		<p ng-if="allTasks.length">Here are your tasks</p>
-		<p ng-if="!allTasks.length">You don't have tasks</p>
+		<p ng-if="userTasks.length">Here are your tasks</p>
+		<p ng-if="!userTasks.length">You don't have tasks</p>
 	</div>
+	
 	<form class="formgroup addActivity cf" name="addTaskForm"
 		novalidate ng-submit="addTask()">
 		<div class="iwrap" >
@@ -17,33 +18,38 @@
 		+
 		</button>
 		<br/>
-		<div class="" >
-			<label class="formgroup">
-			Order by:
-			<select ng-model="tasksOrder">
-				<option value="date">Date</option>
-				<option value="priority">Priority</option>
-				<option value="name">Name</option>
-			</select>
-			</label>
-			<label class="formgroup">asc
-				<input type="radio" name="direction" ng-model="direction" />
-			</label>
-			<label class="formgroup">desc
-				<input type="radio" name="direction" ng-model="direction" value="reverse" checked/>
-			</label>
-		</div>
+		
 	</form>
+	
+	<div class="" >
+		<label class="formgroup">
+		Order by:
+		<select ng-model="tasksOrder">
+			<option value="date">Creation</option>
+			<option value="name">Name</option>
+			<option value="priority">Importance</option>
+		</select>
+		</label>
+		<label class="formgroup">asc
+			<input type="radio" name="direction" ng-model="direction" />
+		</label>
+		<label class="formgroup">desc
+			<input type="radio" name="direction" ng-model="direction" value="reverse" checked/>
+		</label>
+	</div>
+		
+		
 	<br/><br/>
-	<div class="card cf activities" ng-show="allTasks.length">
+	<div class="card cf activities" ng-show="userTasks.length">
 		<div class="activity" 
-		ng-repeat="(key,task) in allTasks | filter: taskName | orderBy: tasksOrder:direction ">
-			<span ng-show="false">{{task.priority}}</span>
-			<span class="text">{{task.name}}</span>
+		ng-repeat="(key,task) in userTasks | filter: taskName | orderBy: tasksOrder:direction ">
+			
+			<span class="text">{{task.name}}</span> <br/>
 			<button class="btn btn-checkin tooltip"
-				ng-click="completeTask(key)">
+				ng-click="completeTask(task.$id)">
 				<span>Complete this Task?</span>
 			</button>
+
 		</div>
 	</div>
 	<br/>
