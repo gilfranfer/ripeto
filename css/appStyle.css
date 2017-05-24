@@ -53,7 +53,7 @@ nav li a:hover {
 .card {
   background: white;
   width: 100%;
-  max-width: 850px;
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
   padding: 10px 40px;
@@ -241,17 +241,11 @@ input[type=radio] {
 .btn-love { background-image: url(../images/icons/icon_heart.png); }
 .btn-email { background-image: url(../images/icons/icon_email.png); }
 .btn-meeting { background-image:  url(../images/icons/icon_meeting.png); }
-
-.btn-important {
-  background-color: #C94C24; 
-  background-image: url(../images/icons/icon_heart.png);
+.btn-restore {
+  background: #2D8BCF url(../images/icons/icon_reset.png)  5px center no-repeat;
+  background-size: 20px 20px;
+  padding: 5px 5px 5px 50px;
 }
-
-.btn-notimportant {
-  background-color: #fcdf23; 
-  background-image: url(../images/icons/icon_heart.png);
-}
-
 .btn-pick {
   background: #2D8BCF url(../images/icons/icon_dice.png) 5px center no-repeat;
   background-size: 20px 20px;

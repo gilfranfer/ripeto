@@ -22,9 +22,9 @@
 			</button>
 			<br/>
 		</form>
-	
+		<br/>
 		<div class="formgroup" >
-			<span class="label">by:</span>
+			<span class="label">Order by:</span>
 			<select ng-model="tasksOrder">
 				<option value="date">Creation</option>
 				<option value="name">Name</option>
@@ -49,13 +49,40 @@
     
 	<br/><br/>
 	<div class="card cf activities" ng-show="userTasks.length">
-		<ul class="tasksList cf">
-		<li ng-repeat="task in userTasks | orderBy: tasksOrder:direction | filter: { $id: recordId, $: taskName}">
+	<ul class="tasksList cf">
+		<li ng-repeat="task in userTasks | orderBy: tasksOrder:direction | filter: { $id: recordId, name: taskName}"
+			ng-if="task.status=='open'">
     	<div class="task">
     		<div class="buttons">
-	        	<button class="btn btn-checkin tooltip"
-					ng-click="completeTask(task.$id)">
-					<span>Complete this Task?</span>
+				<button class="btn btn-checkin tooltip"
+					ng-click="closeTask(task.$id)">
+					<span>Complete Task?</span>
+				</button>
+	        </div>
+	        <div class="info">
+	        	<h2>{{task.name}}</h2>
+	        	<div class="date">
+	            	{{task.date | date: "MMM d,yy h:mm a"}}
+	        	</div><!-- date -->
+	        </div>
+    	</div>
+		</li>
+	</ul>
+	</div><br/>
+	
+	<div class="card cf activities" ng-show="userTasks.length">
+	<ul class="tasksList cf">
+		<li ng-repeat="task in userTasks | orderBy: tasksOrder:direction | filter: { name: taskName}" 
+			ng-if="task.status=='closed'">
+    	<div class="task">
+    		<div class="buttons">
+	        	<button class="btn btn-delete tooltip"
+					ng-click="deleteTask(task.$id)">
+					<span>Delete Task?</span>
+				</button>
+	        	<button class="btn btn-restore tooltip"
+					ng-click="openTask(task.$id)">
+					<span>Recover Task?</span>
 				</button>
 	        </div>
 	        <div class="info">

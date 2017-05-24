@@ -21,6 +21,7 @@ ripetoApp.controller('TasksCntrl',
 	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray','$firebaseObject',
 	function($scope, $rootScope, $firebaseAuth, $firebaseArray, $firebaseObject){
 		$scope.tasksOrder= "date";
+		$scope.taskType= "normal";
 		
 		var baseRef = firebase.database().ref();
 		var userRef = undefined;
@@ -29,20 +30,33 @@ ripetoApp.controller('TasksCntrl',
 		var ref = firebase.database().ref();
 		var auth = $firebaseAuth();
 
+
 		$scope.addTask = function(){
 			$rootScope.userTasks.$add({
 				name: $scope.taskName,
-				date: firebase.database.ServerValue.TIMESTAMP
+				date: firebase.database.ServerValue.TIMESTAMP,
+				status: 'open'
 			}).then( function(){
 				$scope.taskName = '';
 			});
 		};
 
-		$scope.completeTask = function(id){
+		
+		$scope.closeTask = function(id){
+			userTasksRef.child(id).update(
+					{status:'closed' ,completeDate: firebase.database.ServerValue.TIMESTAMP});
+		};
+		
+		$scope.deleteTask = function(id){
 			var refDel = userTasksRef.child(id);
 		    var record = $firebaseObject(refDel);
 		    record.$remove(id);
 			//$rootScope.userTasks.$remove(key);
+		};
+		
+		$scope.openTask = function(id){
+			userTasksRef.child(id).update(
+					{status:'open' ,completeDate: null});
 		};
 		
 		auth.$onAuthStateChanged( function(user){
