@@ -32,8 +32,7 @@ ripetoApp.controller('TasksCntrl',
 		$scope.addTask = function(){
 			$rootScope.userTasks.$add({
 				name: $scope.taskName,
-				date: firebase.database.ServerValue.TIMESTAMP,
-				important: 1
+				date: firebase.database.ServerValue.TIMESTAMP
 			}).then( function(){
 				$scope.taskName = '';
 			});
