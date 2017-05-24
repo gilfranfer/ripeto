@@ -96,6 +96,77 @@ a.small {
 }
 
 /* Form Styles */
+.search .buttons {
+  display: block;
+  width: 33%;
+  float: right;
+  text-align: right;
+}
+.search {
+  background: #F5F5F5;
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 10px;
+  padding: 20px 30px;
+  border-radius: 4px;
+  text-align: left;
+  font-size: 1.1rem;
+  font-family: Lato, 'Helvetica Nueue', Helvetica, Arial, sans-serif;
+}
+
+.search h2 {
+  color: #124E61;
+  margin-bottom: 10px;
+}
+
+.search select {
+  font-size: 1rem;
+  padding: 10px 0 10px 15px;
+  color: #475B62;
+  background: rgba(255,255,255,0.4);
+  border: 1px solid rgba(0,0,0,0.3);
+}
+
+.search input[type="text"] {
+  margin-bottom: 10px;
+}
+
+.search input[type="checkbox"] {
+  display: inline;
+    background-color: #ddd;
+    border: 1px solid #C5C5C5;
+    display: inline-block;
+    margin-right: 15px;
+    -webkit-appearance: none;
+}
+
+.search label {
+  font-size: 1rem;
+  font-family: Lato, 'Helvetica Nueue', Helvetica, Arial, sans-serif;
+  color: #576E75;
+}
+
+.search .formgroup {
+  float: left;
+  width: 33%;
+}
+
+@media all and (max-width: 700px) {
+  .search .formgroup {
+    width: 50%;
+  }
+
+  .search .buttons {
+    width: 100%;
+    float: right;
+  }
+}
+
+@media all and (max-width: 550px) {
+  .search .formgroup {
+    width: 100%;
+  }
+}
 
 input {
   width: 100%;
@@ -325,4 +396,68 @@ input.ng-valid.ng-touched {
 }
 .badge:empty {
   display: none;
+}
+
+/* user List Styles */
+
+.tasksList {
+  width: 100%;
+  margin: 0 auto;
+  opacity: .95;
+  z-index: 10;
+  margin-top: 20px;
+}
+
+.tasksList ul {
+  margin: 0;
+  padding: 0;
+}
+
+.tasksList li {
+  width: 50%;
+  float: left;
+  padding: 12px;
+  margin-bottom: 10px;
+  -webkit-transition: all 0.3s ease-out;
+  -moz-transition: all 0.3s ease-out;
+  -o-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+  border: 1px solid transparent;
+}
+
+.tasksList li:hover {
+  border: 1px solid #C5C5C5;
+  border-radius: 4px;
+}
+
+.tasksList li.expanded {
+  width: 100%;
+}
+
+.tasksList .buttons {
+  display: block;
+  float: left;
+  text-align: left;
+  margin-right: 5px;
+}
+
+.tasksList .btn {
+    padding: 0;
+    margin: 0 3px;
+}
+
+.tasksList .info {
+  display: block;
+  float: left;
+  text-align: left;
+}
+
+@media all and (max-width: 600px) {
+  .tasksList li {
+    width: 100%;
+  }
+
+  .tasksList  .info  {
+    width: 70%;
+  }
 }
