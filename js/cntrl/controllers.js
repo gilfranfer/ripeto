@@ -59,6 +59,16 @@ ripetoApp.controller('TasksCntrl',
 					{status:'open' ,completeDate: null});
 		};
 		
+		$rootScope.updateBadge = function(){
+			var totalCount = 0;
+			$rootScope.userTasks.forEach(function(element) {
+			    if(element.status == 'open'){
+			    	totalCount ++;
+			    }
+			});
+			$rootScope.totalCount = totalCount;
+		};
+				
 		auth.$onAuthStateChanged( function(user){
     		if(user){
     			userRef = baseRef.child('users').child(user.uid);
@@ -66,16 +76,13 @@ ripetoApp.controller('TasksCntrl',
 				var userTasks = $firebaseArray(userTasksRef);
 				
 				$rootScope.userTasks = userTasks;
-				var updateBadge = function(){
-					$rootScope.totalCount = userTasks.length;
-				};
-
+				
 				userTasks.$loaded().then( function(data){
-					updateBadge();
+					$rootScope.updateBadge();
 				} );
 
 				userTasks.$watch( function(data){
-					updateBadge();
+					$rootScope.updateBadge();
 				} );
 			}
 		}); //onAuthStateChanged
