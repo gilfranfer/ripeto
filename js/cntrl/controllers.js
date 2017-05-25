@@ -60,13 +60,18 @@ ripetoApp.controller('TasksCntrl',
 		};
 		
 		$rootScope.updateBadge = function(){
-			var totalCount = 0;
+			var totalOpen = 0;
+			var totalClosed = 0;
 			$rootScope.userTasks.forEach(function(element) {
 			    if(element.status == 'open'){
-			    	totalCount ++;
+			    	totalOpen ++;
+			    }else if(element.status == 'closed'){
+			    	totalClosed ++;
+			    	
 			    }
 			});
-			$rootScope.totalCount = totalCount;
+			$rootScope.totalClosedTasks = totalClosed;
+			$rootScope.totalOpenTasks = totalOpen;
 		};
 				
 		auth.$onAuthStateChanged( function(user){

@@ -48,7 +48,7 @@
     </div>
     
 	<br/><br/>
-	<div class="card cf activities" ng-show="userTasks.length">
+	<div class="card cf activities" ng-show="totalOpenTasks>0">
 	<ul class="tasksList cf">
 		<li ng-repeat="task in userTasks | orderBy: tasksOrder:direction | filter: { $id: recordId, name: taskName}"
 			ng-if="task.status=='open'">
@@ -70,7 +70,7 @@
 	</ul>
 	</div><br/>
 	
-	<div class="card cf activities" ng-show="userTasks.length">
+	<div class="card cf activities" ng-show="totalClosedTasks>0">
 	<ul class="tasksList cf">
 		<li ng-repeat="task in userTasks | orderBy: tasksOrder:direction | filter: { name: taskName}" 
 			ng-if="task.status=='closed'">
