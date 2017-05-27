@@ -23,7 +23,16 @@
 			<br/>
 		</form>
 		<br/>
-		<div class="formgroup" >
+		<div id="">
+			List:
+			<select ng-model="activeTasksList">
+				<option ng-repeat="list in taskLists | orderBy:name " value="{{list.name}}">
+					{{list.name}}
+				</option>
+			</select>
+		</div>
+		<br>
+		<div class="forgroup" >
 			<span class="label">Order by:</span>
 			<select ng-model="tasksOrder">
 				<option value="date">Creation</option>
@@ -45,55 +54,64 @@
 	        ng-show="recordId" ng-click="recordId=''">Reset</button>
 	
 	    </div>
+		
     </div>
+    
     
 	<br/><br/>
 	<div class="card cf activities" ng-show="totalOpenTasks>0">
-	<ul class="tasksList cf">
-		<li ng-repeat="task in userTasks | orderBy: tasksOrder:direction | filter: { $id: recordId, name: taskName}"
-			ng-if="task.status=='open'">
-    	<div class="task">
-    		<div class="buttons">
-				<button class="btn btn-checkin tooltip"
-					ng-click="closeTask(task.$id)">
-					<span>Complete Task?</span>
-				</button>
-	        </div>
-	        <div class="info">
-	        	<h2>{{task.name}}</h2>
-	        	<div class="date">
-	            	{{task.date | date: "MMM d,yy h:mm a"}}
-	        	</div><!-- date -->
-	        </div>
-    	</div>
-		</li>
-	</ul>
-	</div><br/>
+		<div class="textintro">
+			<h1>Tasks on list: {{activeTasksList}} </h1>
+		</div>
+		<ul class="tasksList cf">
+			<li ng-repeat="task in userTasks | orderBy: tasksOrder:direction | filter: { $id: recordId, name: taskName}"
+				ng-if="task.inList == activeTasksList && task.status=='open'">
+	    	<div class="task">
+	    		<div class="buttons">
+					<button class="btn btn-checkin tooltip"
+						ng-click="closeTask(task.$id)">
+						<span>Close Task?</span>
+					</button>
+		        </div>
+		        <div class="info">
+		        	<h2>{{task.name}}</h2>
+		        	<div class="date">
+		            	{{task.date | date: "MMM d,yy h:mm a"}}
+		        	</div><!-- date -->
+		        </div>
+	    	</div>
+			</li>
+		</ul>
+	</div>
 	
 	<div class="card cf activities" ng-show="totalClosedTasks>0">
-	<ul class="tasksList cf">
-		<li ng-repeat="task in userTasks | orderBy: tasksOrder:direction | filter: { name: taskName}" 
-			ng-if="task.status=='closed'">
-    	<div class="task">
-    		<div class="buttons">
-	        	<button class="btn btn-delete tooltip"
-					ng-click="deleteTask(task.$id)">
-					<span>Delete Task?</span>
-				</button>
-	        	<button class="btn btn-restore tooltip"
-					ng-click="openTask(task.$id)">
-					<span>Recover Task?</span>
-				</button>
-	        </div>
-	        <div class="info">
-	        	<h2>{{task.name}}</h2>
-	        	<div class="date">
-	            	{{task.date | date: "MMM d,yy h:mm a"}}
-	        	</div><!-- date -->
-	        </div>
-    	</div>
-		</li>
-	</ul>
+		
+		<div class="textintro">
+			<h1>All Your Closed Tasks</h1>
+		</div>
+		<ul class="tasksList cf">
+			<li ng-repeat="task in userTasks | orderBy: tasksOrder:direction | filter: { name: taskName}" 
+				ng-if="task.status=='closed'">
+	    	<div class="task">
+	    		<div class="buttons">
+		        	<button class="btn btn-delete tooltip"
+						ng-click="deleteTask(task.$id)">
+						<span>Delete Task?</span>
+					</button>
+		        	<button class="btn btn-restore tooltip"
+						ng-click="openTask(task.$id)">
+						<span>Recover Task?</span>
+					</button>
+		        </div>
+		        <div class="info">
+		        	<h2>{{task.name}}</h2>
+		        	<div class="date">
+		            	{{task.date | date: "MMM d,yy h:mm a"}}
+		        	</div><!-- date -->
+		        </div>
+	    	</div>
+			</li>
+		</ul>
 	</div>
 	<br/><br/>
 </article>
