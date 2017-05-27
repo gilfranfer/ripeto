@@ -1,4 +1,4 @@
-var ripetoApp = angular.module('ripetoApp',['ngRoute','firebase']);
+var ripetoApp = angular.module('ripetoApp',['ngRoute','firebase','ngDialog']);
 
 ripetoApp.config(['$routeProvider',
 	function($routeProvider){
@@ -47,6 +47,20 @@ ripetoApp.config(['$routeProvider',
 	}
 ]);
 
+ripetoApp.config(['ngDialogProvider', function (ngDialogProvider) {
+            ngDialogProvider.setDefaults({
+                className: 'ngdialog-theme-default',
+                plain: false,
+                showClose: false,
+                closeByDocument: false,
+                closeByEscape: true,
+                appendTo: false,
+                preCloseCallback: function () {
+                    console.log('default pre-close callback');
+                }
+            });
+}]);
+        
 ripetoApp.run( ['$rootScope', '$location', function($rootScope,$location){
 
 	$rootScope.$on('$routeChangeError', function( event, next, previous, error){

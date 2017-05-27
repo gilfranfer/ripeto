@@ -1,8 +1,7 @@
 ripetoApp.controller('TasksCntrl',
-	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray','$firebaseObject',
-	function($scope, $rootScope, $firebaseAuth, $firebaseArray, $firebaseObject){
-		$scope.tasksOrder= "date";
-		$scope.activeTasksList= "Default";
+	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray','$firebaseObject', 'ngDialog', 
+	function($scope, $rootScope, $firebaseAuth, $firebaseArray, $firebaseObject, ngDialog){
+		$scope.tasksOrder = "date";
 		//$scope.taskType= "normal";
 		
 		var baseRef = firebase.database().ref();
@@ -55,7 +54,7 @@ ripetoApp.controller('TasksCntrl',
 			$rootScope.totalClosedTasks = totalClosed;
 			$rootScope.totalOpenTasks = totalOpen;
 		};
-				
+		
 		auth.$onAuthStateChanged( function(user){
     		if(user){
     			userRef = baseRef.child('users').child(user.uid);
@@ -65,6 +64,7 @@ ripetoApp.controller('TasksCntrl',
 				
 				$rootScope.userTasks = userTasks;
 				$rootScope.taskLists = taskLists;
+				$rootScope.activeTasksList = "Default";
 				
 				userTasks.$loaded().then( function(data){
 					$rootScope.updateBadge();
@@ -75,6 +75,15 @@ ripetoApp.controller('TasksCntrl',
 				} );
 			}
 		}); //onAuthStateChanged
+		
+		$scope.addTaskList = function () {
+			ngDialog.open({
+                    template: 'views/dialogs/addList.html',
+                    className: 'ngdialog-theme-default',
+                    height: 200,
+                    widht: 500
+                });
+	    };
 
 	}
 ]);//controller
