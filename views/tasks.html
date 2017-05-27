@@ -24,7 +24,7 @@
 		</form>
 		<br/>
 		<div id="">
-			<button class="btn btn-addList" ng-click="addTaskList()">+ Lists:</button>
+			<button class="btn btn-addList" ng-click="addListDialog()">+ Lists:</button>
 	
 			<select ng-model="activeTasksList">
 				<option ng-repeat="list in taskLists | orderBy:name " value="{{list.name}}">

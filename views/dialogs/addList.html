@@ -1,1 +1,17 @@
-<h2>Add Lists Here</h2>
+<div class="">
+    <div class="textintro">
+        <h2>Add Lists Here</h2>
+		<p>Min 4 Characters, and Max 20</p>
+	</div>
+    <br/>
+    <form class="addList cf" name="addListForm" novalidate ng-submit="addList()">
+        <div class="iwrap" >
+        <input type="text" name="listName" placeholder="List Name"
+    			ng-model="listName" ng-required="true"
+    			ng-minlength="4" ng-maxlength="25"/>
+    	</div>
+    	<button type="submit" class="btn" ng-disabled="addListForm.$invalid">+</button>
+    	<br/>
+    </form>
+    <br/>
+</div>

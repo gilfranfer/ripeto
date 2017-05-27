@@ -76,13 +76,14 @@ ripetoApp.controller('TasksCntrl',
 			}
 		}); //onAuthStateChanged
 		
-		$scope.addTaskList = function () {
-			// ngDialog.open({
-   //                 template: 'views/dialogs/addList.html',
-   //                 className: 'ngdialog-theme-default',
-   //                 height: 200,
-   //                 widht: 500
-   //             });
+		$scope.addListDialog = function () {
+			ngDialog.open({
+                    template: 'views/dialogs/addList.html',
+                    className: 'ngdialog-theme-default',
+                	showClose: true,
+                    height: 200,
+                    widht: 500
+                });
 	    };
 
 	}
