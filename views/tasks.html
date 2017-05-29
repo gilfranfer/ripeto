@@ -24,38 +24,21 @@
 		</form>
 		<br/>
 		<div id="">
-			<button class="btn btn-addList" ng-click="addListDialog()">+ Lists:</button>
+			<button class="btn btn-addList" ng-click="addListDialog()">+ List:</button>
 	
 			<select ng-model="activeTasksList">
 				<option ng-repeat="list in taskLists | orderBy:name " value="{{list.name}}">
 					{{list.name}}
 				</option>
 			</select>
-		</div>
-		<br>
-		<div class="forgroup" >
-			<span class="label">Order by:</span>
+			
+			<button class="btn btn-addList" ng-click="changeTasksDirection()">
+				Order {{taskDirectionLabel}} by </button>
 			<select ng-model="tasksOrder">
 				<option value="date">Creation</option>
 				<option value="name">Name</option>
 			</select>
 		</div>
-		<div class="formgroup" >
-			<input id="dirascending" type="radio" name="direction" ng-model="direction" />
-			<label for="dirascending">asc</label>&nbsp;
-			<input id="dirdescending"  type="radio"  name="direction" ng-model="direction" value="reverse" checked/>
-			<label for="dirdescending">desc</label>
-		</div>
-		<div ng-show="false" class="buttons cf">
-	
-	      <button class="btn btn-pick"
-	        ng-hide="recordId" ng-click="pickRandom()">Pick Random</button>
-	
-	      <button class="btn btn-pick"
-	        ng-show="recordId" ng-click="recordId=''">Reset</button>
-	
-	    </div>
-		
     </div>
     
     
@@ -65,7 +48,7 @@
 			<h1>Tasks on list: {{activeTasksList}} </h1>
 		</div>
 		<ul class="tasksList cf">
-			<li ng-repeat="task in userTasks | orderBy: tasksOrder:direction | filter: { $id: recordId, name: taskName}"
+			<li ng-repeat="task in userTasks | orderBy: tasksOrder:taskDirection | filter: { $id: recordId, name: taskName}"
 				ng-if="task.inList == activeTasksList && task.status=='open'">
 	    	<div class="task">
 	    		<div class="buttons">
