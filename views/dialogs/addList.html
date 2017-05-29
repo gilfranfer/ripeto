@@ -1,1 +1,19 @@
-<h2>Add Lists Here</h2>
+<div class="">
+    <div class="textintro">
+        <h2>{{title}}</h2>
+		<p>4 to 25 non special Characters</p>
+        <span style="color: green">{{message}}</span>
+	</div>
+    <br/>
+    <form class="addList cf" name="addListForm" novalidate ng-submit="createNewList()">
+        <div class="iwrap" >
+        <input type="text" name="listName" placeholder="List Name"
+    			ng-model="listName" ng-required="true"
+    			ng-minlength="4" ng-maxlength="25"
+    			ng-pattern="regex"/>
+    	</div>
+    	<button type="submit" class="btn" ng-disabled="addListForm.$invalid">+</button>
+    </form>
+    <button class="btn" ng-click="closeThisDialog(1)">Close</button>
+    <br/>
+</div>

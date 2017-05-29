@@ -286,23 +286,23 @@ input.ng-valid.ng-touched {
 }
 
 /*  */
-.addActivity {
+.addActivity, .addList {
     width:100%;
 }
 
-.addActivity .iwrap {
-  margin-right:80px;
-}
-
-.addActivity .iwrap input {
-    float: left;
-    width: 100%;
-}
-
-.addActivity button {
+.addActivity button, .addList button {
   width: 60px;
   margin-left: 20px;
   vertical-align: center;
+}
+
+.iwrap {
+  margin-right:80px;
+}
+
+.iwrap input {
+    float: left;
+    width: 100%;
 }
 
 .activities {

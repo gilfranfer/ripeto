@@ -2,7 +2,8 @@ ripetoApp.controller('TasksCntrl',
 	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray','$firebaseObject', 'ngDialog', 
 	function($scope, $rootScope, $firebaseAuth, $firebaseArray, $firebaseObject, ngDialog){
 		$scope.tasksOrder = "date";
-		//$scope.taskType= "normal";
+		$scope.taskDirection = "";
+		$scope.taskDirectionLabel = "Asc";
 		
 		var baseRef = firebase.database().ref();
 		var userRef = undefined;
@@ -41,6 +42,16 @@ ripetoApp.controller('TasksCntrl',
 					{status:'open' ,closed: null});
 		};
 		
+		$scope.changeTasksDirection = function(){
+			if ($scope.taskDirectionLabel === "Asc"){
+				$scope.taskDirection = "reverse";
+				$scope.taskDirectionLabel = "Des";
+			}else{
+				$scope.taskDirection = "";
+				$scope.taskDirectionLabel = "Asc";
+			}
+		};
+		
 		$rootScope.updateBadge = function(){
 			var totalOpen = 0;
 			var totalClosed = 0;
@@ -76,14 +87,32 @@ ripetoApp.controller('TasksCntrl',
 			}
 		}); //onAuthStateChanged
 		
-		$scope.addTaskList = function () {
-			// ngDialog.open({
-   //                 template: 'views/dialogs/addList.html',
-   //                 className: 'ngdialog-theme-default',
-   //                 height: 200,
-   //                 widht: 500
-   //             });
+		$scope.addListDialog = function () {
+			ngDialog.open({
+                    template: 'views/dialogs/addList.html',
+                    className: 'ngdialog-theme-default',
+                    height: 250, widht: 500,
+                    controller: 'ListsCntrl'
+                });
 	    };
 
 	}
 ]);//controller
+
+ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray',
+	function($scope,$rootScope,$firebaseArray){
+		$scope.title = "Add Your List Here";
+		$scope.regex = "[a-zA-Z0-9\\s]{4,25}";
+		$scope.listName;
+		
+		$scope.createNewList = function(){
+			$rootScope.taskLists.$add({
+				name: $scope.listName,
+				date: firebase.database.ServerValue.TIMESTAMP
+			}).then( function(){
+				$rootScope.activeTasksList = $scope.listName;
+				$scope.message = "List was created";
+			});
+		};
+	}
+]);
