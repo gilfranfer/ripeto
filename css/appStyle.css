@@ -119,11 +119,10 @@ a.small {
   margin-bottom: 10px;
 }
 
-.search select {
+.search select, form select {
   font-size: 1rem;
   padding: 10px 0 10px 15px;
   color: #475B62;
-  background: rgba(255,255,255,0.4);
   border: 1px solid rgba(0,0,0,0.3);
 }
 
@@ -168,7 +167,7 @@ a.small {
   }
 }
 
-input {
+input, textarea{
   width: 100%;
   display: inline-block;
   font-weight: 100;
@@ -276,7 +275,7 @@ input.ng-valid.ng-touched {
   border: 1px solid #509D12;
 }
 
-.ng-invalid .btn {
+.ng-invalid button.btn {
   background: gray;
 }
 
@@ -458,4 +457,15 @@ input.ng-valid.ng-touched {
   .tasksList  .info  {
     width: 70%;
   }
+}
+
+#taskSelects{
+  text-align:left;
+}
+
+.successmsg{
+  color: green;
+}
+.errormsg{
+  color: red;
 }

@@ -48,20 +48,24 @@
 			<h1>Tasks on list: {{activeTasksList}} </h1>
 		</div>
 		<ul class="tasksList cf">
-			<li ng-repeat="task in userTasks | orderBy: tasksOrder:taskDirection | filter: { $id: recordId, name: taskName}"
-				ng-if="task.inList == activeTasksList && task.status=='open'">
+			<li ng-repeat="task in userTasks | filter: { $id: recordId, name: taskName}"
+				ng-if="task.inList == activeTasksList && task.status=='open'"
+				ng-href="#!/task/{{task.$id}}">
 	    	<div class="task">
 	    		<div class="buttons">
 					<button class="btn btn-checkin tooltip"
 						ng-click="closeTask(task.$id)">
 						<span>Close Task?</span>
 					</button>
+					<a class="btn btn-list tooltip" ng-href="#!/task/{{currentUser.$id}}/{{task.$id}}">
+			        	<span>Task Details</span>
+			        </a>
 		        </div>
 		        <div class="info">
-		        	<h2>{{task.name}}</h2>
+		        	<h2>{{task.name}}</a>
 		        	<div class="date">
 		            	{{task.date | date: "MMM d,yy h:mm a"}}
-		        	</div><!-- date -->
+		        	</div>
 		        </div>
 	    	</div>
 			</li>
@@ -90,8 +94,9 @@
 		        <div class="info">
 		        	<h2>{{task.name}}</h2>
 		        	<div class="date">
-		            	{{task.date | date: "MMM d,yy h:mm a"}}
-		        	</div><!-- date -->
+		        		In list: {{task.inList}} <br/>
+		            	Closed: {{task.closed | date: "MMM d,yy h:mm a"}}
+		        	</div>
 		        </div>
 	    	</div>
 			</li>
