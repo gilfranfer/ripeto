@@ -1,0 +1,42 @@
+<article class="card cf">
+    <form name="editTaskForm" novalidate ng-submit="updateTask()">
+
+    <div class="textintro">
+      <h1>Task Details</h1>
+      <p></p>
+      <span ng-show="successmsg" class="successmsg">{{successmsg}}</span>
+      <span ng-show="errormsg" class="errormsg">{{errormsg}}</span>
+    </div>
+
+    <fieldset>
+        <input type="text" name="taskname" placeholder="Task Name"
+            ng-model="currentTask.name" ng-required="true"/>
+        <input type="text" name="taskdate" placeholder="Task Date"
+            value="Created on {{currentTask.date | date: 'MMM d,yy h:mm a'}}"
+            ng-required="true" ng-enabled="false"/>
+        <p class="error validationerror"
+            ng-show="editTaskForm.taskname.$invalid">
+              Task name required
+        </p>
+        <textarea name="taskdesc" placeholder="Description"
+            ng-model="currentTask.description"ng-required="false"></textarea>
+        <div id="taskSelects">
+            In list:
+            <select ng-model="currentTask.inList">
+        		<option ng-repeat="list in taskLists | orderBy:name " value="{{list.name}}">
+        			{{list.name}}
+        		</option>
+        	</select>
+        	with status:
+        	<select ng-model="currentTask.status">
+        		<option value="open">Open</option>
+        		<option value="closed">Closed</option>
+        	</select>
+    	</div>
+    </fieldset>
+    <br/><br/>
+    <a class="btn" ng-href="#!/tasks">< Go Back</a>
+    <button type="submit" class="btn" ng-disabled="editTaskForm.$invalid">Save</button>
+    </form>
+    
+</article>

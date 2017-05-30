@@ -18,7 +18,7 @@ ripetoApp.controller('TasksCntrl',
 				name: $scope.taskName,
 				date: firebase.database.ServerValue.TIMESTAMP,
 				status: 'open',
-				inList: $scope.activeTasksList
+				inList: $rootScope.activeTasksList
 			}).then( function(){
 				$scope.taskName = '';
 			});
@@ -67,6 +67,7 @@ ripetoApp.controller('TasksCntrl',
 		};
 		
 		auth.$onAuthStateChanged( function(user){
+			console.log("On Auth State");
     		if(user){
     			userRef = baseRef.child('users').child(user.uid);
     			userTasksRef = userRef.child('tasks');
@@ -99,6 +100,24 @@ ripetoApp.controller('TasksCntrl',
 	}
 ]);//controller
 
+ripetoApp.controller('EditTaskCntrl',
+  ['$scope', '$rootScope', '$location', '$routeParams', '$firebaseObject',
+	function($scope, $rootScope, $location, $routeParams, $firebaseObject) {
+		var whichUser = $routeParams.uId;
+		var whichTask = $routeParams.tId;
+	    var ref = firebase.database().ref().child('users').child(whichUser).child("tasks").child(whichTask);
+		$scope.currentTask = $firebaseObject(ref);
+		
+		$scope.updateTask = function(){
+			$scope.currentTask.$save().then(function(ref) {
+			  $scope.successmsg = "Record Saved";
+			}, function(error) {
+				$scope.errormsg = error;
+			});
+		};
+	}
+]);
+
 ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray',
 	function($scope,$rootScope,$firebaseArray){
 		$scope.title = "Add Your List Here";
@@ -112,6 +131,7 @@ ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray',
 			}).then( function(){
 				$rootScope.activeTasksList = $scope.listName;
 				$scope.message = "List was created";
+				$scope.listName = "";
 			});
 		};
 	}

@@ -29,6 +29,15 @@ ripetoApp.config(['$routeProvider',
 					}
 				}
 			}).
+			when('/task/:uId/:tId', {
+				templateUrl: 'views/editTask.html',
+				controller:  'EditTaskCntrl',
+				resolve: {
+					currentAuth: function(AuthenticationSvc){
+						return AuthenticationSvc.isUserLoggedIn();
+					}
+				}
+			}).
 			when('/home', {
 				templateUrl: 'views/home.html',
 				controller: 'HomeCntrl'
