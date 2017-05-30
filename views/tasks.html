@@ -41,14 +41,12 @@
 		</div>
     </div>
     
-    
-	<br/><br/>
 	<div class="card cf activities" ng-show="totalOpenTasks>0">
 		<div class="textintro">
 			<h1>Tasks on list: {{activeTasksList}} </h1>
 		</div>
 		<ul class="tasksList cf">
-			<li ng-repeat="task in userTasks | filter: { $id: recordId, name: taskName}"
+			<li ng-repeat="task in userTasks |  orderBy: tasksOrder:taskDirection | filter: { $id: recordId, name: taskName}"
 				ng-if="task.inList == activeTasksList && task.status=='open'"
 				ng-href="#!/task/{{task.$id}}">
 	    	<div class="task">
@@ -71,14 +69,14 @@
 			</li>
 		</ul>
 	</div>
-	
+	<br/>
 	<div class="card cf activities" ng-show="totalClosedTasks>0">
 		
 		<div class="textintro">
 			<h1>All Your Closed Tasks</h1>
 		</div>
 		<ul class="tasksList cf">
-			<li ng-repeat="task in userTasks | orderBy: tasksOrder:direction | filter: { name: taskName}" 
+			<li ng-repeat="task in userTasks |  orderBy: tasksOrder:taskDirection | filter: { $id: recordId, name: taskName}"
 				ng-if="task.status=='closed'">
 	    	<div class="task">
 	    		<div class="buttons">
