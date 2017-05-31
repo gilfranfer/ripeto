@@ -1,9 +1,10 @@
 ripetoApp.controller('TasksCntrl',
 	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray','$firebaseObject', 'ngDialog', 
 	function($scope, $rootScope, $firebaseAuth, $firebaseArray, $firebaseObject, ngDialog){
-		$scope.tasksOrder = "date";
-		$scope.taskDirection = "";
-		$scope.taskDirectionLabel = "Asc";
+		$scope.tasksOrder = "dueDate";
+		$scope.taskDirection = "reverse";
+		$scope.taskDirectionLabel = "Des";
+		$scope.dpValue = "Due Date: MM/DD/YYYY";
 		
 		var baseRef = firebase.database().ref();
 		var userRef = undefined;
@@ -15,19 +16,24 @@ ripetoApp.controller('TasksCntrl',
 
 		$scope.addTask = function(){
 			var list = $rootScope.activeTasksList;
+			var taskDuedate = $( "#datepicker" ).datepicker( "getDate" );
+			var dpValue = $( "#datepicker" ).val();
 			
-			if(!list || 0 === list.length){
-				console.warn("Empty List");
-				list = "Default";
-			}
+			//null and undefined are false
+			if(!list || 0 === list.length){ list = "Default"; }
 			
-			$rootScope.userTasks.$add({
+			var taskObject = {
 				name: $scope.taskName,
 				date: firebase.database.ServerValue.TIMESTAMP,
 				status: 'open',
 				inList: list
-			}).then( function(){
+			};
+			
+			if(taskDuedate != null && dpValue != $scope.dpValue){ taskObject.dueDate = taskDuedate.getTime(); }
+			
+			$rootScope.userTasks.$add( taskObject ).then( function(){
 				$scope.taskName = '';
+				$( "#datepicker" ).val($scope.dpValue);
 			});
 		};
 
@@ -110,6 +116,14 @@ ripetoApp.controller('TasksCntrl',
                     controller: 'ListsCntrl'
                 });
 	    };
+	    
+	    $scope.initDatePicker = function () {
+          $(function () {
+            $( "#datepicker" ).datepicker();
+          });
+      };
+
+      $scope.initDatePicker();
 
 	}
 ]);//controller
