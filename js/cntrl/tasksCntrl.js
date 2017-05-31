@@ -17,7 +17,7 @@ ripetoApp.controller('TasksCntrl',
 			var list = $rootScope.activeTasksList;
 			
 			if(!list || 0 === list.length){
-				console.warn("Empty List")
+				console.warn("Empty List");
 				list = "Default";
 			}
 			
@@ -138,31 +138,57 @@ ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray', '$f
 		$scope.listToCreate;
 		$scope.listToDelete;
 		
+		var listsRef = firebase.database().ref().child('users')
+							.child($rootScope.currentUser.$id).child('lists');
+		var tasksRef = firebase.database().ref().child('users')
+							.child($rootScope.currentUser.$id).child('tasks');
+		 
+		
+		listsRef.on('child_removed', function(data) {
+			$rootScope.activeTasksList = "Default";
+			moveTasksToDefaultList(data.val().name);
+		});
+
+		var moveTasksToDefaultList = function(origList){
+			var list = $firebaseArray(tasksRef.orderByChild("inList").equalTo(origList));
+			
+			list.$loaded()
+			.then(function(data) {
+				console.log("Moving Tasks to Default List");
+				list.forEach(function(element, index) {
+					element.inList = "Default";
+				    list.$save(index);
+				});
+			})
+			.catch(function(error) {
+				console.log("Error:", error);
+			});
+		};
+		
 		$scope.createNewList = function(){
 			$rootScope.taskLists.$add({
 				name: $scope.listToCreate,
 				date: firebase.database.ServerValue.TIMESTAMP
 			}).then( function(){
-				$rootScope.activeTasksList = $scope.listToCreate;
+				$scope.successmsg = $scope.listToCreate+" was created";
 				$scope.listToCreate = "";
-				$scope.successmsg = $rootScope.activeTasksList+" was created";
 			});
 		};
 		
 		$scope.removeList = function(){
 			var uid = $rootScope.currentUser.$id;
-			var refDel = firebase.database().ref().child('users')
-							.child(uid).child('lists').child($scope.listToDelete);
-		    var record = $firebaseObject(refDel);
+			var refDel = listsRef.child($scope.listToDelete);
+			var record = $firebaseObject(refDel);
 		    
 		    record.$loaded().then(function() {
 				var listname = record.name;
+					
 			    record.$remove().then(function(ref) {
 			    	$scope.successmsg = listname + " list was deleted";
-			    	$rootScope.activeTasksList = "Default";
-				}, function(error) {
+			    }, function(error) {
 					$scope.errormsg = error;
 				});
+				
 		    });
 		    
 		};
