@@ -299,9 +299,10 @@ input.ng-valid.ng-touched {
   margin-right:80px;
 }
 
-.iwrap input {
+.iwrap input, .iwrap select {
     float: left;
     width: 100%;
+    padding: 15px;
 }
 
 .activities {
