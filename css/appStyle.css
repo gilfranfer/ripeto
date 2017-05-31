@@ -167,7 +167,7 @@ a.small {
   }
 }
 
-input, textarea{
+form input, form textarea{
   width: 100%;
   display: inline-block;
   font-weight: 100;
@@ -469,4 +469,9 @@ input.ng-valid.ng-touched {
 }
 .errormsg{
   color: red;
+}
+
+.dueTask{
+  color: #ea1212;
+  font-weight: bold;
 }
