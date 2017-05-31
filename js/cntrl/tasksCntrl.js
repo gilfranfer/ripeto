@@ -2,8 +2,8 @@ ripetoApp.controller('TasksCntrl',
 	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray','$firebaseObject', 'ngDialog', 
 	function($scope, $rootScope, $firebaseAuth, $firebaseArray, $firebaseObject, ngDialog){
 		$scope.tasksOrder = "dueDate";
-		$scope.taskDirection = "reverse";
-		$scope.taskDirectionLabel = "Des";
+		$scope.taskDirection = "";
+		$scope.taskDirectionLabel = "Asc";
 		$scope.dpValue = "Due Date: MM/DD/YYYY";
 		
 		var baseRef = firebase.database().ref();
