@@ -37,7 +37,7 @@ You can open the task details for more information. Currently you can add commen
 There is always a Default list to place your tasks. If you need to add your own lists, just click the "List" button, below the "Search/Create" box and you will get a popup window to add your new list.
 You can delete your existing lists anytime using the same popoup window. Keep in mind that the "Default" list cannot be deleted. If you happen to delete a list that already has tasks associate, all those tasks will be automatically moved to the "Default" list.
     
-#Features to implement:
+# Features to implement:
 - Create lists to organize your activities
 - Create Activities specifiyng name, description or notes, time and recurrence
 - Activities wil be displayed on a list in the main page
