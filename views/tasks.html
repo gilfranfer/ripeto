@@ -20,7 +20,7 @@
 		<div>
 			<input id="datepicker" class="btn btn-addList" value="{{dpValue}}"/>
 			<button class="btn btn-addList" ng-click="addListDialog()">List</button>
-			<select ng-model="activeTasksList">
+			<select id="list-select" ng-model="activeTasksList">
 				<option ng-repeat="list in taskLists | orderBy:name " value="{{list.name}}">
 					{{list.name}}
 				</option>

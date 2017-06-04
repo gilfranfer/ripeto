@@ -5,6 +5,7 @@ ripetoApp.controller('TasksCntrl',
 		$scope.taskDirection = "";
 		$scope.taskDirectionLabel = "Asc";
 		$scope.dpValue = "Due Date: MM/DD/YYYY";
+		$rootScope.activeTasksList = "Default";
 		
 		var baseRef = firebase.database().ref();
 		var userRef = undefined;
@@ -15,12 +16,13 @@ ripetoApp.controller('TasksCntrl',
 
 
 		$scope.addTask = function(){
-			var list = $rootScope.activeTasksList;
+			var list = $( "#list-select" ).val();
 			var taskDuedate = $( "#datepicker" ).datepicker( "getDate" );
 			var dpValue = $( "#datepicker" ).val();
 			
 			//null and undefined are false
 			if(!list || 0 === list.length){ list = "Default"; }
+			console.log("After:"+ list);
 			
 			var taskObject = {
 				name: $scope.taskName,
@@ -97,10 +99,6 @@ ripetoApp.controller('TasksCntrl',
 				userTasks.$loaded().then( function(data){
 					$rootScope.updateBadge();
 				} );
-				
-				taskLists.$loaded().then( function(data){
-		    		$rootScope.activeTasksList = "Default";
-				} );
 
 				userTasks.$watch( function(data){
 					$rootScope.updateBadge();
@@ -137,13 +135,26 @@ ripetoApp.controller('EditTaskCntrl',
 		$scope.currentTask = $firebaseObject(ref);
 		
 		$scope.updateTask = function(){
+			var taskDuedate = $( "#datepicker" ).datepicker( "getDate" );
+			if(taskDuedate != null ){ 
+				$scope.currentTask.dueDate = taskDuedate.getTime(); }
+			
 			$scope.currentTask.$save().then(function(ref) {
 			  $scope.successmsg = "Record Saved";
 			}, function(error) {
 				$scope.errormsg = error;
 			});
+		};	
+		
+		$scope.initDatePicker = function () {
+		  $(function () {
+		    $( "#datepicker" ).datepicker();
+		  });
 		};
+		
+		$scope.initDatePicker();
 	}
+
 ]);
 
 ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray', '$firebaseObject',
@@ -159,7 +170,6 @@ ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray', '$f
 		 
 		
 		listsRef.on('child_removed', function(data) {
-			$rootScope.activeTasksList = "Default";
 			moveTasksToDefaultList(data.val().name);
 		});
 

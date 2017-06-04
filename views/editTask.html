@@ -11,13 +11,17 @@
     <fieldset>
         <input type="text" name="taskname" placeholder="Task Name"
             ng-model="currentTask.name" ng-required="true"/>
-        <input type="text" name="taskdate" placeholder="Task Date"
-            value="Created on {{currentTask.date | date: 'MMM d,yy h:mm a'}}"
-            ng-required="true" ng-enabled="false"/>
         <p class="error validationerror"
             ng-show="editTaskForm.taskname.$invalid">
               Task name required
         </p>
+        <input type="text" name="taskdate" placeholder="Task Date"
+            value="Created on {{currentTask.date | date: 'MMM d,yy h:mm a'}}"
+            ng-required="true" ng-enabled="false"/>
+            
+        <input id="datepicker" class="btn btn-addList" placeholder="Due Date: MM/DD/YYYY" 
+            value="{{currentTask.dueDate | date: 'MM/dd/yyyy'}}"/>
+			
         <textarea name="taskdesc" placeholder="Description"
             ng-model="currentTask.description"ng-required="false"></textarea>
         <div id="taskSelects">
