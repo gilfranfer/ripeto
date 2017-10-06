@@ -1,15 +1,17 @@
 /* Space out content a bit */
   body {
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
-  }
+  padding-bottom: 1.5rem;
+  min-height: 40rem;
+  padding-top: 4.5rem;
+}
 
-/* Custom page header */
+
+/* Custom page header 
 .header {
   padding-bottom: 1rem;
   border-bottom: .05rem solid #e5e5e5;
   margin-bottom: 2rem;
-}
+}*/
 
 /* Make the masthead heading the same height as the navigation */
 .header h3 {
