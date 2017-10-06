@@ -14,6 +14,12 @@ ripetoApp.controller('AuthenticationCntrl',
 		$scope.register = function(){
 			AuthenticationSvc.register($scope.regUser, ConfigurationSvc.getAppVersion());
 		};
+
+		$scope.clearErrors = function () {
+			$rootScope.appMessages = { };
+		};
+		
+		$scope.clearErrors()
 	}]//function
 );//controller
 
@@ -142,14 +148,14 @@ ripetoApp.controller('TasksCntrl',
                 });
 	    };
 	    
-	    $scope.initDatePicker = function () {
+	 /*   $scope.initDatePicker = function () {
           $(function () {
             $( "#datepicker" ).datepicker();
           });
       };
 
       $scope.initDatePicker();
-
+		*/
 	}
 ]);//controller
 
@@ -172,14 +178,14 @@ ripetoApp.controller('EditTaskCntrl',
 				$scope.errormsg = error;
 			});
 		};	
-		
+		/*
 		$scope.initDatePicker = function () {
 		  $(function () {
 		    $( "#datepicker" ).datepicker();
 		  });
 		};
 		
-		$scope.initDatePicker();
+		$scope.initDatePicker();*/
 	}
 
 ]);

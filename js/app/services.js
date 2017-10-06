@@ -37,8 +37,8 @@ ripetoApp.factory( 'AuthenticationSvc',
 					$location.path( loginSuccessPage );
 					console.log( "Sucessful Login!");
 				}).catch( function(error){
-					$rootScope.errormessage = error.message;
-					console.log( error.message );
+					$rootScope.appMessages.loginErrorMsg = error.message;
+					console.error( error.message );
 				});
 			},
 			logout: function(){
@@ -68,7 +68,7 @@ ripetoApp.factory( 'AuthenticationSvc',
 						$location.path( loginSuccessPage );
 					}
 				).catch( function(error){
-					$rootScope.errormessage = error.message;
+					$rootScope.appMessages.registerErrorMsg = error.message;
 				});
 			}
 		};//return
