@@ -6,7 +6,7 @@
     
     <form class="withSpaceUp" name="registerForm" novalidate ng-submit="register()">
       <!-- Name row -->
-      <div class="row">
+      <div class="form-row">
         <div class="col-md form-group">
           <label for="firstname">First name</label>
           <input type="text" name="firstname" placeholder="Are you Luke?"
@@ -27,7 +27,7 @@
         </div>
       </div>
       <!-- Email row -->
-      <div class="row">
+      <div class="form-row">
         <div class="col-md form-group">
           <label for="email">Email address</label>
           <input type="email" name="email" id="email" aria-describedby="emailHelp"
@@ -42,7 +42,7 @@
         </div>
       </div>
       <!-- Password row -->
-     <div class="row"> 
+      <div class="form-row"> 
         <div class="col-md form-group">
           <label for="pwd">Set a Password</label>
           <input type="password" name="password" id="pwd" aria-describedby="pwdHelp"
@@ -63,6 +63,12 @@
             ng-show="registerForm.passwordConfirm.$invalid && registerForm.passwordConfirm.$dirty">
             Password must match
           </div>
+        </div>
+      </div>
+      <!-- Error row -->
+      <div class="form-row">
+        <div class="col-md form-group alert alert-danger" role="alert" ng-show="appMessages.registerErrorMsg">
+          {{appMessages.registerErrorMsg}}
         </div>
       </div>
       <!-- Buttons row -->
