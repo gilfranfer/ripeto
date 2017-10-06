@@ -1,20 +1,37 @@
-<nav class="cf" ng-controller="AuthenticationCntrl">
-  <div class="branding">
-  	<a ng-href="#!/init">Ripeto!</a>
-  </div>
-  <div  ng-controller="TasksCntrl">
-    <ul ng-if="!currentUser" >
-      <li><a ng-href="#!/register">Register</a></li>
-      <li><a ng-href="#!/login">Login</a></li>
-    </ul>
-    <ul ng-if="currentUser" >
-      <li><a ng-href="#!/home" ng-click="logout()">Logout</a></li>
-      <li><a ng-href="#!/profile/{{currentUser.userid}}">{{currentUser.firstname}}</a></li>
-      <li><a ng-href="#!/tasks">
-        Your Tasks
+<nav ng-controller="TasksCntrl">
+  
+  <ul class="nav nav-pills float-right">
+    <!-- Menu Items when user is not logged in -->
+    <li class="nav-item" ng-if="!currentUser">
+      <a class="nav-link" ng-href="#!/register">Register</a>
+    </li>
+    <li class="nav-item" ng-if="!currentUser">
+      <a class="nav-link" ng-href="#!/login">Log in</a>
+    </li>
+
+    <!-- Menu Items when user is logged in 
+    <li class="nav-item" ng-if="currentUser">
+      <a class="nav-link" ng-href="#!/profile/{{currentUser.userid}}">{{currentUser.firstname}}</a>
+    </li> -->
+    <li class="nav-item" ng-if="currentUser">
+      <a class="nav-link" ng-href="#!/tasks">
         <span ng-show="totalOpenTasks" class="badge">{{totalOpenTasks}}</span>
-          </a>
-      </li>
-    </ul>
-  </div>
+        Tasks
+      </a>
+    </li>
+    <li class="nav-item" ng-if="currentUser">
+      <a class="nav-link" ng-href="#!/about" ng-click="logout()">Logout</a>
+    </li>
+    
+    <!-- Common Menu Items 
+    <li class="nav-item">
+      <a class="nav-link" ng-href="#!/contact">Contact</a>
+    </li> -->
+    <li class="nav-item">
+      <a class="nav-link active" ng-href="#!/about">About</a>
+    </li>
+      
+  </ul>
+
+  <h3 class="text-muted">Ripeto!</h3>
 </nav>
