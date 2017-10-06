@@ -9,11 +9,12 @@ ripetoApp.factory( 'AuthenticationSvc',
 		var loginSuccessPage = '/tasks';
 
 		auth.$onAuthStateChanged( function(authUser){
+			console.log("AuthSvc - On Auth State");
     		if(authUser){
 				$rootScope.currentUser = getUserData(authUser.uid);
 				ConfigurationSvc.upgradeUserConfig( getUserData(authUser.uid) );
 			}else{
-				$rootScope.currentUser = '';				
+				$rootScope.currentUser = null;				
 			}
 		} );
 		
@@ -28,14 +29,16 @@ ripetoApp.factory( 'AuthenticationSvc',
 		};
 		
 		return{
-			login: function(user){
+			loginUser: function(user){
 				auth.$signInWithEmailAndPassword( 
 					user.email,user.pwd
 				).then( function (user){
 					updateLastLogin(user);
 					$location.path( loginSuccessPage );
+					console.log( "Sucessful Login!");
 				}).catch( function(error){
 					$rootScope.errormessage = error.message;
+					console.log( error.message );
 				});
 			},
 			logout: function(){
@@ -71,6 +74,7 @@ ripetoApp.factory( 'AuthenticationSvc',
 		};//return
 	}
 ]);
+
 ripetoApp.factory( 'ConfigurationSvc', 
 	['$rootScope','$firebaseObject','$firebaseAuth', 
 	

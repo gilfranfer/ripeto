@@ -4,7 +4,7 @@ ripetoApp.controller('AuthenticationCntrl',
 	function($scope, $rootScope, AuthenticationSvc, ConfigurationSvc){
 		
 		$scope.login = function(){
-			AuthenticationSvc.login($scope.user);
+			AuthenticationSvc.loginUser($scope.user);
 		};
 		
 		$scope.logout = function(){
@@ -17,22 +17,10 @@ ripetoApp.controller('AuthenticationCntrl',
 	}]//function
 );//controller
 
-ripetoApp.controller('ErrorCntrl',['$scope',
-	function($scope){
-
-	}
-]);
-
 ripetoApp.controller('ProfileCntrl', ['$routeParams', '$rootScope', 'AuthenticationSvc',
 	function($routeParams, $rootScope, AuthenticationSvc){
 
 		var uid =$routeParams.uid;
 		$rootScope.profileData = AuthenticationSvc.loadUserProfileData(uid);
-	}
-]);
-
-ripetoApp.controller('HomeCntrl',['$scope',
-	function($scope){
-
 	}
 ]);

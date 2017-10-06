@@ -86,7 +86,7 @@ ripetoApp.controller('TasksCntrl',
 		};
 		
 		auth.$onAuthStateChanged( function(user){
-			console.log("On Auth State");
+			console.log("TskCntrl - On Auth State");
     		if(user){
     			userRef = baseRef.child('users').child(user.uid);
     			userTasksRef = userRef.child('tasks');
