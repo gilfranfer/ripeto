@@ -32,7 +32,7 @@ ripetoApp.config(['$routeProvider',
 					}
 				}
 			}).
-			when('/task/:uId/:tId', {
+			when('/task/:tId', {
 				templateUrl: 'views/editTask.html',
 				controller:  'EditTaskCntrl',
 				resolve: {

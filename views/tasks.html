@@ -1,3 +1,80 @@
+<!-- Create Section -->
+<section class="jumbotron">
+  <!-- Greeting -->
+  <h1 class="display-4">Hi {{currentUser.firstname}} !!</h1>
+  <p class="lead" ng-if="userTasks.length">
+    You already have some tasks waiting to be completed.
+  </p>
+  <p class="lead" ng-if="!userTasks.length">
+    You don't have tasks yet. Let's start creating some of them.
+  </p>
+  <hr class="my-4">
+  <!-- Create form -->
+  <form class="" name="addTaskForm" novalidate ng-submit="addTask()">
+    <div class="form-row">
+      <div class="col-10">
+        <input type="text" name="taskName" class="form-control form-control-lg"
+          placeholder="Search or add a Task" ng-model="taskName" 
+          ng-required="true"/>
+      </div>
+      <div class="col">
+        <button type="submit" class="btn btn-primary btn-block" 
+              ng-disabled="addTaskForm.$invalid">
+          +
+        </button>
+      </div>
+    </div>
+  </form>
+<!--
+  
+  <div>
+    <input id="datepicker" class="btn btn-addList" value="{{dpValue}}"/>
+    <button class="btn btn-addList" ng-click="addListDialog()">List</button>
+    <select id="list-select" ng-model="activeTasksList">
+      <option ng-repeat="list in taskLists | orderBy:name " value="{{list.name}}">
+        {{list.name}}
+      </option>
+    </select>
+    
+    <button class="btn btn-addList" ng-click="changeTasksDirection()">
+      Order {{taskDirectionLabel}} by 
+    </button>
+    <select ng-model="tasksOrder">
+      <option value="dueDate">Due Date</option>
+      <option value="date">Creation</option>
+      <option value="name">Name</option>
+    </select>
+  </div>
+-->
+</section>
+
+<!-- Open Tasks Section -->
+<section class="row">
+  <div class="col" ng-show="totalOpenTasks>0">
+	<!--h3>Tasks on list: {{activeTasksList}} </h3-->
+		<ul class="list-group">
+  		<li class="list-group-item list-group-item-action flex-column align-items-start" 
+          ng-repeat="task in userTasks | orderBy: tasksOrder:taskDirection | filter: {name: taskName}"
+          ng-if="(task.inList == activeTasksList && task.status=='open')" 
+          ng-href="#!/task/{{currentUser.$id}}/{{task.$id}}" > 
+        
+        <div class="d-flex w-100 justify-content-between">
+          <h3 class="mb-1">
+            <button type="button" class="btn btn-sm btn-outline-success" ng-click="closeTask(task.$id)">
+              Ok
+            </button>
+            {{task.name}}
+          </h3>
+          <small>from {{activeTasksList}}</small>
+        </div>
+  		  <p class="mb-1">{{task.description}}</p>
+  		  <small>Created on {{task.date | date: "MMM dd yyyy"}}</small>
+  		</li>
+  	</ul>
+  </div>
+</section>
+
+<!--
 <article class="card cf">
 	<div class="textintro">
 		<h1>Welcome {{currentUser.firstname}}</h1>
@@ -36,7 +113,6 @@
 			</select>
 		</div>
     </div>
-    <!-- Open Tasks in selected List -->
 	<div class="card cf activities" ng-show="totalOpenTasks>0">
 		<div class="textintro">
 			<h1>Tasks on list: {{activeTasksList}} </h1>
@@ -67,7 +143,6 @@
 		</ul>
 	</div><br/>
 	
-    <!-- All Closed Tasks -->
 	<div class="card cf activities" ng-show="totalClosedTasks>0">
 		<div class="textintro">
 			<h1>All Your Closed Tasks</h1>
@@ -96,3 +171,4 @@
 		</ul>
 	</div><br/><br/>
 </article>
+-->
