@@ -23,31 +23,46 @@ ripetoApp.controller('AuthenticationCntrl',
 	}]//function
 );//controller
 
-ripetoApp.controller('ProfileCntrl', ['$routeParams', '$rootScope', 'AuthenticationSvc',
-	function($routeParams, $rootScope, AuthenticationSvc){
-
-		var uid =$routeParams.uid;
-		$rootScope.profileData = AuthenticationSvc.loadUserProfileData(uid);
-	}
-]);
-
 ripetoApp.controller('TasksCntrl',
 	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray','$firebaseObject', 'ngDialog', 
 	function($scope, $rootScope, $firebaseAuth, $firebaseArray, $firebaseObject, ngDialog){
-		$scope.tasksOrder = "dueDate";
-		$scope.taskDirection = "";
-		$scope.taskDirectionLabel = "Asc";
-		$scope.dpValue = "Due Date: MM/DD/YYYY";
+		//Default values for some utility variables
+		$scope.tasksOrder = "name";
+		$scope.reverseOrder = false;
 		$rootScope.activeTasksList = "Default";
 		
+		$rootScope.userTasks = undefined;
+		$rootScope.userLists = undefined;
+		$rootScope.totalClosedTasks = undefined;
+		$rootScope.totalOpenTasks = undefined;
+
+		//Firebase stuff
+		var auth = $firebaseAuth();
 		var baseRef = firebase.database().ref();
 		var userRef = undefined;
 		var userTasksRef = undefined;
-		
-		var ref = firebase.database().ref();
-		var auth = $firebaseAuth();
 
+		auth.$onAuthStateChanged( function(user){
+			console.log("TskCntrl - On Auth State");
+    		if(user){
+    			userRef = baseRef.child('users').child(user.uid);
+				let userTasks = $firebaseArray( userRef.child('tasks') );
+				let userLists = $firebaseArray( userRef.child('lists') );
+				
+				$rootScope.userTasks = userTasks;
+				$rootScope.userLists = userLists;
+				
+				userTasks.$loaded().then( function(data){
+					$rootScope.updateBadge();
+				} );
 
+				userTasks.$watch( function(data){
+					$rootScope.updateBadge();
+				} );
+			}
+		}); 
+
+		//Custom functions
 		$scope.addTask = function(){
 			var list = $( "#list-select" ).val();
 			var taskDuedate = $( "#datepicker" ).datepicker( "getDate" );
@@ -72,7 +87,6 @@ ripetoApp.controller('TasksCntrl',
 			});
 		};
 
-		
 		$scope.closeTask = function(id){
 			userTasksRef.child(id).update(
 					{status:'closed' ,closed: firebase.database.ServerValue.TIMESTAMP});
@@ -94,16 +108,6 @@ ripetoApp.controller('TasksCntrl',
 					{status:'open' ,closed: null});
 		};
 		
-		$scope.changeTasksDirection = function(){
-			if ($scope.taskDirectionLabel === "Asc"){
-				$scope.taskDirection = "reverse";
-				$scope.taskDirectionLabel = "Des";
-			}else{
-				$scope.taskDirection = "";
-				$scope.taskDirectionLabel = "Asc";
-			}
-		};
-		
 		$rootScope.updateBadge = function(){
 			var totalOpen = 0;
 			var totalClosed = 0;
@@ -118,27 +122,6 @@ ripetoApp.controller('TasksCntrl',
 			$rootScope.totalOpenTasks = totalOpen;
 		};
 		
-		auth.$onAuthStateChanged( function(user){
-			console.log("TskCntrl - On Auth State");
-    		if(user){
-    			userRef = baseRef.child('users').child(user.uid);
-    			userTasksRef = userRef.child('tasks');
-				var userTasks = $firebaseArray(userTasksRef);
-				var taskLists = $firebaseArray(userRef.child('lists'));
-				
-				$rootScope.userTasks = userTasks;
-				$rootScope.taskLists = taskLists;
-				
-				userTasks.$loaded().then( function(data){
-					$rootScope.updateBadge();
-				} );
-
-				userTasks.$watch( function(data){
-					$rootScope.updateBadge();
-				} );
-			}
-		}); //onAuthStateChanged
-		
 		$scope.addListDialog = function () {
 			ngDialog.open({
                     template: 'views/dialogs/editLists.html',
@@ -148,14 +131,17 @@ ripetoApp.controller('TasksCntrl',
                 });
 	    };
 	    
-	 /*   $scope.initDatePicker = function () {
-          $(function () {
-            $( "#datepicker" ).datepicker();
-          });
-      };
+	    $scope.reverseDisplay = function(bool) {
+			$scope.reverseOrder = bool;
+		};
 
-      $scope.initDatePicker();
-		*/
+		$scope.orderTaskBy = function(value) {
+			$scope.tasksOrder = value;
+		};
+		
+		$scope.setActiveList = function(name) {
+			$scope.activeTasksList = name;
+		};
 	}
 ]);//controller
 
@@ -250,5 +236,13 @@ ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray', '$f
 		    
 		};
 		
+	}
+]);
+
+ripetoApp.controller('ProfileCntrl', ['$routeParams', '$rootScope', 'AuthenticationSvc',
+	function($routeParams, $rootScope, AuthenticationSvc){
+
+		var uid =$routeParams.uid;
+		$rootScope.profileData = AuthenticationSvc.loadUserProfileData(uid);
 	}
 ]);

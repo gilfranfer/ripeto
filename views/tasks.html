@@ -18,43 +18,67 @@
           ng-required="true"/>
       </div>
       <div class="col">
-        <button type="submit" class="btn btn-primary btn-block" 
+        <button type="submit" class="btn btnj btn-primary btn-block" 
               ng-disabled="addTaskForm.$invalid">
           +
         </button>
       </div>
     </div>
+    <input type="hidden" name="taskList" ng-model="activeTasksList">
+    <!--<input id="datepicker" class="btn btn-addList" value="{{dpValue}}"/>
+    <button class="btn btn-addList" ng-click="addListDialog()">List</button>-->
   </form>
-<!--
-  
-  <div>
-    <input id="datepicker" class="btn btn-addList" value="{{dpValue}}"/>
-    <button class="btn btn-addList" ng-click="addListDialog()">List</button>
-    <select id="list-select" ng-model="activeTasksList">
-      <option ng-repeat="list in taskLists | orderBy:name " value="{{list.name}}">
-        {{list.name}}
-      </option>
-    </select>
-    
-    <button class="btn btn-addList" ng-click="changeTasksDirection()">
-      Order {{taskDirectionLabel}} by 
-    </button>
-    <select ng-model="tasksOrder">
-      <option value="dueDate">Due Date</option>
-      <option value="date">Creation</option>
-      <option value="name">Name</option>
-    </select>
+</section>
+
+<!-- Ordering Section -->
+<section class="row mb-2">
+  <!-- Dropdown with User Task Lists -->
+  <div class="col-4 text-left">
+    <div class="btn-group">
+      <button type="button" class="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{activeTasksList}} List
+      </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" ng-click="setActiveList(list.name)"
+          ng-repeat="list in userLists | orderBy:name" ng-if="list.name != activeTasksList" >
+          {{list.name}}
+        </a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item">Create a List</a>
+      </div>
+    </div>
   </div>
--->
+  <!-- Order By and direction -->
+  <div class="col text-right">
+    <div class="btn-group " data-toggle="buttons">
+      <label class="btn btn-sm btn-dark active" 
+              ng-click="orderTaskBy('name')">
+        <input type="radio" name="options">Name
+      </label>
+      <label class="btn btn-sm btn-dark" 
+              ng-click="orderTaskBy('date')">
+        <input type="radio" name="options">Date
+      </label>
+    </div>  
+    <div class="btn-group " data-toggle="buttons">
+      <label class="btn btn-sm btn-success active" 
+              ng-click="reverseDisplay(false)">
+        <input type="radio" name="options">Asc
+      </label>
+      <label class="btn btn-sm btn-success" 
+              ng-click="reverseDisplay(true)">
+        <input type="radio" name="options">Desc
+      </label>
+    </div>
+  </div>
 </section>
 
 <!-- Open Tasks Section -->
 <section class="row">
   <div class="col" ng-show="totalOpenTasks>0">
-	<!--h3>Tasks on list: {{activeTasksList}} </h3-->
 		<ul class="list-group">
   		<li class="list-group-item list-group-item-action flex-column align-items-start" 
-          ng-repeat="task in userTasks | orderBy: tasksOrder:taskDirection | filter: {name: taskName}"
+          ng-repeat="task in userTasks | orderBy:tasksOrder:reverseOrder | filter: {name: taskName}"
           ng-if="(task.inList == activeTasksList && task.status=='open')" 
           ng-href="#!/task/{{currentUser.$id}}/{{task.$id}}" > 
         
