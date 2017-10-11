@@ -29,7 +29,7 @@ ripetoApp.controller('TasksCntrl',
 		//Default values for some utility variables
 		$scope.tasksOrder = "name";
 		$scope.reverseOrder = false;
-		$rootScope.activeTasksList = "Default";
+		$rootScope.activeTasksList = "All";
 		
 		$rootScope.userTasks = undefined;
 		$rootScope.userLists = undefined;
@@ -46,7 +46,8 @@ ripetoApp.controller('TasksCntrl',
 			console.log("TskCntrl - On Auth State");
     		if(user){
     			userRef = baseRef.child('users').child(user.uid);
-				let userTasks = $firebaseArray( userRef.child('tasks') );
+    			userTasksRef = userRef.child('tasks');
+				let userTasks = $firebaseArray( userTasksRef );
 				let userLists = $firebaseArray( userRef.child('lists') );
 				
 				$rootScope.userTasks = userTasks;

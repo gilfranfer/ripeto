@@ -12,12 +12,12 @@
   <!-- Create form -->
   <form class="" name="addTaskForm" novalidate ng-submit="addTask()">
     <div class="form-row">
-      <div class="col-10">
+      <div class="col">
         <input type="text" name="taskName" class="form-control form-control-lg"
           placeholder="Search or add a Task" ng-model="taskName" 
           ng-required="true"/>
       </div>
-      <div class="col">
+      <div class="col-2">
         <button type="submit" class="btn btnj btn-primary btn-block" 
               ng-disabled="addTaskForm.$invalid">
           +
@@ -39,6 +39,10 @@
         {{activeTasksList}} List
       </button>
       <div class="dropdown-menu">
+        <a class="dropdown-item" ng-click="setActiveList('All')"
+          ng-if="'All' != activeTasksList" >
+          All
+        </a>
         <a class="dropdown-item" ng-click="setActiveList(list.name)"
           ng-repeat="list in userLists | orderBy:name" ng-if="list.name != activeTasksList" >
           {{list.name}}
@@ -79,7 +83,7 @@
 		<ul class="list-group">
   		<li class="list-group-item list-group-item-action flex-column align-items-start" 
           ng-repeat="task in userTasks | orderBy:tasksOrder:reverseOrder | filter: {name: taskName}"
-          ng-if="(task.inList == activeTasksList && task.status=='open')" 
+          ng-if="task.status=='open' && (activeTasksList == 'All' || task.inList == activeTasksList)" 
           ng-href="#!/task/{{currentUser.$id}}/{{task.$id}}" > 
         
         <div class="d-flex w-100 justify-content-between">
@@ -89,7 +93,7 @@
             </button>
             {{task.name}}
           </h3>
-          <small>from {{activeTasksList}}</small>
+          <small>from {{task.inList}}</small>
         </div>
   		  <p class="mb-1">{{task.description}}</p>
   		  <small>Created on {{task.date | date: "MMM dd yyyy"}}</small>
