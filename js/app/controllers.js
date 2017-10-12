@@ -143,33 +143,25 @@ ripetoApp.controller('TasksCntrl',
 	}
 ]);//controller
 
-ripetoApp.controller('EditTaskCntrl',
+ripetoApp.controller('TaskDetailCntrl',
   ['$scope', '$rootScope', '$location', '$routeParams', '$firebaseObject',
 	function($scope, $rootScope, $location, $routeParams, $firebaseObject) {
-		var whichUser = $routeParams.uId;
-		var whichTask = $routeParams.tId;
+		let whichUser = $rootScope.currentUser.$id;
+		let whichTask = $routeParams.tId;
 	    var ref = firebase.database().ref().child('users').child(whichUser).child("tasks").child(whichTask);
 		$scope.currentTask = $firebaseObject(ref);
 		
 		$scope.updateTask = function(){
-			var taskDuedate = $( "#datepicker" ).datepicker( "getDate" );
+			/*var taskDuedate = $( "#datepicker" ).datepicker( "getDate" );
 			if(taskDuedate != null ){ 
-				$scope.currentTask.dueDate = taskDuedate.getTime(); }
-			
+				$scope.currentTask.dueDate = taskDuedate.getTime(); }*/	
+			$scope.appMessages = { };
 			$scope.currentTask.$save().then(function(ref) {
-			  $scope.successmsg = "Record Saved";
+			   $scope.appMessages.editTaskSuccessMsg = "Record Saved";
 			}, function(error) {
-				$scope.errormsg = error;
+				$scope.appMessages.editTaskErrorMsg = error;
 			});
-		};	
-		/*
-		$scope.initDatePicker = function () {
-		  $(function () {
-		    $( "#datepicker" ).datepicker();
-		  });
 		};
-		
-		$scope.initDatePicker();*/
 	}
 
 ]);

@@ -33,8 +33,8 @@ ripetoApp.config(['$routeProvider',
 				}
 			}).
 			when('/task/:tId', {
-				templateUrl: 'views/editTask.html',
-				controller:  'EditTaskCntrl',
+				templateUrl: 'views/taskDetails.html',
+				controller:  'TaskDetailCntrl',
 				resolve: {
 					currentAuth: function(AuthenticationSvc){
 						return AuthenticationSvc.isUserLoggedIn();

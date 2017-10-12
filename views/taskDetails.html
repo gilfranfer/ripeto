@@ -1,0 +1,106 @@
+<section id="editTask-section" class="row">
+  <div class="col-md"></div>
+  <div class="col-md-8">
+    
+    <form class="withSpaceUp" name="editTaskForm" novalidate ng-submit="updateTask()">
+      <h3 class="form-group">Task Details</h3>
+      <!-- Name row -->
+      <div class="form-row">
+        <div class="col form-group">
+          <label for="taskname">Task name</label>
+          <input type="text" name="taskname" placeholder="Task Name"
+            class="form-control form-control-lg" ng-model="currentTask.name" ng-required="true">
+          <div class="alert alert-danger" role="alert"
+            ng-show="editTaskForm.taskname.$invalid && editTaskForm.taskname.$dirty">
+            Task name is required
+          </div>
+        </div>
+      </div>
+      <!-- List and Status row -->
+      <div class="form-row">
+        <div class="col text-left  form-group">
+          <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              in {{currentTask.inList}} List
+            </button>
+            <div class="dropdown-menu">
+              <!-- The active list should not appear in the dropdown, 
+                  because it is already displayed in the main button -->
+              <a class="dropdown-item" ng-click="currentTask.inList = list.name"
+                ng-repeat="list in userLists | orderBy:name" 
+                ng-if="list.name != currentTask.inList" >
+                {{list.name}}
+              </a>
+              <!--div class="dropdown-divider"></div>
+              <a class="dropdown-item">Create a List</a-->
+            </div>
+          </div>
+        <!--/div>
+        <div class="col text-right"-->
+          <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              with {{currentTask.status}} status
+            </button>
+            <div class="dropdown-menu">
+              <!-- The active status should not appear in the dropdown, 
+                  because it is already displayed in the main button -->
+              <a class="dropdown-item" ng-click="currentTask.status = 'open'"
+                ng-if="currentTask.status != 'open'" >
+                open
+              </a>
+              <a class="dropdown-item" ng-click="currentTask.status = 'closed'"
+                ng-if="currentTask.status != 'closed'" >
+                closed
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Date row -->
+      <div class="form-row">
+        <div class="col form-group">
+          <label for="createdOn">Created on</label>
+          <input type="text" name="createdOn" disabled
+            class="form-control form-control-lg" 
+            value="{{currentTask.date | date: 'MMM dd yyyy hh:mm:ss'}}"
+            ng-required="true" ng-enabled="false">
+        </div>
+      </div>
+      <!-- More fields rows -->
+      <div class="form-row">
+        <div class="col form-group">
+          <label for="taskdesc">Description</label>
+          <textarea name="taskdesc" placeholder="Give more details about your task"
+                class="form-control form-control-lg"
+                ng-model="currentTask.description" ng-required="false">      
+          </textarea>
+        </div>
+      </div>
+      <!-- Messages rows -->
+      <div class="form-row">
+        <div class="col-md form-group alert alert-danger" role="alert" ng-show="appMessages.editTaskErrorMsg">
+          {{appMessages.editTaskErrorMsg}}
+        </div>
+        <div class="col-md form-group alert alert-success" role="alert" ng-show="appMessages.editTaskSuccessMsg">
+          {{appMessages.editTaskSuccessMsg}}
+        </div>
+      </div>
+      <!-- Buttons row -->
+      <div class="form-row">
+          <div class="form-group col-md-6">
+            <button type="submit" class="btn btn-lg btn-block btn-success"  
+                role="button" ng-disabled="editTaskForm.$invalid">
+              Save
+            </button>
+          </div>
+          <div class="form-group col-md-6">
+            <a class="btn btn-primary btn-lg btn-block" role="button" href="#!/tasks" >
+              Go back
+            </a>
+          </div>
+      </div>
+    </form>
+
+  </div >
+  <div class="col-md"></div>
+</section>
