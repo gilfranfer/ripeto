@@ -3,7 +3,7 @@
   <!-- Greeting -->
   <h1 class="display-4">Hi {{currentUser.firstname}} !!</h1>
   <p class="lead" ng-if="totalOpenTasks>0">
-    You have <span class="badge badge-danger"> {{totalOpenTasks}} </span> tasks waiting to be completed.
+    You have some tasks waiting to be completed.
   </p>
   <p class="lead" ng-if="totalOpenTasks<=0">
     You don't have any pending task.
@@ -83,7 +83,7 @@
 		<ul class="list-group">
       <!-- Default li for toggle -->
       <li class="list-group-item list-group-item-dark list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#openTaskToggle" aria-controls="openTaskToggle" aria-expanded="true" aria-label="">
-        Your Open Tasks
+         <span class="badge badge-danger"> {{totalOpenTasks}} </span> Open Tasks
       </li>
       <!-- Tasks for the active list -->
       <div id="openTaskToggle" class="collapse show">
@@ -117,7 +117,7 @@
     <ul class="list-group">
       <!-- Default li for toggle -->
       <li class="list-group-item list-group-item-danger list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#closedTaskToggle" aria-controls="closedTaskToggle" aria-expanded="false" aria-label="">
-        Your Closed Tasks
+         <span class="badge badge-dark"> {{totalClosedTasks}} </span> Closed Tasks
       </li>
       <!-- Tasks for the active list -->
       <div id="closedTaskToggle" class="collapse">
@@ -136,7 +136,7 @@
             </button>
             <button type="button" class="btn btn-sm btn-outline-success" ng-click="reopenTask(task.$id)">
               Res
-            </button>
+            </button> 
           </small>
         </div>
         <p class="mb-1">
