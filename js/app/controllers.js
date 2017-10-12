@@ -88,21 +88,20 @@ ripetoApp.controller('TasksCntrl',
 
 		$scope.closeTask = function(id){
 			userTasksRef.child(id).update(
-					{status:'closed' ,closed: firebase.database.ServerValue.TIMESTAMP});
+					{status:'closed', closed: firebase.database.ServerValue.TIMESTAMP});
 		};
 		
 		$scope.deleteTask = function(id){
-			var refDel = userTasksRef.child(id);
-		    var record = $firebaseObject(refDel);
+			var record = $firebaseObject(userTasksRef.child(id));
 		    record.$remove().then(function(ref) {
 			  // data has been deleted locally and in the database
 			}, function(error) {
-			  console.log("Error:", error);
+			  console.error("Error:", error);
 			});
 			//$rootScope.userTasks.$remove(key);
 		};
 		
-		$scope.openTask = function(id){
+		$scope.reopenTask = function(id){
 			userTasksRef.child(id).update(
 					{status:'open' ,closed: null});
 		};

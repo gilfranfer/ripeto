@@ -18,17 +18,17 @@
       <!-- Menu Items when user is logged in -->
       <a class="nav-item nav-link" 
           ng-if="currentUser" ng-href="#!/profile/{{currentUser.userid}}">
-        Hi {{currentUser.firstname}} !</a>
+        {{currentUser.firstname}}'s Profile !</a>
       <a class="nav-item nav-link" ng-if="currentUser" ng-href="#!/tasks"> 
         Tasks <span class="badge badge-danger">{{totalOpenTasks}}</span>
       </a>
       <a class="nav-item nav-link" ng-if="currentUser" 
           ng-href="#!/about" ng-click="logout()">
         Logout</a>
-      <!-- Common Menu Items -->
+      <!-- Common Menu Items 
       <a class="nav-item nav-link active" ng-href="#!/contact">
         Contact</a>
-    </div>
+    </div>-->
   </div>
 </nav>
 

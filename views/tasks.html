@@ -2,11 +2,11 @@
 <section class="jumbotron">
   <!-- Greeting -->
   <h1 class="display-4">Hi {{currentUser.firstname}} !!</h1>
-  <p class="lead" ng-if="userTasks.length">
-    You already have some tasks waiting to be completed.
+  <p class="lead" ng-if="totalOpenTasks>0">
+    You have <span class="badge badge-danger"> {{totalOpenTasks}} </span> tasks waiting to be completed.
   </p>
-  <p class="lead" ng-if="!userTasks.length">
-    You don't have tasks yet. Let's start creating some of them.
+  <p class="lead" ng-if="totalOpenTasks<=0">
+    You don't have any pending task.
   </p>
   <hr class="my-4">
   <!-- Create form -->
@@ -82,7 +82,7 @@
   <div class="col">
 		<ul class="list-group">
       <!-- Default li for toggle -->
-      <li class="list-group-item list-group-item-dark list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#openTaskToggle" aria-controls="openTaskToggle" aria-expanded="true" aria-label="Toggle navigation">
+      <li class="list-group-item list-group-item-dark list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#openTaskToggle" aria-controls="openTaskToggle" aria-expanded="true" aria-label="">
         Your Open Tasks
       </li>
       <!-- Tasks for the active list -->
@@ -110,3 +110,37 @@
 </section>
 
 
+<!-- Closed Tasks Section -->
+<section class="row withSpaceUp" >
+  <div class="col">
+    <ul class="list-group">
+      <!-- Default li for toggle -->
+      <li class="list-group-item list-group-item-danger list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#closedTaskToggle" aria-controls="closedTaskToggle" aria-expanded="true" aria-label="">
+        Your Closed Tasks
+      </li>
+      <!-- Tasks for the active list -->
+      <div id="closedTaskToggle" class="collapse show">
+      <li class="list-group-item list-group-item-action flex-column align-items-start" 
+          ng-repeat="task in userTasks | orderBy:tasksOrder:reverseOrder | filter: {name: taskName}"
+          ng-if="task.status=='closed' && (activeTasksList == 'All' || task.inList == activeTasksList)" 
+          ng-href="#!/task/{{currentUser.$id}}/{{task.$id}}" > 
+        
+        <div class="d-flex w-100 justify-content-between">
+          <h3 class="mb-1">
+            <button type="button" class="btn btn-sm btn-outline-danger" ng-click="deleteTask(task.$id)">
+              Del
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-success" ng-click="reopenTask(task.$id)">
+              Res
+            </button>
+            {{task.name}}
+          </h3>
+          <small>from {{task.inList}}</small>
+        </div>
+        <p class="mb-1">{{task.description}}</p>
+        <small>Created on {{task.date | date: "MMM dd yyyy HH:MM:ss"}}</small>
+      </li>
+      </div>
+    </ul>
+  </div>
+</section>
