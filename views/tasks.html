@@ -93,16 +93,17 @@
           ng-href="#!/task/{{currentUser.$id}}/{{task.$id}}" > 
         
         <div class="d-flex w-100 justify-content-between">
-          <h3 class="mb-1">
+          <h3 class="mb-1">{{task.name}}</h3>
+          <small>
             <button type="button" class="btn btn-sm btn-outline-success" ng-click="closeTask(task.$id)">
               Ok
             </button>
-            {{task.name}}
-          </h3>
-          <small>from {{task.inList}}</small>
+          </small>
         </div>
-  		  <p class="mb-1">{{task.description}}</p>
-  		  <small>Created on {{task.date | date: "MMM dd yyyy HH:MM:ss"}}</small>
+  		  <p class="mb-1">
+          Created on {{task.date | date: "MMM dd yyyy HH:MM:ss"}}
+        </p>
+  		  <small>from {{task.inList}} List</small>
   		</li>
       </div>
   	</ul>
@@ -127,18 +128,21 @@
         
         <div class="d-flex w-100 justify-content-between">
           <h3 class="mb-1">
+            {{task.name}}
+          </h3>
+          <small>
             <button type="button" class="btn btn-sm btn-outline-danger" ng-click="deleteTask(task.$id)">
               Del
             </button>
             <button type="button" class="btn btn-sm btn-outline-success" ng-click="reopenTask(task.$id)">
               Res
             </button>
-            {{task.name}}
-          </h3>
-          <small>from {{task.inList}}</small>
+          </small>
         </div>
-        <p class="mb-1">{{task.description}}</p>
-        <small>Created on {{task.date | date: "MMM dd yyyy HH:MM:ss"}}</small>
+        <p class="mb-1">
+          Created on {{task.date | date: "MMM dd yyyy HH:MM:ss"}}
+        </p>
+        <small>from {{task.inList}} List</small>
       </li>
       </div>
     </ul>
