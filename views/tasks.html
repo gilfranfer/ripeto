@@ -39,12 +39,17 @@
         {{activeTasksList}} List
       </button>
       <div class="dropdown-menu">
+        <!-- All is not a list comming from the user, but an option
+            in the program, that is why it needs to be added manually -->
         <a class="dropdown-item" ng-click="setActiveList('All')"
           ng-if="'All' != activeTasksList" >
           All
         </a>
+        <!-- The active list should not appear in the dropdown, 
+            because it is already displayed in the main button -->
         <a class="dropdown-item" ng-click="setActiveList(list.name)"
-          ng-repeat="list in userLists | orderBy:name" ng-if="list.name != activeTasksList" >
+          ng-repeat="list in userLists | orderBy:name" 
+          ng-if="list.name != activeTasksList" >
           {{list.name}}
         </a>
         <div class="dropdown-divider"></div>
@@ -83,7 +88,8 @@
 		<ul class="list-group">
       <!-- Default li for toggle -->
       <li class="list-group-item list-group-item-dark list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#openTaskToggle" aria-controls="openTaskToggle" aria-expanded="true" aria-label="">
-         <span class="badge badge-danger"> {{totalOpenTasks}} </span> Open Tasks
+         <span class="badge badge-danger"> {{totalOpenTasks}} </span> 
+         Total Open Tasks
       </li>
       <!-- Tasks for the active list -->
       <div id="openTaskToggle" class="collapse show">
@@ -93,7 +99,9 @@
           ng-href="#!/task/{{currentUser.$id}}/{{task.$id}}" > 
         
         <div class="d-flex w-100 justify-content-between">
-          <h3 class="mb-1">{{task.name}}</h3>
+          <a class="text-dark mb-1" ng-href="#!/task/{{task.$id}}">
+            <h3>{{task.name}}</h3>
+          </a>
           <small>
             <button type="button" class="btn btn-sm btn-outline-success" ng-click="closeTask(task.$id)">
               Ok
@@ -101,7 +109,7 @@
           </small>
         </div>
   		  <p class="mb-1">
-          Created on {{task.date | date: "MMM dd yyyy HH:MM:ss"}}
+          Created on {{task.date | date: "MMM dd yyyy hh:mm:ss"}}
         </p>
   		  <small>from {{task.inList}} List</small>
   		</li>
@@ -117,19 +125,20 @@
     <ul class="list-group">
       <!-- Default li for toggle -->
       <li class="list-group-item list-group-item-danger list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#closedTaskToggle" aria-controls="closedTaskToggle" aria-expanded="false" aria-label="">
-         <span class="badge badge-dark"> {{totalClosedTasks}} </span> Closed Tasks
+         <span class="badge badge-dark"> {{totalClosedTasks}} </span> 
+         Total Closed Tasks
       </li>
       <!-- Tasks for the active list -->
       <div id="closedTaskToggle" class="collapse">
       <li class="list-group-item list-group-item-action flex-column align-items-start" 
           ng-repeat="task in userTasks | orderBy:tasksOrder:reverseOrder | filter: {name: taskName}"
           ng-if="task.status=='closed' && (activeTasksList == 'All' || task.inList == activeTasksList)" 
-          ng-href="#!/task/{{currentUser.$id}}/{{task.$id}}" > 
+           > 
         
         <div class="d-flex w-100 justify-content-between">
-          <h3 class="mb-1">
-            {{task.name}}
-          </h3>
+          <a class="text-dark mb-1" ng-href="#!/task/{{task.$id}}">
+            <h3>{{task.name}}</h3>
+          </a>
           <small>
             <button type="button" class="btn btn-sm btn-outline-danger" ng-click="deleteTask(task.$id)">
               Del
@@ -140,7 +149,7 @@
           </small>
         </div>
         <p class="mb-1">
-          Created on {{task.date | date: "MMM dd yyyy HH:MM:ss"}}
+          Created on {{task.date | date: "MMM dd yyyy hh:mm:ss"}}
         </p>
         <small>from {{task.inList}} List</small>
       </li>
