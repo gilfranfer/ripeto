@@ -115,11 +115,11 @@
   <div class="col">
     <ul class="list-group">
       <!-- Default li for toggle -->
-      <li class="list-group-item list-group-item-danger list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#closedTaskToggle" aria-controls="closedTaskToggle" aria-expanded="true" aria-label="">
+      <li class="list-group-item list-group-item-danger list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#closedTaskToggle" aria-controls="closedTaskToggle" aria-expanded="false" aria-label="">
         Your Closed Tasks
       </li>
       <!-- Tasks for the active list -->
-      <div id="closedTaskToggle" class="collapse show">
+      <div id="closedTaskToggle" class="collapse">
       <li class="list-group-item list-group-item-action flex-column align-items-start" 
           ng-repeat="task in userTasks | orderBy:tasksOrder:reverseOrder | filter: {name: taskName}"
           ng-if="task.status=='closed' && (activeTasksList == 'All' || task.inList == activeTasksList)" 
