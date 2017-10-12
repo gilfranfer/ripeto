@@ -3,7 +3,7 @@
   <!-- Greeting -->
   <h1 class="display-4">Hi {{currentUser.firstname}} !!</h1>
   <p class="lead" ng-if="totalOpenTasks>0">
-    You have <span class="badge badge-danger"> {{totalOpenTasks}} </span> tasks waiting to be completed.
+    You have some tasks waiting to be completed.
   </p>
   <p class="lead" ng-if="totalOpenTasks<=0">
     You don't have any pending task.
@@ -83,7 +83,7 @@
 		<ul class="list-group">
       <!-- Default li for toggle -->
       <li class="list-group-item list-group-item-dark list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#openTaskToggle" aria-controls="openTaskToggle" aria-expanded="true" aria-label="">
-        Your Open Tasks
+         <span class="badge badge-danger"> {{totalOpenTasks}} </span> Open Tasks
       </li>
       <!-- Tasks for the active list -->
       <div id="openTaskToggle" class="collapse show">
@@ -93,16 +93,17 @@
           ng-href="#!/task/{{currentUser.$id}}/{{task.$id}}" > 
         
         <div class="d-flex w-100 justify-content-between">
-          <h3 class="mb-1">
+          <h3 class="mb-1">{{task.name}}</h3>
+          <small>
             <button type="button" class="btn btn-sm btn-outline-success" ng-click="closeTask(task.$id)">
               Ok
             </button>
-            {{task.name}}
-          </h3>
-          <small>from {{task.inList}}</small>
+          </small>
         </div>
-  		  <p class="mb-1">{{task.description}}</p>
-  		  <small>Created on {{task.date | date: "MMM dd yyyy HH:MM:ss"}}</small>
+  		  <p class="mb-1">
+          Created on {{task.date | date: "MMM dd yyyy HH:MM:ss"}}
+        </p>
+  		  <small>from {{task.inList}} List</small>
   		</li>
       </div>
   	</ul>
@@ -115,11 +116,11 @@
   <div class="col">
     <ul class="list-group">
       <!-- Default li for toggle -->
-      <li class="list-group-item list-group-item-danger list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#closedTaskToggle" aria-controls="closedTaskToggle" aria-expanded="true" aria-label="">
-        Your Closed Tasks
+      <li class="list-group-item list-group-item-danger list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#closedTaskToggle" aria-controls="closedTaskToggle" aria-expanded="false" aria-label="">
+         <span class="badge badge-dark"> {{totalClosedTasks}} </span> Closed Tasks
       </li>
       <!-- Tasks for the active list -->
-      <div id="closedTaskToggle" class="collapse show">
+      <div id="closedTaskToggle" class="collapse">
       <li class="list-group-item list-group-item-action flex-column align-items-start" 
           ng-repeat="task in userTasks | orderBy:tasksOrder:reverseOrder | filter: {name: taskName}"
           ng-if="task.status=='closed' && (activeTasksList == 'All' || task.inList == activeTasksList)" 
@@ -127,18 +128,21 @@
         
         <div class="d-flex w-100 justify-content-between">
           <h3 class="mb-1">
+            {{task.name}}
+          </h3>
+          <small>
             <button type="button" class="btn btn-sm btn-outline-danger" ng-click="deleteTask(task.$id)">
               Del
             </button>
             <button type="button" class="btn btn-sm btn-outline-success" ng-click="reopenTask(task.$id)">
               Res
-            </button>
-            {{task.name}}
-          </h3>
-          <small>from {{task.inList}}</small>
+            </button> 
+          </small>
         </div>
-        <p class="mb-1">{{task.description}}</p>
-        <small>Created on {{task.date | date: "MMM dd yyyy HH:MM:ss"}}</small>
+        <p class="mb-1">
+          Created on {{task.date | date: "MMM dd yyyy HH:MM:ss"}}
+        </p>
+        <small>from {{task.inList}} List</small>
       </li>
       </div>
     </ul>
