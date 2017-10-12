@@ -10,7 +10,7 @@
   </p>
   <hr class="my-4">
   <!-- Create form -->
-  <form class="" name="addTaskForm" novalidate ng-submit="addTask()">
+  <form class="" name="addTaskForm" novalidate ng-submit="createTask()">
     <div class="form-row">
       <div class="col">
         <input type="text" name="taskName" class="form-control form-control-lg"
@@ -79,8 +79,12 @@
 
 <!-- Open Tasks Section -->
 <section class="row">
-  <div class="col" ng-show="totalOpenTasks>0">
+  <div class="col">
 		<ul class="list-group">
+      <li class="list-group-item list-group-item-dark list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#openTaskToggle" aria-controls="openTaskToggle" aria-expanded="true" aria-label="Toggle navigation">
+        Your Open Tasks
+      </li>
+      <div id="openTaskToggle" class="collapse show">
   		<li class="list-group-item list-group-item-action flex-column align-items-start" 
           ng-repeat="task in userTasks | orderBy:tasksOrder:reverseOrder | filter: {name: taskName}"
           ng-if="task.status=='open' && (activeTasksList == 'All' || task.inList == activeTasksList)" 
@@ -96,8 +100,9 @@
           <small>from {{task.inList}}</small>
         </div>
   		  <p class="mb-1">{{task.description}}</p>
-  		  <small>Created on {{task.date | date: "MMM dd yyyy"}}</small>
+  		  <small>Created on {{task.date | date: "MMM dd yyyy HH:MM:ss"}}</small>
   		</li>
+      </div>
   	</ul>
   </div>
 </section>

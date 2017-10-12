@@ -29,7 +29,7 @@ ripetoApp.controller('TasksCntrl',
 		//Default values for some utility variables
 		$scope.tasksOrder = "name";
 		$scope.reverseOrder = false;
-		$rootScope.activeTasksList = "All";
+		$scope.activeTasksList = "All";
 		
 		$rootScope.userTasks = undefined;
 		$rootScope.userLists = undefined;
@@ -64,28 +64,26 @@ ripetoApp.controller('TasksCntrl',
 		}); 
 
 		//Custom functions
-		$scope.addTask = function(){
-			var list = $( "#list-select" ).val();
-			var taskDuedate = $( "#datepicker" ).datepicker( "getDate" );
-			var dpValue = $( "#datepicker" ).val();
-			
-			//null and undefined are false
-			if(!list || 0 === list.length){ list = "Default"; }
-			console.log("After:"+ list);
-			
+		$scope.createTask = function(){
+			let list = $scope.activeTasksList;
+			//Task created while showing All Tasks,
+			//get created in Default List
+			if( list === 'All'){
+				list = 'Default';
+			}
+
 			var taskObject = {
 				name: $scope.taskName,
-				date: firebase.database.ServerValue.TIMESTAMP,
 				status: 'open',
-				inList: list
+				inList: list,
+				date: firebase.database.ServerValue.TIMESTAMP				
 			};
-			
-			if(taskDuedate != null && dpValue != $scope.dpValue){ taskObject.dueDate = taskDuedate.getTime(); }
-			
+
+			//Reset Taskname model after persist
 			$rootScope.userTasks.$add( taskObject ).then( function(){
 				$scope.taskName = '';
-				$( "#datepicker" ).val($scope.dpValue);
 			});
+			console.log(taskObject);
 		};
 
 		$scope.closeTask = function(id){
