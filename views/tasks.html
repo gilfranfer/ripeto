@@ -1,98 +1,146 @@
-<article class="card cf">
-	<div class="textintro">
-		<h1>Welcome {{currentUser.firstname}}</h1>
-		<p ng-if="userTasks.length">Here are your tasks</p>
-		<p ng-if="!userTasks.length">You don't have tasks</p>
-	</div>
-	
-	<div class="search cf">
-		<form class="addActivity cf" name="addTaskForm"
-			novalidate ng-submit="addTask()">
-			<div class="iwrap" >
-				<input type="text" name="taskName"
-					placeholder="Search or add a Task"
-					ng-model="taskName" ng-required="true"/>
-			</div>
-			<button type="submit" class="btn" ng-disabled="addTaskForm.$invalid">
-			+
-			</button>
-		</form><br/>
-		<div>
-			<input id="datepicker" class="btn btn-addList" value="{{dpValue}}"/>
-			<button class="btn btn-addList" ng-click="addListDialog()">List</button>
-			<select id="list-select" ng-model="activeTasksList">
-				<option ng-repeat="list in taskLists | orderBy:name " value="{{list.name}}">
-					{{list.name}}
-				</option>
-			</select>
-			
-			<button class="btn btn-addList" ng-click="changeTasksDirection()">
-				Order {{taskDirectionLabel}} by 
-			</button>
-			<select ng-model="tasksOrder">
-				<option value="dueDate">Due Date</option>
-				<option value="date">Creation</option>
-				<option value="name">Name</option>
-			</select>
-		</div>
+<!-- Create Section -->
+<section class="jumbotron">
+  <!-- Greeting -->
+  <h1 class="display-4">Hi {{currentUser.firstname}} !!</h1>
+  <p class="lead" ng-if="totalOpenTasks>0">
+    You have <span class="badge badge-danger"> {{totalOpenTasks}} </span> tasks waiting to be completed.
+  </p>
+  <p class="lead" ng-if="totalOpenTasks<=0">
+    You don't have any pending task.
+  </p>
+  <hr class="my-4">
+  <!-- Create form -->
+  <form class="" name="addTaskForm" novalidate ng-submit="createTask()">
+    <div class="form-row">
+      <div class="col">
+        <input type="text" name="taskName" class="form-control form-control-lg"
+          placeholder="Search or add a Task" ng-model="taskName" 
+          ng-required="true"/>
+      </div>
+      <div class="col-2">
+        <button type="submit" class="btn btnj btn-primary btn-block" 
+              ng-disabled="addTaskForm.$invalid">
+          +
+        </button>
+      </div>
     </div>
-    <!-- Open Tasks in selected List -->
-	<div class="card cf activities" ng-show="totalOpenTasks>0">
-		<div class="textintro">
-			<h1>Tasks on list: {{activeTasksList}} </h1>
-		</div>
-		<ul class="tasksList cf">
-			<li ng-repeat="task in userTasks | orderBy: tasksOrder:taskDirection | filter: {name: taskName}"
-				ng-if="task.inList == activeTasksList && task.status=='open'"
-				ng-href="#!/task/{{task.$id}}"
-				>
-		    	<div class="task">
-		    		<div class="buttons">
-						<button class="btn btn-checkin tooltip" ng-click="closeTask(task.$id)">
-							<span>Close Task?</span>
-						</button>
-						<a class="btn btn-list tooltip" ng-href="#!/task/{{currentUser.$id}}/{{task.$id}}">
-				        	<span>Task Details</span>
-				        </a>
-			        </div>
-			        <div class="info" ng-class="{ 'dueTask': task.dueDate }">
-			        	<h2>{{task.name}}</h2>
-			        	<div class="date">
-			            	Created on {{task.date | date: "MMM d,yy h:mm a"}} <br>
-			            	<span ng-if="task.dueDate">Due on {{task.dueDate | date: "MMM d,yy"}}</span>
-			        	</div>
-			        </div>
-		    	</div>
-			</li>
-		</ul>
-	</div><br/>
-	
-    <!-- All Closed Tasks -->
-	<div class="card cf activities" ng-show="totalClosedTasks>0">
-		<div class="textintro">
-			<h1>All Your Closed Tasks</h1>
-		</div>
-		<ul class="tasksList cf">
-			<li ng-repeat="task in userTasks | orderBy: tasksOrder:taskDirection | filter: {name: taskName}"
-				ng-if="task.status=='closed'">
-		    	<div class="task">
-		    		<div class="buttons">
-			        	<button class="btn btn-delete tooltip" ng-click="deleteTask(task.$id)">
-							<span>Delete Task?</span>
-						</button>
-			        	<button class="btn btn-restore tooltip" ng-click="openTask(task.$id)">
-							<span>Recover Task?</span>
-						</button>
-			        </div>
-			        <div class="info">
-			        	<h2>{{task.name}}</h2>
-			        	<div class="date">
-			        		In list {{task.inList}} <br/>
-			            	Closed on {{task.closed | date: "MMM d,yy h:mm a"}}
-			        	</div>
-			        </div>
-		    	</div>
-			</li>
-		</ul>
-	</div><br/><br/>
-</article>
+    <input type="hidden" name="taskList" ng-model="activeTasksList">
+    <!--<input id="datepicker" class="btn btn-addList" value="{{dpValue}}"/>
+    <button class="btn btn-addList" ng-click="addListDialog()">List</button>-->
+  </form>
+</section>
+
+<!-- Ordering Section -->
+<section class="row mb-2">
+  <!-- Dropdown with User Task Lists -->
+  <div class="col-4 text-left">
+    <div class="btn-group">
+      <button type="button" class="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{activeTasksList}} List
+      </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" ng-click="setActiveList('All')"
+          ng-if="'All' != activeTasksList" >
+          All
+        </a>
+        <a class="dropdown-item" ng-click="setActiveList(list.name)"
+          ng-repeat="list in userLists | orderBy:name" ng-if="list.name != activeTasksList" >
+          {{list.name}}
+        </a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item">Create a List</a>
+      </div>
+    </div>
+  </div>
+  <!-- Order By and direction -->
+  <div class="col text-right">
+    <div class="btn-group " data-toggle="buttons">
+      <label class="btn btn-sm btn-dark active" 
+              ng-click="orderTaskBy('name')">
+        <input type="radio" name="options">Name
+      </label>
+      <label class="btn btn-sm btn-dark" 
+              ng-click="orderTaskBy('date')">
+        <input type="radio" name="options">Date
+      </label>
+    </div>  
+    <div class="btn-group " data-toggle="buttons">
+      <label class="btn btn-sm btn-success active" 
+              ng-click="reverseDisplay(false)">
+        <input type="radio" name="options">Asc
+      </label>
+      <label class="btn btn-sm btn-success" 
+              ng-click="reverseDisplay(true)">
+        <input type="radio" name="options">Desc
+      </label>
+    </div>
+  </div>
+</section>
+
+<!-- Open Tasks Section -->
+<section class="row">
+  <div class="col">
+		<ul class="list-group">
+      <!-- Default li for toggle -->
+      <li class="list-group-item list-group-item-dark list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#openTaskToggle" aria-controls="openTaskToggle" aria-expanded="true" aria-label="">
+        Your Open Tasks
+      </li>
+      <!-- Tasks for the active list -->
+      <div id="openTaskToggle" class="collapse show">
+  		<li class="list-group-item list-group-item-action flex-column align-items-start" 
+          ng-repeat="task in userTasks | orderBy:tasksOrder:reverseOrder | filter: {name: taskName}"
+          ng-if="task.status=='open' && (activeTasksList == 'All' || task.inList == activeTasksList)" 
+          ng-href="#!/task/{{currentUser.$id}}/{{task.$id}}" > 
+        
+        <div class="d-flex w-100 justify-content-between">
+          <h3 class="mb-1">
+            <button type="button" class="btn btn-sm btn-outline-success" ng-click="closeTask(task.$id)">
+              Ok
+            </button>
+            {{task.name}}
+          </h3>
+          <small>from {{task.inList}}</small>
+        </div>
+  		  <p class="mb-1">{{task.description}}</p>
+  		  <small>Created on {{task.date | date: "MMM dd yyyy HH:MM:ss"}}</small>
+  		</li>
+      </div>
+  	</ul>
+  </div>
+</section>
+
+
+<!-- Closed Tasks Section -->
+<section class="row withSpaceUp" >
+  <div class="col">
+    <ul class="list-group">
+      <!-- Default li for toggle -->
+      <li class="list-group-item list-group-item-danger list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#closedTaskToggle" aria-controls="closedTaskToggle" aria-expanded="true" aria-label="">
+        Your Closed Tasks
+      </li>
+      <!-- Tasks for the active list -->
+      <div id="closedTaskToggle" class="collapse show">
+      <li class="list-group-item list-group-item-action flex-column align-items-start" 
+          ng-repeat="task in userTasks | orderBy:tasksOrder:reverseOrder | filter: {name: taskName}"
+          ng-if="task.status=='closed' && (activeTasksList == 'All' || task.inList == activeTasksList)" 
+          ng-href="#!/task/{{currentUser.$id}}/{{task.$id}}" > 
+        
+        <div class="d-flex w-100 justify-content-between">
+          <h3 class="mb-1">
+            <button type="button" class="btn btn-sm btn-outline-danger" ng-click="deleteTask(task.$id)">
+              Del
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-success" ng-click="reopenTask(task.$id)">
+              Res
+            </button>
+            {{task.name}}
+          </h3>
+          <small>from {{task.inList}}</small>
+        </div>
+        <p class="mb-1">{{task.description}}</p>
+        <small>Created on {{task.date | date: "MMM dd yyyy HH:MM:ss"}}</small>
+      </li>
+      </div>
+    </ul>
+  </div>
+</section>

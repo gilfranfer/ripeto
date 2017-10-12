@@ -1,54 +1,69 @@
 <!doctype html>
 <html lang="en"  ng-app="ripetoApp">
-	<head>
-		<title>RIPETO</title>
+  <head>
+  	<title>RIPETO</title>
+  	<meta charset="UTF-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
-		<link rel="stylesheet" type="text/css" href="css/baseStyle.css">
-		<link rel="stylesheet" type="text/css" href="css/appStyle.css">
-		
-		<script src="js/lib/angular.min.js"></script>
-		<script src="js/lib/angular-route.min.js"></script>
-		<script src="js/lib/angular-animate.min.js"></script>
-
-		<!-- ngDialog, Datepicker -->	
-		<link rel="stylesheet" href="css/ngDialog.min.css">
-		<link rel="stylesheet" href="css/ngDialog-theme-default.min.css">
-		<script src="js/lib/ngDialog.min.js"></script>
-		<link rel="stylesheet" href="css/jquery-ui.css">
-		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-		<!-- Replace with your firebase config bellow-->	
-		<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
-		<script>
-		  // Initialize Firebase
-		    var config = {
-				apiKey: "AIzaSyABQ6T4lpA4hvqIIOpHgGMFbZnQek-ZMsA",
-				authDomain: "ripeto-prd.firebaseapp.com",
-				databaseURL: "https://ripeto-prd.firebaseio.com",
-				projectId: "ripeto-prd",
-				storageBucket: "ripeto-prd.appspot.com",
-				messagingSenderId: "209179056459"
-			};
-		  firebase.initializeApp(config);
-		</script>
-		<!-- Replace with your firebase config above-->
-
-		<script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
-
-		<script src="js/application.js"></script>
-		<script src="js/cntrl/controllers.js"></script>
-		<script src="js/cntrl/tasksCntrl.js"></script>
-		<script src="js/svc/services.js"></script>
-		
+  	<!-- Bootstrap CSS -->
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  	<link rel="stylesheet" type="text/css" href="css/bsCustom.css">
+      <!-- Custom Styles  
+        <link rel="stylesheet" type="text/css" href="css/baseStyle.css">  
+      <link rel="stylesheet" type="text/css" href="css/appStyle.css">--> 
+  			
 	</head>
 	<body>
-		<header ng-include="'views/nav.html'"></header>
-		<div class="page">
-			<main class="cf" ng-view></main>
-		</div>
-	</body>
+    <section ng-controller="AuthenticationCntrl">
+      <header class="header clearfix" ng-include="'views/nav.html'"></header>
+      <!-- Main Bootstrap container -->
+  		<div class="container"> 
+  			<main id="main" class="withSpaceDown" ng-view></main>
+        <footer class="footer">
+  				<p>&copy; Fernando Gil 2017</p>
+  			</footer>
+  		</div> <!-- Main Bootstrap container  -->
+    </section>
+    <!-- Scripts -->
+  	<!-- Bootstrap JavaScript plugins, jQuery, and Popper.js -->
+  	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+  	<!-- Datepicker	
+  	<link rel="stylesheet" href="css/jquery-ui.css">
+  	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+
+  	<!-- Angular and Firebase -->
+  	<script src="js/lib/angular.min.js"></script>
+  	<script src="js/lib/angular-route.min.js"></script>
+  	<script src="js/lib/angular-animate.min.js"></script>
+
+  	<!-- ngDialog -->	
+  	<link rel="stylesheet" href="css/ngDialog.min.css">
+  	<link rel="stylesheet" href="css/ngDialog-theme-default.min.css">
+  	<script src="js/lib/ngDialog.min.js"></script>
+  	
+  	<!-- Replace with your firebase config bellow-->	
+  	<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+  	<script>
+  	  // Initialize Firebase
+  	  var config = {
+  	  	apiKey: "AIzaSyABQ6T4lpA4hvqIIOpHgGMFbZnQek-ZMsA",
+  	  	authDomain: "ripeto-prd.firebaseapp.com",
+  	  	databaseURL: "https://ripeto-prd.firebaseio.com",
+  	  	projectId: "ripeto-prd",
+  	  	storageBucket: "ripeto-prd.appspot.com",
+  	  	messagingSenderId: "209179056459"
+  	  };
+  	  firebase.initializeApp(config);
+  	</script>
+  	<!-- Replace with your firebase config above-->
+  	<script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+
+  	<script src="js/app/config.js"></script>
+  	<script src="js/app/controllers.js"></script>
+  	<script src="js/app/services.js"></script>
+  </body>
 </html>

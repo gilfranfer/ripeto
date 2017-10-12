@@ -1,58 +1,92 @@
-<section class="card register">
-  <form name="registerForm" novalidate ng-submit="register()">
-
-    <div class="textintro">
-      <h1>Register</h1>
-      <p>To be part of Chocolate's Factory</p>
-      <p ng-show="errormessage">{{errormessage}}</p>
-    </div>
-
-    <fieldset>
-      <input type="text" name="firstname" placeholder="First Name"
-        ng-model="user.firstname" ng-required="true"/>
-        <p class="error validationerror"
-          ng-show="registerForm.firstname.$invalid &&
-              registerForm.firstname.$touched">
-          First name required
-        </p>
-      <input type="text" name="lastname" placeholder="Last Name"
-        ng-model="user.lastname" ng-required="true"/>
-        <p class="error validationerror"
-          ng-show="registerForm.lastname.$invalid &&
-              registerForm.lastname.$touched">
-          Last name required
-        </p>
-      <input type="email" name="email" placeholder="Email"
-        ng-model="user.email" ng-required="true"/>
-        <p class="error validationerror"
-          ng-show="registerForm.email.$invalid &&
-              registerForm.email.$touched">
-          Must be a valid email
-        </p>
-      <input type="password" name="password" placeholder="Password"
-        ng-model="user.pwd" ng-required="true" ng-minlength="8"/>
-        <p class="error validationerror"
-          ng-show="registerForm.password.$invalid &&
-              registerForm.password.$touched">
-          Password is Required
-        </p>
-        <p class="error validationerror"
-          ng-show="registerForm.password.$error.minlength">
-          Password must be 8 chars or more
-        </p>
-
-      <input type="password" name="passwordConfirm" placeholder="Confirm Password"
-        ng-model="user.pwdconf" ng-required="true" ng-pattern="user.pwd"/>
-        <p class="error validationerror"
-          ng-show="registerForm.passwordConfirm.$invalid &&
-              registerForm.passwordConfirm.$touched">
-          Password must match
-        </p>
-    </fieldset>
+<section id="register-section" class="row">
+  <div class="col-md"></div>
+  <div class="col-md-8">
+    <h2>Register here!</h2>
+    <h3>To be part of the awesomeness!</h3>
     
-    <button type="submit" class="btn" ng-disabled="registerForm.$invalid">
-      Register!
-    </button>
-    <p>or <a ng-href="#!/login">login</a></p>
-  </form>
+    <form class="withSpaceUp" name="registerForm" novalidate ng-submit="register()">
+      <!-- Name row -->
+      <div class="form-row">
+        <div class="col-md form-group">
+          <label for="firstname">First name</label>
+          <input type="text" name="firstname" placeholder="Are you Luke?"
+            class="form-control form-control-lg" ng-model="regUser.firstname" ng-required="true">
+          <div class="alert alert-danger" role="alert"
+            ng-show="registerForm.firstname.$invalid && registerForm.firstname.$dirty">
+            First name is required
+          </div>
+        </div>
+        <div class="col-md form-group">
+          <label for="lastname">Last name</label>
+          <input type="text" name="lastname" placeholder="Skywalker?"
+            class="form-control form-control-lg" ng-model="regUser.lastname" ng-required="true">
+          <div class="alert alert-danger" role="alert"
+            ng-show="registerForm.lastname.$invalid && registerForm.lastname.$dirty">
+            Last name is required
+          </div>
+        </div>
+      </div>
+      <!-- Email row -->
+      <div class="form-row">
+        <div class="col-md form-group">
+          <label for="email">Email address</label>
+          <input type="email" name="email" id="email" aria-describedby="emailHelp"
+            class="form-control form-control-lg" placeholder="ex: luke.sky@jedis.com"
+            ng-model="regUser.email" ng-required="true">
+          <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+
+          <div class="alert alert-danger" role="alert"
+            ng-show="registerForm.email.$invalid && registerForm.email.$dirty">
+          That's not a valid email
+          </div>
+        </div>
+      </div>
+      <!-- Password row -->
+      <div class="form-row"> 
+        <div class="col-md form-group">
+          <label for="pwd">Set a Password</label>
+          <input type="password" name="password" id="pwd" aria-describedby="pwdHelp"
+            class="form-control form-control-lg" placeholder="Shhh"
+            ng-model="regUser.pwd" ng-required="true" ng-minlength="8"/>
+          <small id="pwdHelp" class="form-text text-muted">More than 8 charactes</small>
+          <div class="alert alert-danger" role="alert"
+            ng-show="registerForm.password.$invalid && registerForm.password.$dirty">
+            Password must be 8 chars or more
+          </div>
+        </div>
+        <div class="col-md form-group">
+          <label for="cpwd">Confirm Password</label>
+          <input type="password" name="passwordConfirm" id="cpwd" 
+            class="form-control form-control-lg" placeholder="Say it again"
+            ng-model="regUser.pwdconf" ng-required="true" ng-pattern="regUser.pwd"/>
+          <div class="alert alert-danger" role="alert"
+            ng-show="registerForm.passwordConfirm.$invalid && registerForm.passwordConfirm.$dirty">
+            Password must match
+          </div>
+        </div>
+      </div>
+      <!-- Error row -->
+      <div class="form-row">
+        <div class="col-md form-group alert alert-danger" role="alert" ng-show="appMessages.registerErrorMsg">
+          {{appMessages.registerErrorMsg}}
+        </div>
+      </div>
+      <!-- Buttons row -->
+      <div class="form-row">
+          <div class="form-group col-md-6">
+            <button type="submit" class="btn btn-lg btn-block btn-success"  
+                role="button" ng-disabled="registerForm.$invalid">
+              Register!
+            </button>
+          </div>
+          <div class="form-group col-md-6">
+            <a class="btn btn-primary btn-lg btn-block" role="button" href="#!/login" >
+              or Log in
+            </a>
+          </div>
+      </div>
+    </form>
+
+  </div>
+  <div class="col-md"></div>
 </section>

@@ -1,0 +1,57 @@
+/* Space out content a bit */
+  body {
+  padding-bottom: 1.5rem;
+  min-height: 40rem;
+  padding-top: 4.5rem;
+}
+
+
+/* Custom page header 
+.header {
+  padding-bottom: 1rem;
+  border-bottom: .05rem solid #e5e5e5;
+  margin-bottom: 2rem;
+}*/
+
+/* Make the masthead heading the same height as the navigation */
+.header h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 3rem;
+}
+
+/* Custom page footer */
+.footer {
+  padding-top: 1.5rem;
+  color: #777;
+  border-top: .05rem solid #e5e5e5;
+}
+
+/* Main marketing message and sign up button */
+.jumbotron {
+  text-align: center;
+  border-bottom: .05rem solid #e5e5e5;
+}
+.jumbotron .btnj {
+  font-size: 1.5rem;
+}
+
+/* Supporting marketing content */
+.marketing {
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+
+.marketing p + h4 {
+  margin-top: 1.5rem;
+}
+
+
+/* Login Section */
+.withSpaceUp{
+  padding-top: 3rem;
+}
+
+.withSpaceDown{
+  padding-bottom: 3rem;
+}

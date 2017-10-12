@@ -1,20 +1,33 @@
-<nav class="cf" ng-controller="AuthenticationCntrl">
-  <div class="branding">
-  	<a ng-href="#!/init">Ripeto!</a>
-  </div>
-  <div  ng-controller="TasksCntrl">
-    <ul ng-if="!currentUser" >
-      <li><a ng-href="#!/register">Register</a></li>
-      <li><a ng-href="#!/login">Login</a></li>
-    </ul>
-    <ul ng-if="currentUser" >
-      <li><a ng-href="#!/home" ng-click="logout()">Logout</a></li>
-      <li><a ng-href="#!/profile/{{currentUser.userid}}">{{currentUser.firstname}}</a></li>
-      <li><a ng-href="#!/tasks">
-        Your Tasks
-        <span ng-show="totalOpenTasks" class="badge">{{totalOpenTasks}}</span>
-          </a>
-      </li>
-    </ul>
+<nav ng-controller="TasksCntrl"
+     class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+  
+  <a class="navbar-brand" href="#!/about">Ripeto!</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarContent">
+    <div class="navbar-nav">
+      <!-- Menu Items when user is not logged in -->
+      <a class="nav-item nav-link" 
+          ng-if="!currentUser" ng-href="#!/register">
+        Register</a>
+      <a class="nav-item nav-link" 
+          ng-if="!currentUser" ng-href="#!/login">
+        Log in</a>
+      <!-- Menu Items when user is logged in -->
+      <a class="nav-item nav-link" 
+          ng-if="currentUser" ng-href="#!/profile/{{currentUser.userid}}">
+        {{currentUser.firstname}}'s Profile !</a>
+      <a class="nav-item nav-link" ng-if="currentUser" ng-href="#!/tasks"> 
+        Tasks <span class="badge badge-danger">{{totalOpenTasks}}</span>
+      </a>
+      <a class="nav-item nav-link" ng-if="currentUser" 
+          ng-href="#!/about" ng-click="logout()">
+        Logout</a>
+      <!-- Common Menu Items 
+      <a class="nav-item nav-link active" ng-href="#!/contact">
+        Contact</a>
+    </div>-->
   </div>
 </nav>

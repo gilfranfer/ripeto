@@ -3,6 +3,9 @@ var ripetoApp = angular.module('ripetoApp',['ngRoute','firebase','ngDialog']);
 ripetoApp.config(['$routeProvider',
 	function($routeProvider){
 		$routeProvider.
+			when('/about', {
+				templateUrl: 'views/home.html'
+			}).
 			when('/login',{
 				templateUrl: 'views/login.html',
 				controller: 'AuthenticationCntrl'
@@ -29,7 +32,7 @@ ripetoApp.config(['$routeProvider',
 					}
 				}
 			}).
-			when('/task/:uId/:tId', {
+			when('/task/:tId', {
 				templateUrl: 'views/editTask.html',
 				controller:  'EditTaskCntrl',
 				resolve: {
@@ -38,20 +41,15 @@ ripetoApp.config(['$routeProvider',
 					}
 				}
 			}).
-			when('/home', {
-				templateUrl: 'views/home.html',
-				controller: 'HomeCntrl'
-			}).
 			when('/error', {
-				templateUrl: 'views/errors/general.html',
-				controller: 'ErrorCntrl'
+				templateUrl: 'views/errors/general.html'
 			}).
 			when('/error-login', {
 				templateUrl: 'views/errors/login.html',
 				controller: 'ErrorCntrl'
 			}).
 			otherwise({
-				redirectTo: 'home'
+				redirectTo: 'about'
 			});
 	}
 ]);
