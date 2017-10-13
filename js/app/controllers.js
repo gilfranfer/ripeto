@@ -26,11 +26,13 @@ ripetoApp.controller('AuthenticationCntrl',
 ripetoApp.controller('TasksCntrl',
 	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray','$firebaseObject', 'ngDialog', 
 	function($scope, $rootScope, $firebaseAuth, $firebaseArray, $firebaseObject, ngDialog){
-		//Default values for some utility variables
-		$scope.tasksOrder = "name";
-		$scope.reverseOrder = false;
-		$scope.activeTasksList = "All";
 		
+		$rootScope.tasksOrder = "name";
+		$rootScope.reverseOrder = false;
+		if( $rootScope.activeTasksList  == undefined){	
+			$rootScope.activeTasksList = "All";
+		}
+
 		$rootScope.userTasks = undefined;
 		$rootScope.userLists = undefined;
 		$rootScope.totalClosedTasks = undefined;
@@ -65,7 +67,7 @@ ripetoApp.controller('TasksCntrl',
 
 		//Custom functions
 		$scope.createTask = function(){
-			let list = $scope.activeTasksList;
+			let list = $rootScope.activeTasksList;
 			//Task created while showing All Tasks,
 			//get created in Default List
 			if( list === 'All'){
@@ -130,15 +132,15 @@ ripetoApp.controller('TasksCntrl',
 	    };
 	    
 	    $scope.reverseDisplay = function(bool) {
-			$scope.reverseOrder = bool;
+			$rootScope.reverseOrder = bool;
 		};
 
 		$scope.orderTaskBy = function(value) {
-			$scope.tasksOrder = value;
+			$rootScope.tasksOrder = value;
 		};
 		
 		$scope.setActiveList = function(name) {
-			$scope.activeTasksList = name;
+			$rootScope.activeTasksList = name;
 		};
 	}
 ]);//controller
