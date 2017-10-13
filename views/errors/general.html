@@ -1,8 +1,15 @@
-<div class="card meetings cf">
+<section>
+	
+	<div class="jumbotron">
+		<h1 class="display-3">Oooops!!</h1>
+		<hr class="my-4">
+		<p class="lead">
+		  Houston, We have some problems!
+		</p>
+		<div class="alert alert-danger" role="alert"
+			ng-show="loginForm.email.$invalid && loginForm.email.$dirty">
+			{{routeErrorMessage}}
+		</div>
+	</div>
 
-  <div class="textintro">
-  	<h1>Ooops! We have some problems</h1>
-    <p>{{routeErrorMessage}}</p>
-  </div>
-
-</div>
+</section>
