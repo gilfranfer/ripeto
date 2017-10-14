@@ -38,28 +38,29 @@ ripetoApp.controller('TasksCntrl',
 		var usersFolder = firebase.database().ref().child('users');
 
 		auth.$onAuthStateChanged( function(user){
-    		if(user && $rootScope.userTasks == undefined){
-    			console.log("TskCntrl - On Auth State");
+			console.log("TskCntrl - On Auth State");
+
+    		if(user && (!$rootScope.userLists || !$rootScope.openTasks == undefined) ){
+				console.log("TskCntrl - Creating Task References");
+
 				let userTasksRef = usersFolder.child(user.uid).child('tasks');
     			let userListsRef = usersFolder.child(user.uid).child('lists');
 				let openTasksQuery = userTasksRef.orderByChild("status").equalTo("open");
-				let closedTasksQuery = userTasksRef.orderByChild("status").equalTo("closed"); 
-
-				let userTasksArray = $firebaseArray( userTasksRef );
+				
+				let openTasksArray = $firebaseArray( openTasksQuery );
 				let userListsArray = $firebaseArray( userListsRef );
-				$rootScope.userTasks = userTasksArray;
+				$rootScope.openTasks = openTasksArray;
 				$rootScope.userLists = userListsArray;
 			
-				userTasksArray.$loaded().then( function(data){
-					console.log("TskCntrl - User Tasks Loaded");
+				/*userTasksArray.$loaded().then( function(data){
+					console.log("Loaded: User Tasks");
 					$rootScope.updateBadge();
-				} );
+				} );*/
 
-				userTasksArray.$watch( function(data){
-					console.log("Watch: Event on User Tasks");
+				openTasksArray.$watch( function(data){
+					console.log("Watch: Event on Open Tasks");
 					$rootScope.updateBadge();
-				} );
-				
+				} );	
 			}
 		}); 
 
@@ -79,7 +80,7 @@ ripetoApp.controller('TasksCntrl',
 				date: firebase.database.ServerValue.TIMESTAMP				
 			};
 
-			$rootScope.userTasks.$add( taskObject ).then( function(){
+			$rootScope.openTasks.$add( taskObject ).then( function(){
 				//$scope.taskName = '';//Reset Taskname model after persist
 			});
 			//console.log(taskObject);
@@ -97,7 +98,7 @@ ripetoApp.controller('TasksCntrl',
 			}, function(error) {
 			  console.error("Error:", error);
 			});
-			//$rootScope.userTasks.$remove(key);
+			//$rootScope.openTasks.$remove(key);
 		};
 		
 		$scope.reopenTask = function(id){
@@ -108,7 +109,7 @@ ripetoApp.controller('TasksCntrl',
 		$rootScope.updateBadge = function(){
 			var totalOpen = 0;
 			var totalClosed = 0;
-			$rootScope.userTasks.forEach(function(element) {
+			$rootScope.openTasks.forEach(function(element) {
 			    if(element.status == 'open'){
 			    	totalOpen ++;
 			    }else if(element.status == 'closed'){
@@ -128,7 +129,23 @@ ripetoApp.controller('TasksCntrl',
                 });
 	    };
 	    
-	    $scope.reverseDisplay = function(bool) {
+	    $scope.loadClosedTaks = function(bool) {
+			//console.log("Trying to load Closed tasks");
+    		if( $rootScope.currentUser && !$rootScope.closedTasks ){
+				console.log("Loading closed Tasks on Demand");
+
+				let userTasksRef = usersFolder.child($rootScope.currentUser.$id).child('tasks');
+				let closedTasksQuery = userTasksRef.orderByChild("status").equalTo("closed"); 
+				let closedTasksArray = $firebaseArray( closedTasksQuery );
+				$rootScope.closedTasks = closedTasksArray;
+				closedTasksArray.$watch( function(data){
+					console.log("Watch: Event on Closed Tasks");
+					$rootScope.updateBadge();
+				} );
+			}
+		};
+
+		$scope.reverseDisplay = function(bool) {
 			$rootScope.reverseOrder = bool;
 		};
 
