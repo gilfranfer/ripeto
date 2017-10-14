@@ -59,7 +59,7 @@ ripetoApp.controller('TasksCntrl',
 
 				openTasksArray.$watch( function(data){
 					console.log("Watch: Event on Open Tasks");
-					$rootScope.updateBadge();
+					//$rootScope.updateBadge();
 				} );	
 			}
 		}); 
@@ -106,7 +106,7 @@ ripetoApp.controller('TasksCntrl',
 					{status:'open' ,closed: null});
 		};
 		
-		$rootScope.updateBadge = function(){
+		/*$rootScope.updateBadge = function(){
 			var totalOpen = 0;
 			var totalClosed = 0;
 			$rootScope.openTasks.forEach(function(element) {
@@ -118,7 +118,7 @@ ripetoApp.controller('TasksCntrl',
 			});
 			$rootScope.totalClosedTasks = totalClosed;
 			$rootScope.totalOpenTasks = totalOpen;
-		};
+		};*/
 		
 		$scope.addListDialog = function () {
 			ngDialog.open({
@@ -140,7 +140,7 @@ ripetoApp.controller('TasksCntrl',
 				$rootScope.closedTasks = closedTasksArray;
 				closedTasksArray.$watch( function(data){
 					console.log("Watch: Event on Closed Tasks");
-					$rootScope.updateBadge();
+					//$rootScope.updateBadge();
 				} );
 			}
 		};
