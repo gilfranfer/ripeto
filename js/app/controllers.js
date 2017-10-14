@@ -33,35 +33,33 @@ ripetoApp.controller('TasksCntrl',
 			$rootScope.activeTasksList = "All";
 		}
 
-		$rootScope.userTasks = undefined;
-		$rootScope.userLists = undefined;
-		$rootScope.totalClosedTasks = undefined;
-		$rootScope.totalOpenTasks = undefined;
-
 		//Firebase stuff
 		var auth = $firebaseAuth();
-		var baseRef = firebase.database().ref();
-		var userRef = undefined;
-		var userTasksRef = undefined;
+		var usersFolder = firebase.database().ref().child('users');
 
 		auth.$onAuthStateChanged( function(user){
-			console.log("TskCntrl - On Auth State");
-    		if(user){
-    			userRef = baseRef.child('users').child(user.uid);
-    			userTasksRef = userRef.child('tasks');
-				let userTasks = $firebaseArray( userTasksRef );
-				let userLists = $firebaseArray( userRef.child('lists') );
-				
-				$rootScope.userTasks = userTasks;
-				$rootScope.userLists = userLists;
-				
-				userTasks.$loaded().then( function(data){
+    		if(user && $rootScope.userTasks == undefined){
+    			console.log("TskCntrl - On Auth State");
+				let userTasksRef = usersFolder.child(user.uid).child('tasks');
+    			let userListsRef = usersFolder.child(user.uid).child('lists');
+				let openTasksQuery = userTasksRef.orderByChild("status").equalTo("open");
+				let closedTasksQuery = userTasksRef.orderByChild("status").equalTo("closed"); 
+
+				let userTasksArray = $firebaseArray( userTasksRef );
+				let userListsArray = $firebaseArray( userListsRef );
+				$rootScope.userTasks = userTasksArray;
+				$rootScope.userLists = userListsArray;
+			
+				userTasksArray.$loaded().then( function(data){
+					console.log("TskCntrl - User Tasks Loaded");
 					$rootScope.updateBadge();
 				} );
 
-				userTasks.$watch( function(data){
+				userTasksArray.$watch( function(data){
+					console.log("Watch: Event on User Tasks");
 					$rootScope.updateBadge();
 				} );
+				
 			}
 		}); 
 
@@ -81,20 +79,19 @@ ripetoApp.controller('TasksCntrl',
 				date: firebase.database.ServerValue.TIMESTAMP				
 			};
 
-			//Reset Taskname model after persist
 			$rootScope.userTasks.$add( taskObject ).then( function(){
-				$scope.taskName = '';
+				//$scope.taskName = '';//Reset Taskname model after persist
 			});
-			console.log(taskObject);
+			//console.log(taskObject);
 		};
 
 		$scope.closeTask = function(id){
-			userTasksRef.child(id).update(
+			usersFolder.child($rootScope.currentUser.$id).child('tasks').child(id).update(
 					{status:'closed', closed: firebase.database.ServerValue.TIMESTAMP});
 		};
 		
 		$scope.deleteTask = function(id){
-			var record = $firebaseObject(userTasksRef.child(id));
+			var record = $firebaseObject(usersFolder.child($rootScope.currentUser.$id).child('tasks').child(id));
 		    record.$remove().then(function(ref) {
 			  // data has been deleted locally and in the database
 			}, function(error) {
@@ -104,7 +101,7 @@ ripetoApp.controller('TasksCntrl',
 		};
 		
 		$scope.reopenTask = function(id){
-			userTasksRef.child(id).update(
+			usersFolder.child($rootScope.currentUser.$id).child('tasks').child(id).update(
 					{status:'open' ,closed: null});
 		};
 		
