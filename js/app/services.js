@@ -12,7 +12,7 @@ ripetoApp.factory( 'AuthenticationSvc',
 			console.log("AuthSvc - On Auth State");
     		if(authUser){
 				$rootScope.currentUser = getUserData(authUser.uid);
-				ConfigurationSvc.upgradeUserConfig( getUserData(authUser.uid) );
+				//ConfigurationSvc.upgradeUserConfig( getUserData(authUser.uid) );
 			}else{
 				$rootScope.currentUser = null;				
 			}
