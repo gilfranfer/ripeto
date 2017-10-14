@@ -1,5 +1,4 @@
-<nav ng-controller="TasksCntrl"
-     class="navbar navbar-dark bg-dark fixed-top ">
+<nav class="navbar navbar-dark bg-dark fixed-top ">
   
   <!-- For collapsable menu, uncomment bellow code
   <nav ng-controller="TasksCntrl"
@@ -37,7 +36,7 @@
   </li>  -->
   <li class="nav-item">
     <a class="nav-link text-light" ng-if="currentUser" ng-href="#!/tasks"> 
-      <span class="badge badge-danger">{{totalOpenTasks}}</span> Tasks 
+      <span class="badge badge-danger">{{openTasks.length}}</span> Tasks 
     </a>
   </li>
   <li class="nav-item">

@@ -51,9 +51,13 @@
           ng-repeat="list in userLists | orderBy:name" 
           ng-if="list.name != activeTasksList" >
           {{list.name}}
-        </a>
+        </a><!--
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item">Create a List</a>
+         Form to create Lists 
+        <form class="" name="addTaskForm" novalidate ng-submit="createTask()">
+          <input type="text" class="form-control is-valid" placeholder="Type a new List">
+          <button type="button" class="btn-block btn btn-success">+</button>
+        </form>-->
       </div>
     </div>
   </div>
@@ -88,14 +92,14 @@
 		<ul class="list-group">
       <!-- Default li for toggle -->
       <li class="list-group-item list-group-item-dark list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#openTaskToggle" aria-controls="openTaskToggle" aria-expanded="true" aria-label="">
-         <span class="badge badge-danger"> {{totalOpenTasks}} </span> 
-         Total Open Tasks
+         <span class="badge badge-danger"> {{openTasks.length}} </span> 
+         Open Tasks
       </li>
       <!-- Tasks for the active list -->
       <div id="openTaskToggle" class="collapse show">
   		<li class="list-group-item list-group-item-action flex-column align-items-start" 
-          ng-repeat="task in userTasks | orderBy:tasksOrder:reverseOrder | filter: {name: taskName}"
-          ng-if="task.status=='open' && (activeTasksList == 'All' || task.inList == activeTasksList)" 
+          ng-repeat="task in openTasks | orderBy:tasksOrder:reverseOrder | filter: {name: taskName}"
+          ng-if="activeTasksList == 'All' || task.inList == activeTasksList" 
           ng-href="#!/task/{{currentUser.$id}}/{{task.$id}}" > 
         
         <div class="d-flex w-100 justify-content-between">
@@ -124,15 +128,17 @@
   <div class="col">
     <ul class="list-group">
       <!-- Default li for toggle -->
-      <li class="list-group-item list-group-item-danger list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#closedTaskToggle" aria-controls="closedTaskToggle" aria-expanded="false" aria-label="">
-         <span class="badge badge-dark"> {{totalClosedTasks}} </span> 
-         Total Closed Tasks
+      <li class="list-group-item list-group-item-danger list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#closedTaskToggle" aria-controls="closedTaskToggle" aria-expanded="false" aria-label=""
+      ng-click="loadClosedTaks()">
+         <span class="badge badge-dark" ng-show="closedTasks">
+          {{closedTasks.length}} </span> 
+         Closed Tasks
       </li>
       <!-- Tasks for the active list -->
       <div id="closedTaskToggle" class="collapse">
       <li class="list-group-item list-group-item-action flex-column align-items-start" 
-          ng-repeat="task in userTasks | orderBy:tasksOrder:reverseOrder | filter: {name: taskName}"
-          ng-if="task.status=='closed' && (activeTasksList == 'All' || task.inList == activeTasksList)" 
+          ng-repeat="task in closedTasks | orderBy:tasksOrder:reverseOrder | filter: {name: taskName}"
+          ng-if="activeTasksList == 'All' || task.inList == activeTasksList" 
            > 
         
         <div class="d-flex w-100 justify-content-between">

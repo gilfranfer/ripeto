@@ -12,7 +12,7 @@ ripetoApp.factory( 'AuthenticationSvc',
 			console.log("AuthSvc - On Auth State");
     		if(authUser){
 				$rootScope.currentUser = getUserData(authUser.uid);
-				ConfigurationSvc.upgradeUserConfig( getUserData(authUser.uid) );
+				//ConfigurationSvc.upgradeUserConfig( getUserData(authUser.uid) );
 			}else{
 				$rootScope.currentUser = null;				
 			}
@@ -42,6 +42,13 @@ ripetoApp.factory( 'AuthenticationSvc',
 				});
 			},
 			logout: function(){
+				//Clean rootScope
+				for (var prop in $rootScope) {
+				    if (prop.substring(0,1) !== '$') {
+						console.log("Rootscope Prop: "+prop);
+				        delete $rootScope[prop];
+				    }
+				}
 				return auth.$signOut();
 			},
 			isUserLoggedIn: function(){
