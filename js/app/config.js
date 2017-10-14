@@ -45,8 +45,7 @@ ripetoApp.config(['$routeProvider',
 				templateUrl: 'views/errors/general.html'
 			}).
 			when('/error-login', {
-				templateUrl: 'views/errors/login.html',
-				controller: 'ErrorCntrl'
+				templateUrl: 'views/errors/login.html'
 			}).
 			otherwise({
 				redirectTo: 'about'
