@@ -23,6 +23,15 @@ ripetoApp.config(['$routeProvider',
 					}
 				}
 			}).
+			when('/lists', {
+				templateUrl: 'views/lists.html',
+				controller:  'ListsCntrl',
+				resolve: {
+					currentAuth: function(AuthenticationSvc){
+						return AuthenticationSvc.isUserLoggedIn();
+					}
+				}
+			}).
 			when('/tasks', {
 				templateUrl: 'views/tasks.html',
 				controller:  'TasksCntrl',
@@ -32,7 +41,7 @@ ripetoApp.config(['$routeProvider',
 					}
 				}
 			}).
-			when('/task/:tId', {
+			when('/task/:tid', {
 				templateUrl: 'views/taskDetails.html',
 				controller:  'TaskDetailCntrl',
 				resolve: {
@@ -53,6 +62,7 @@ ripetoApp.config(['$routeProvider',
 	}
 ]);
 
+/*
 ripetoApp.config(['ngDialogProvider', function (ngDialogProvider) {
             ngDialogProvider.setDefaults({
                 className: 'ngdialog-theme-default',
@@ -65,7 +75,7 @@ ripetoApp.config(['ngDialogProvider', function (ngDialogProvider) {
                     console.log('default pre-close callback');
                 }
             });
-}]);
+}]);*/
         
 ripetoApp.run( ['$rootScope', '$location', function($rootScope,$location){
 
@@ -73,7 +83,7 @@ ripetoApp.run( ['$rootScope', '$location', function($rootScope,$location){
 		if(error == 'AUTH_REQUIRED'){
 			$location.path('/error-login');
 		}else{		
-			$rootScope.routeErrorMessage = error;	
+			$rootScope.appMessages.errorMessage = error;	
 			$location.path('/error');
 		}
 	});

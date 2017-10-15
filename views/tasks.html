@@ -2,12 +2,12 @@
 <section class="jumbotron">
   <!-- Greeting -->
   <h1 class="display-4">Hi {{currentUser.firstname}} !!</h1>
-  <p class="lead" ng-if="totalOpenTasks>0">
+  <!--p class="lead" ng-if="totalOpenTasks>0">
     You have some tasks waiting to be completed.
   </p>
   <p class="lead" ng-if="totalOpenTasks<=0">
     You don't have any pending task.
-  </p>
+  </p-->
   <hr class="my-4">
   <!-- Create form -->
   <form class="" name="addTaskForm" novalidate ng-submit="createTask()">
@@ -51,13 +51,11 @@
           ng-repeat="list in userLists | orderBy:name" 
           ng-if="list.name != activeTasksList" >
           {{list.name}}
-        </a><!--
+        </a>
         <div class="dropdown-divider"></div>
-         Form to create Lists 
-        <form class="" name="addTaskForm" novalidate ng-submit="createTask()">
-          <input type="text" class="form-control is-valid" placeholder="Type a new List">
-          <button type="button" class="btn-block btn btn-success">+</button>
-        </form>-->
+        <a class="dropdown-item" ng-href="#!/lists">
+          Manage Lists
+        </a>
       </div>
     </div>
   </div>
@@ -99,8 +97,7 @@
       <div id="openTaskToggle" class="collapse show">
   		<li class="list-group-item list-group-item-action flex-column align-items-start" 
           ng-repeat="task in openTasks | orderBy:tasksOrder:reverseOrder | filter: {name: taskName}"
-          ng-if="activeTasksList == 'All' || task.inList == activeTasksList" 
-          ng-href="#!/task/{{currentUser.$id}}/{{task.$id}}" > 
+          ng-if="activeTasksList == 'All' || task.inList == activeTasksList"> 
         
         <div class="d-flex w-100 justify-content-between">
           <a class="text-dark mb-1" ng-href="#!/task/{{task.$id}}">
@@ -122,7 +119,6 @@
   </div>
 </section>
 
-
 <!-- Closed Tasks Section -->
 <section class="row withSpaceUp" >
   <div class="col">
@@ -138,8 +134,7 @@
       <div id="closedTaskToggle" class="collapse">
       <li class="list-group-item list-group-item-action flex-column align-items-start" 
           ng-repeat="task in closedTasks | orderBy:tasksOrder:reverseOrder | filter: {name: taskName}"
-          ng-if="activeTasksList == 'All' || task.inList == activeTasksList" 
-           > 
+          ng-if="activeTasksList == 'All' || task.inList == activeTasksList"> 
         
         <div class="d-flex w-100 justify-content-between">
           <a class="text-dark mb-1" ng-href="#!/task/{{task.$id}}">
@@ -149,7 +144,7 @@
             <button type="button" class="btn btn-sm btn-outline-danger" ng-click="deleteTask(task.$id)">
               Del
             </button>
-            <button type="button" class="btn btn-sm btn-outline-success" ng-click="reopenTask(task.$id)">
+            <button type="button" class="btn btn-sm btn-outline-primary" ng-click="reopenTask(task.$id)">
               Res
             </button> 
           </small>

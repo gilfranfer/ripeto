@@ -6,8 +6,8 @@
 		<p class="lead">
 		  Houston, We have some problems!
 		</p>
-		<div class="alert alert-danger" role="alert">
-			{{routeErrorMessage}}
+		<div class="alert alert-danger" role="alert" ng-show="appMessages.errorMessage">
+			{{appMessages.errorMessage}}
 		</div>
 	</div>
 
