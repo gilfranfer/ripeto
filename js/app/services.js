@@ -1,54 +1,47 @@
 ripetoApp.factory( 'AuthenticationSvc', 
-	['$rootScope','$location','$firebaseObject','$firebaseAuth', 'ConfigurationSvc',
+	['$rootScope','$location','$firebaseObject','$firebaseAuth',
 	
-	function($rootScope, $location,$firebaseObject,$firebaseAuth,ConfigurationSvc){
+	function($rootScope, $location,$firebaseObject,$firebaseAuth){
 		
-		var ref = firebase.database().ref();
 		var auth = $firebaseAuth();
-		var usersFolder = ref.child('users');
+		var usersFolder = firebase.database().ref().child('users');
 		var loginSuccessPage = '/tasks';
 
 		auth.$onAuthStateChanged( function(authUser){
-			console.log("AuthSvc - On Auth State");
-    		if(authUser){
-				$rootScope.currentUser = getUserData(authUser.uid);
-				//ConfigurationSvc.upgradeUserConfig( getUserData(authUser.uid) );
+    		if(authUser && !$rootScope.currentUser){
+				console.log("AuthSvc - Initialization");
+				$rootScope.currentUser = $firebaseObject(usersFolder.child(authUser.uid));
+				$rootScope.userTasksRef = usersFolder.child(authUser.uid).child('tasks');
+    			$rootScope.userListsRef = usersFolder.child(authUser.uid).child('lists');
+				usersFolder.child(authUser.uid).update({lastlogin: firebase.database.ServerValue.TIMESTAMP});
+				//ConfigurationSvc.upgradeUserConfig( currentUser );
 			}else{
-				$rootScope.currentUser = null;				
+				console.log("AuthSvc - No User Authenticated");
+				cleanRootScope();
 			}
 		} );
-		
-		var updateLastLogin = function(user){
-				usersFolder.child(user.uid).update(
-					{lastlogin: firebase.database.ServerValue.TIMESTAMP});
-			};
 			
-		var getUserData = function(uid){
-			var userRef = usersFolder.child(uid);
-			return $firebaseObject(userRef);
+		var cleanRootScope = function(){
+			for (var prop in $rootScope) {
+			    if (prop.substring(0,1) !== '$') {
+					//console.log("Rootscope Prop: "+prop);
+			        delete $rootScope[prop];
+			    }
+			}
 		};
-		
+
 		return{
 			loginUser: function(user){
-				auth.$signInWithEmailAndPassword( 
-					user.email,user.pwd
-				).then( function (user){
-					updateLastLogin(user);
-					$location.path( loginSuccessPage );
-					console.log( "Sucessful Login!");
-				}).catch( function(error){
-					$rootScope.appMessages.loginErrorMsg = error.message;
-					console.error( error.message );
-				});
+				auth.$signInWithEmailAndPassword( user.email,user.pwd)
+					.then( function (user){
+						console.log( "Sucessful Login!");
+						$location.path( loginSuccessPage );
+					}).catch( function(error){
+						$rootScope.appMessages.loginErrorMsg = error.message;
+						//console.error( error.message );
+					});
 			},
 			logout: function(){
-				//Clean rootScope
-				for (var prop in $rootScope) {
-				    if (prop.substring(0,1) !== '$') {
-						console.log("Rootscope Prop: "+prop);
-				        delete $rootScope[prop];
-				    }
-				}
 				return auth.$signOut();
 			},
 			isUserLoggedIn: function(){
@@ -58,25 +51,25 @@ ripetoApp.factory( 'AuthenticationSvc',
 				return $firebaseObject(usersFolder.child(uid));
 			},
 			register: function(user, currentAppVersion){
-				auth.$createUserWithEmailAndPassword(user.email, user.pwd
-				).then(
-					function(regUser){
-						usersFolder.child(regUser.uid).set({
-							firstname: user.firstname,
-							lastname: user.lastname,
-							email: user.email,
-							userid: regUser.uid,
-							date: firebase.database.ServerValue.TIMESTAMP,
-							lastlogin: firebase.database.ServerValue.TIMESTAMP,
-							//Consider to move this to a ConfService
-							config: { appVersion: currentAppVersion },
-							lists: { "default": {name:"Default", date:firebase.database.ServerValue.TIMESTAMP}}
-						});
-						$location.path( loginSuccessPage );
-					}
-				).catch( function(error){
-					$rootScope.appMessages.registerErrorMsg = error.message;
-				});
+				auth.$createUserWithEmailAndPassword(user.email, user.pwd)
+					.then(
+						function(regUser){
+							usersFolder.child(regUser.uid).set({
+								firstname: user.firstname,
+								lastname: user.lastname,
+								email: user.email,
+								userid: regUser.uid,
+								date: firebase.database.ServerValue.TIMESTAMP,
+								lastlogin: firebase.database.ServerValue.TIMESTAMP,
+								//Consider to move this to a ConfService
+								config: { appVersion: currentAppVersion },
+								lists: { "default": {name:"Default", date:firebase.database.ServerValue.TIMESTAMP}}
+							});
+							$location.path( loginSuccessPage );
+						}
+					).catch( function(error){
+						$rootScope.appMessages.registerErrorMsg = error.message;
+					});
 			}
 		};//return
 	}
@@ -132,7 +125,6 @@ ripetoApp.factory( 'ConfigurationSvc',
 		};
 	}
 ]);
-
 
 ripetoApp.factory( 'TasksSvc', 
 	['$rootScope','$location','$firebaseObject','$firebaseAuth', 

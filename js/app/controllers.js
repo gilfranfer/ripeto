@@ -21,7 +21,7 @@ ripetoApp.controller('AuthenticationCntrl',
 		
 		$scope.clearErrors()
 	}]//function
-);//controller
+);
 
 ripetoApp.controller('TasksCntrl',
 	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray','$firebaseObject', 'ngDialog', 
@@ -37,18 +37,14 @@ ripetoApp.controller('TasksCntrl',
 		var auth = $firebaseAuth();
 		var usersFolder = firebase.database().ref().child('users');
 
-		auth.$onAuthStateChanged( function(user){
-			console.log("TskCntrl - On Auth State");
-
-    		if(user && (!$rootScope.userLists || !$rootScope.openTasks == undefined) ){
+		auth.$onAuthStateChanged( function(authUser){
+    		if(authUser && (!$rootScope.userLists || !$rootScope.openTasks ) ){
 				console.log("TskCntrl - Creating Task References");
 
-				let userTasksRef = usersFolder.child(user.uid).child('tasks');
-    			let userListsRef = usersFolder.child(user.uid).child('lists');
-				let openTasksQuery = userTasksRef.orderByChild("status").equalTo("open");
-				
+				let userListsQuery = $rootScope.userListsRef.orderByChild("name");
+				let openTasksQuery = $rootScope.userTasksRef.orderByChild("status").equalTo("open");
 				let openTasksArray = $firebaseArray( openTasksQuery );
-				let userListsArray = $firebaseArray( userListsRef );
+				let userListsArray = $firebaseArray( userListsQuery );
 				$rootScope.openTasks = openTasksArray;
 				$rootScope.userLists = userListsArray;
 			
@@ -58,7 +54,7 @@ ripetoApp.controller('TasksCntrl',
 				} );*/
 
 				openTasksArray.$watch( function(data){
-					console.log("Watch: Event on Open Tasks");
+					//console.log("Watch: Event on Open Tasks");
 					//$rootScope.updateBadge();
 				} );	
 			}
@@ -105,35 +101,10 @@ ripetoApp.controller('TasksCntrl',
 			usersFolder.child($rootScope.currentUser.$id).child('tasks').child(id).update(
 					{status:'open' ,closed: null});
 		};
-		
-		/*$rootScope.updateBadge = function(){
-			var totalOpen = 0;
-			var totalClosed = 0;
-			$rootScope.openTasks.forEach(function(element) {
-			    if(element.status == 'open'){
-			    	totalOpen ++;
-			    }else if(element.status == 'closed'){
-			    	totalClosed ++;
-			    }
-			});
-			$rootScope.totalClosedTasks = totalClosed;
-			$rootScope.totalOpenTasks = totalOpen;
-		};*/
-		
-		$scope.addListDialog = function () {
-			ngDialog.open({
-                    template: 'views/dialogs/editLists.html',
-                    className: 'ngdialog-theme-default',
-                    widht: 500,
-                    controller: 'ListsCntrl'
-                });
-	    };
-	    
+			  
+		// Closed tasks wil be loaded on demand.  
 	    $scope.loadClosedTaks = function(bool) {
-			//console.log("Trying to load Closed tasks");
     		if( $rootScope.currentUser && !$rootScope.closedTasks ){
-				console.log("Loading closed Tasks on Demand");
-
 				let userTasksRef = usersFolder.child($rootScope.currentUser.$id).child('tasks');
 				let closedTasksQuery = userTasksRef.orderByChild("status").equalTo("closed"); 
 				let closedTasksArray = $firebaseArray( closedTasksQuery );
@@ -156,21 +127,40 @@ ripetoApp.controller('TasksCntrl',
 		$scope.setActiveList = function(name) {
 			$rootScope.activeTasksList = name;
 		};
+
+
+		/*$rootScope.updateBadge = function(){
+			var totalOpen = 0;
+			var totalClosed = 0;
+			$rootScope.openTasks.forEach(function(element) {
+			    if(element.status == 'open'){
+			    	totalOpen ++;
+			    }else if(element.status == 'closed'){
+			    	totalClosed ++;
+			    }
+			});
+			$rootScope.totalClosedTasks = totalClosed;
+			$rootScope.totalOpenTasks = totalOpen;
+		};
+		
+		$scope.addListDialog = function () {
+			ngDialog.open({
+                    template: 'views/dialogs/editLists.html',
+                    className: 'ngdialog-theme-default',
+                    widht: 500,
+                    controller: 'ListsCntrl'
+                });
+	    };*/
 	}
-]);//controller
+]);
 
 ripetoApp.controller('TaskDetailCntrl',
-  ['$scope', '$rootScope', '$location', '$routeParams', '$firebaseObject',
-	function($scope, $rootScope, $location, $routeParams, $firebaseObject) {
-		let whichUser = $rootScope.currentUser.$id;
+  ['$scope', '$rootScope', '$routeParams', '$firebaseObject',
+	function($scope, $rootScope, $routeParams, $firebaseObject) {
 		let whichTask = $routeParams.tId;
-	    var ref = firebase.database().ref().child('users').child(whichUser).child("tasks").child(whichTask);
-		$scope.currentTask = $firebaseObject(ref);
+		$scope.currentTask = $firebaseObject($rootScope.userTasksRef.child(whichTask));
 		
 		$scope.updateTask = function(){
-			/*var taskDuedate = $( "#datepicker" ).datepicker( "getDate" );
-			if(taskDuedate != null ){ 
-				$scope.currentTask.dueDate = taskDuedate.getTime(); }*/	
 			$scope.appMessages = { };
 			$scope.currentTask.$save().then(function(ref) {
 			   $scope.appMessages.editTaskSuccessMsg = "Record Saved";
@@ -179,7 +169,6 @@ ripetoApp.controller('TaskDetailCntrl',
 			});
 		};
 	}
-
 ]);
 
 ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray', '$firebaseObject',

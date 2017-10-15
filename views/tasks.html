@@ -51,13 +51,11 @@
           ng-repeat="list in userLists | orderBy:name" 
           ng-if="list.name != activeTasksList" >
           {{list.name}}
-        </a><!--
+        </a>
         <div class="dropdown-divider"></div>
-         Form to create Lists 
-        <form class="" name="addTaskForm" novalidate ng-submit="createTask()">
-          <input type="text" class="form-control is-valid" placeholder="Type a new List">
-          <button type="button" class="btn-block btn btn-success">+</button>
-        </form>-->
+        <a class="dropdown-item" ng-href="#!/lists">
+          Manage Lists
+        </a>
       </div>
     </div>
   </div>
@@ -121,7 +119,6 @@
   	</ul>
   </div>
 </section>
-
 
 <!-- Closed Tasks Section -->
 <section class="row withSpaceUp" >
