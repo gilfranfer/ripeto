@@ -1,42 +1,56 @@
-<div class="">
-    <div  ng-if="successmsg">
-        <span class="successmsg">{{successmsg}}</span><br/>
+<!-- Create Section -->
+<section class="jumbotron">
+  <h1 class="display-4">Manage your Lists</h1>
+  <!--p class="lead">
+    Crewith 4 to 25 non special Characters
+  </p-->
+  <hr class="my-4">
+  <form class="" name="addListForm" novalidate ng-submit="createNewList()">
+    <div class="form-row">
+      <div class="col">
+        <input type="text" name="listName" class="form-control form-control-lg"
+          placeholder="Search or add a List" ng-model="listName" 
+          ng-required="true" aria-describedby="nameHelp"/>
+          <small id="nameHelp" class="form-text text-muted">with 4 to 25 non special Characters</small>
+      </div>
+      <div class="col-2">
+        <button type="submit" class="btn btnj btn-primary btn-block" 
+              ng-disabled="addListForm.$invalid">
+          +
+        </button>
+      </div>
     </div>
-    <div  ng-if="errormsg">
-        <span class="errormsg">{{errormsg}}</span><br/>
+  </form>
+</section>
+
+
+<section class="row">
+  <div class="col-md">
+    <div class="alert alert-danger" role="alert">
+      When deleating a list, all its tasks will be moved to Default list
     </div>
-    <article>
-        <div class="textintro">
-            <h2>Add your list</h2>
-    		<p>with 4 to 25 non special Characters</p>
-    	</div>
-        <form class="addList cf" name="addListForm" novalidate ng-submit="createNewList()">
-            <div class="iwrap" >
-            <input type="text" placeholder="List Name"
-        			ng-model="listToCreate" ng-required="true"
-        			ng-minlength="4" ng-maxlength="25"
-        			ng-pattern="regex"/>
-        	</div>
-        	<button type="submit" class="btn" ng-disabled="addListForm.$invalid">+</button>
-        </form>
-    </article>
-    <br/>
-    <article>
-        <div class="textintro">
-            <h2>Remove a list</h2>
-    	</div>
-        <form class="addList cf" name="removeListForm" novalidate ng-submit="removeList()">
-            <div class="iwrap" >
-                <select ng-required="true" ng-model="listToDelete">
-    				<option ng-repeat="list in taskLists | orderBy:name " value="{{list.$id}}" ng-if="list.name != 'Default'">
-    					{{list.name}}
-    				</option>
-    			</select>
-        	</div>
-        	<button type="submit" class="btn" ng-disabled="removeListForm.$invalid">-</button>
-        </form>
-    </article>
-    <br/>
-    <button class="btn" ng-click="closeThisDialog(1)">Close</button>
-    <br/>
-</div>
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-action flex-column align-items-start"
+        ng-repeat="list in userLists | filter: {name: listName}">
+        <div class="d-flex w-100 justify-content-between">
+          {{list.name}}
+          <small>
+            <!--button type="button" class="btn btn-sm btn-outline-success" 
+              ng-click="showList(list.$id)" ng-if="list.name != 'Default'">
+              Show
+            </button> 
+            <button type="button" class="btn btn-sm btn-outline-dark" 
+              ng-click="hideList(list.$id)" ng-if="list.name != 'Default'">
+              Hide
+            </button--> 
+            <button type="button" class="btn btn-sm btn-outline-danger" 
+              ng-click="removeList(list.$id)" ng-if="list.name != 'Default'">
+              Del
+            </button> 
+          </small>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+ 

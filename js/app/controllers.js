@@ -77,7 +77,7 @@ ripetoApp.controller('TasksCntrl',
 			};
 
 			$rootScope.openTasks.$add( taskObject ).then( function(){
-				//$scope.taskName = '';//Reset Taskname model after persist
+			$scope.taskName = '';//Reset Taskname model after persist
 			});
 			//console.log(taskObject);
 		};
@@ -128,44 +128,37 @@ ripetoApp.controller('TasksCntrl',
 			$rootScope.activeTasksList = name;
 		};
 
-
-		/*$rootScope.updateBadge = function(){
-			var totalOpen = 0;
-			var totalClosed = 0;
-			$rootScope.openTasks.forEach(function(element) {
-			    if(element.status == 'open'){
-			    	totalOpen ++;
-			    }else if(element.status == 'closed'){
-			    	totalClosed ++;
-			    }
-			});
-			$rootScope.totalClosedTasks = totalClosed;
-			$rootScope.totalOpenTasks = totalOpen;
-		};
-		
-		$scope.addListDialog = function () {
-			ngDialog.open({
-                    template: 'views/dialogs/editLists.html',
-                    className: 'ngdialog-theme-default',
-                    widht: 500,
-                    controller: 'ListsCntrl'
-                });
-	    };*/
 	}
 ]);
 
 ripetoApp.controller('TaskDetailCntrl',
-  ['$scope', '$rootScope', '$routeParams', '$firebaseObject',
-	function($scope, $rootScope, $routeParams, $firebaseObject) {
-		let whichTask = $routeParams.tId;
-		$scope.currentTask = $firebaseObject($rootScope.userTasksRef.child(whichTask));
-		
+  ['$scope', '$rootScope', '$location', '$routeParams', '$firebaseObject',
+	function($scope, $rootScope, $location, $routeParams, $firebaseObject) {
+		$rootScope.appMessages = {};
+
+		let whichTask = $routeParams.tid;
+		let whichUser = $rootScope.currentUser.$id;
+		let usersFolder = firebase.database().ref().child('users');
+		let currentTask = $firebaseObject(usersFolder.child(whichUser).child('tasks').child(whichTask));
+		currentTask.$loaded()
+		  .then(function(data) {
+		    if(!data.name){
+		    	//Task was not found
+		    	$rootScope.appMessages.errorMessage = "The task doesn't exist";
+				$location.path( "/error" );	
+		    }
+		    $scope.currentTask = currentTask;
+		  })
+		  .catch(function(error) {
+			$rootScope.appMessages.errorMessage = error;
+			$location.path( "/error" )
+		  });
+
 		$scope.updateTask = function(){
-			$scope.appMessages = { };
 			$scope.currentTask.$save().then(function(ref) {
-			   $scope.appMessages.editTaskSuccessMsg = "Record Saved";
+			   $rootScope.appMessages.editTaskSuccessMsg = "Record Saved";
 			}, function(error) {
-				$scope.appMessages.editTaskErrorMsg = error;
+				$rootScope.appMessages.editTaskErrorMsg = error;
 			});
 		};
 	}
@@ -173,26 +166,23 @@ ripetoApp.controller('TaskDetailCntrl',
 
 ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray', '$firebaseObject',
 	function($scope,$rootScope,$firebaseArray,$firebaseObject){
+		$rootScope.appMessages = {};
+
 		$scope.regex = "[a-zA-Z0-9\\s]{4,25}";
-		$scope.listToCreate;
-		$scope.listToDelete;
-		
+		let whichUser = $rootScope.currentUser.$id;
 		var listsRef = firebase.database().ref().child('users')
-							.child($rootScope.currentUser.$id).child('lists');
-		var tasksRef = firebase.database().ref().child('users')
-							.child($rootScope.currentUser.$id).child('tasks');
-		 
+							.child(whichUser).child('lists');
 		
 		listsRef.on('child_removed', function(data) {
 			moveTasksToDefaultList(data.val().name);
 		});
 
 		var moveTasksToDefaultList = function(origList){
-			var list = $firebaseArray(tasksRef.orderByChild("inList").equalTo(origList));
+			var list = $firebaseArray($rootScope.userTasksRef.orderByChild("inList").equalTo(origList));
 			
 			list.$loaded()
 			.then(function(data) {
-				console.log("Moving Tasks to Default List");
+				console.log("Moving Tasks to Default List from: "+origList);
 				list.forEach(function(element, index) {
 					element.inList = "Default";
 				    list.$save(index);
@@ -204,25 +194,22 @@ ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray', '$f
 		};
 		
 		$scope.createNewList = function(){
-			$rootScope.taskLists.$add({
-				name: $scope.listToCreate,
+			$rootScope.userLists.$add({
+				name: $scope.listName,
 				date: firebase.database.ServerValue.TIMESTAMP
 			}).then( function(){
-				$scope.successmsg = $scope.listToCreate+" was created";
-				$scope.listToCreate = "";
+				$scope.successmsg = $scope.listName+" list was created";
+				$scope.listName = "";
 			});
 		};
 		
-		$scope.removeList = function(){
-			var uid = $rootScope.currentUser.$id;
-			var refDel = listsRef.child($scope.listToDelete);
+		$scope.removeList = function(listId){
+			var refDel = listsRef.child(listId);
 			var record = $firebaseObject(refDel);
 		    
 		    record.$loaded().then(function() {
-				var listname = record.name;
-					
-			    record.$remove().then(function(ref) {
-			    	$scope.successmsg = listname + " list was deleted";
+				record.$remove().then(function(ref) {
+			    	$scope.successmsg = record.name + " list was deleted";
 			    }, function(error) {
 					$scope.errormsg = error;
 				});

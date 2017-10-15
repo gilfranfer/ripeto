@@ -41,7 +41,7 @@ ripetoApp.config(['$routeProvider',
 					}
 				}
 			}).
-			when('/task/:tId', {
+			when('/task/:tid', {
 				templateUrl: 'views/taskDetails.html',
 				controller:  'TaskDetailCntrl',
 				resolve: {
@@ -83,7 +83,7 @@ ripetoApp.run( ['$rootScope', '$location', function($rootScope,$location){
 		if(error == 'AUTH_REQUIRED'){
 			$location.path('/error-login');
 		}else{		
-			$rootScope.routeErrorMessage = error;	
+			$rootScope.appMessages.errorMessage = error;	
 			$location.path('/error');
 		}
 	});
