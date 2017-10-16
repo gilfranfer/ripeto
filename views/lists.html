@@ -1,0 +1,56 @@
+<!-- Create Section -->
+<section class="jumbotron">
+  <h1 class="display-4">Manage your Lists</h1>
+  <!--p class="lead">
+    Crewith 4 to 25 non special Characters
+  </p-->
+  <hr class="my-4">
+  <form class="" name="addListForm" novalidate ng-submit="createNewList()">
+    <div class="form-row">
+      <div class="col">
+        <input type="text" name="listName" class="form-control form-control-lg"
+          placeholder="Search or add a List" ng-model="listName" 
+          ng-required="true" aria-describedby="nameHelp"/>
+          <small id="nameHelp" class="form-text text-muted">with 4 to 25 non special Characters</small>
+      </div>
+      <div class="col-2">
+        <button type="submit" class="btn btnj btn-primary btn-block" 
+              ng-disabled="addListForm.$invalid">
+          +
+        </button>
+      </div>
+    </div>
+  </form>
+</section>
+
+
+<section class="row">
+  <div class="col-md">
+    <div class="alert alert-danger" role="alert">
+      When deleating a list, all its tasks will be moved to Default list
+    </div>
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-action flex-column align-items-start"
+        ng-repeat="list in userLists | filter: {name: listName}">
+        <div class="d-flex w-100 justify-content-between">
+          {{list.name}}
+          <small>
+            <!--button type="button" class="btn btn-sm btn-outline-success" 
+              ng-click="showList(list.$id)" ng-if="list.name != 'Default'">
+              Show
+            </button> 
+            <button type="button" class="btn btn-sm btn-outline-dark" 
+              ng-click="hideList(list.$id)" ng-if="list.name != 'Default'">
+              Hide
+            </button--> 
+            <button type="button" class="btn btn-sm btn-outline-danger" 
+              ng-click="removeList(list.$id)" ng-if="list.name != 'Default'">
+              Del
+            </button> 
+          </small>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+ 

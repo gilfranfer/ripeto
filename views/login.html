@@ -1,35 +1,48 @@
-<section>
-<div class="card">
-	<form name="loginForm" novalidate ng-submit="login()">
-		<div class="textintro">
-			<h1>Hi There Oompa Loompa!</h1>
-			<p>Log-in to access the awesomeness!</p>
-			<p ng-show="errormessage">{{errormessage}}</p>
-		</div>
-		<fieldset>
-			<input type="email" name="email" placeholder="Email"
-				ng-model="user.email" ng-required="true"/>
-			<p class="error validationerror"
-				ng-show="loginForm.email.$invalid &&
-						loginForm.email.$touched">
-				Must be a valid email
-			</p>
-			<input type="password" name="password" placeholder="Password"
-				ng-model="user.pwd" ng-required="true"/>
-			<p class="error validationerror"
-				ng-show="loginForm.password.$invalid &&
-						loginForm.password.$touched">
-				Password is required
-			</p>
-		</fieldset>
+<section id="login-section" class="row">
+	<div class="col-md"></div>
+    <div class="col-md-8">
+    	<h2>Hi There!</h2>
+    	<h3>Log-in to access the awesomeness!</h3>
+    	<form class="withSpaceUp" name="loginForm" novalidate ng-submit="login()">
+			<div class="form-group">
+			    <label for="loginemail">Email address</label>
+			    <input type="email" name="email" id="loginemail"
+			    	class="form-control form-control-lg" placeholder="ex: luke.sky@jedis.com"
+			    	ng-model="user.email" ng-required="true">
 
-		<button type="submit" class="btn" ng-disabled="loginForm.$invalid">
-			Go In!
-		</button>
-		<p>
-			or  
-			<a ng-href="#!/register">Register!</a>
-		</p>
-	</form>
-</div>
+				<div class="alert alert-danger" role="alert"
+					ng-show="loginForm.email.$invalid && loginForm.email.$dirty">
+				That's not a valid email
+				</div>
+		  	</div>
+
+		  	<div class="form-group">
+		    	<label for="loginpwd">Password</label>
+		    	<input type="password" name="password" id="loginpwd" placeholder="Your secret words"
+		    		class="form-control form-control-lg" ng-model="user.pwd" ng-required="true">
+
+		    	<div class="alert alert-danger" role="alert"
+					ng-show="loginForm.password.$invalid && loginForm.password.$dirty">
+				Password is required
+				</div>
+		  	</div>
+
+		  	<div class="alert alert-danger" role="alert" ng-show="appMessages.loginErrorMsg">
+				{{appMessages.loginErrorMsg}}
+			</div>
+
+			<div class="form-row">
+		    	<div class="form-group col-md-6">
+		    		<button type="submit" class="btn btn-success btn-lg btn-block" 
+		    			ng-disabled="loginForm.$invalid">
+						Log in now!
+					</button>
+		    	</div>
+		    	<div class="form-group col-md-6">
+		    		<a role="button" class="btn btn-lg btn-block btn-primary" href="#!/register" > or Register</a>
+		    	</div>
+			</div>
+		</form>
+    </div>
+    <div class="col-md"></div>
 </section>
