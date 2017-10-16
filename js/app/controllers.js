@@ -41,8 +41,8 @@ ripetoApp.controller('TasksCntrl',
     		if(authUser && (!$rootScope.userLists || !$rootScope.openTasks ) ){
 				console.log("TskCntrl - Creating Task References");
 
-				let userListsQuery = $rootScope.userListsRef.orderByChild("name");
-				let openTasksQuery = $rootScope.userTasksRef.orderByChild("status").equalTo("open");
+				let userListsQuery = usersFolder.child(authUser.uid).child('lists').orderByChild("name");
+				let openTasksQuery = usersFolder.child(authUser.uid).child('tasks').orderByChild("status").equalTo("open");
 				let openTasksArray = $firebaseArray( openTasksQuery );
 				let userListsArray = $firebaseArray( userListsQuery );
 				$rootScope.openTasks = openTasksArray;
@@ -63,16 +63,18 @@ ripetoApp.controller('TasksCntrl',
 		//Custom functions
 		$scope.createTask = function(){
 			let list = $rootScope.activeTasksList;
+			let listid = $rootScope.activeTasksListId;
 			//Task created while showing All Tasks,
 			//get created in Default List
 			if( list === 'All'){
 				list = 'Default';
+				listid = 'default';
 			}
 
 			var taskObject = {
 				name: $scope.taskName,
 				status: 'open',
-				inList: list,
+				listid: listid,
 				date: firebase.database.ServerValue.TIMESTAMP				
 			};
 
@@ -124,8 +126,9 @@ ripetoApp.controller('TasksCntrl',
 			$rootScope.tasksOrder = value;
 		};
 		
-		$scope.setActiveList = function(name) {
+		$scope.setActiveList = function(name, id) {
 			$rootScope.activeTasksList = name;
+			$rootScope.activeTasksListId = id;
 		};
 
 	}
