@@ -25,6 +25,7 @@
       </div>
     </div>
     <input type="hidden" name="taskList" ng-model="activeTasksList">
+    <input type="hidden" name="taskList" ng-model="activeTasksId">
     <!--<input id="datepicker" class="btn btn-addList" value="{{dpValue}}"/>
     <button class="btn btn-addList" ng-click="addListDialog()">List</button>-->
   </form>
@@ -47,7 +48,7 @@
         </a>
         <!-- The active list should not appear in the dropdown, 
             because it is already displayed in the main button -->
-        <a class="dropdown-item" ng-click="setActiveList(list.name)"
+        <a class="dropdown-item" ng-click="setActiveList(list.name, list.$id)"
           ng-repeat="list in userLists | orderBy:name" 
           ng-if="list.name != activeTasksList" >
           {{list.name}}
@@ -97,7 +98,7 @@
       <div id="openTaskToggle" class="collapse show">
   		<li class="list-group-item list-group-item-action flex-column align-items-start" 
           ng-repeat="task in openTasks | orderBy:tasksOrder:reverseOrder | filter: {name: taskName}"
-          ng-if="activeTasksList == 'All' || task.inList == activeTasksList"> 
+          ng-if="activeTasksList == 'All' || task.listid == activeTasksListId"> 
         
         <div class="d-flex w-100 justify-content-between">
           <a class="text-dark mb-1" ng-href="#!/task/{{task.$id}}">
