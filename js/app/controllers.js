@@ -209,6 +209,7 @@ ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray', '$f
 		    
 		    record.$loaded().then(function() {
 				record.$remove().then(function(ref) {
+					$rootScope.activeTasksList = "All"
 			    	$scope.successmsg = record.name + " list was deleted";
 			    }, function(error) {
 					$scope.errormsg = error;
