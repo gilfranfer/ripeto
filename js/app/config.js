@@ -14,15 +14,15 @@ ripetoApp.config(['$routeProvider',
 				templateUrl: 'views/register.html',
 				controller:  'AuthenticationCntrl'
 			}).
-			when('/profile/:uid', {
-				templateUrl: 'views/profile.html',
-				controller:  'ProfileCntrl',
-				resolve: {
-					currentAuth: function(AuthenticationSvc){
-						return AuthenticationSvc.isUserLoggedIn();
-					}
-				}
-			}).
+			// when('/profile/:uid', {
+			// 	templateUrl: 'views/profile.html',
+			// 	controller:  'ProfileCntrl',
+			// 	resolve: {
+			// 		currentAuth: function(AuthenticationSvc){
+			// 			return AuthenticationSvc.isUserLoggedIn();
+			// 		}
+			// 	}
+			// }).
 			when('/lists', {
 				templateUrl: 'views/lists.html',
 				controller:  'ListsCntrl',
