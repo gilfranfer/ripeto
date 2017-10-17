@@ -63,18 +63,16 @@ ripetoApp.controller('TasksCntrl',
 		//Custom functions
 		$scope.createTask = function(){
 			let list = $rootScope.activeTasksList;
-			let listid = $rootScope.activeTasksListId;
 			//Task created while showing All Tasks,
 			//get created in Default List
 			if( list === 'All'){
 				list = 'Default';
-				listid = 'default';
 			}
 
 			var taskObject = {
 				name: $scope.taskName,
 				status: 'open',
-				listid: listid,
+				inList: list,
 				date: firebase.database.ServerValue.TIMESTAMP				
 			};
 
@@ -126,9 +124,8 @@ ripetoApp.controller('TasksCntrl',
 			$rootScope.tasksOrder = value;
 		};
 		
-		$scope.setActiveList = function(name, id) {
+		$scope.setActiveList = function(name) {
 			$rootScope.activeTasksList = name;
-			$rootScope.activeTasksListId = id;
 		};
 
 	}
