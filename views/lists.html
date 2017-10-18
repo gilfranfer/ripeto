@@ -29,20 +29,27 @@
     <div class="alert alert-danger" role="alert">
       When deleating a list, all its tasks will be moved to Default list
     </div>
+    <div class="alert alert-danger" role="alert" ng-show="errorMessage">
+        {{errorMessage}}
+    </div>
+    <div class="alert alert-success" role="alert" ng-show="successmsg">
+        {{successmsg}}
+    </div>
+
     <ul class="list-group">
       <li class="list-group-item list-group-item-action flex-column align-items-start"
-        ng-repeat="list in userLists | filter: {name: listName}">
+        ng-repeat="list in alluserLists | filter: {name: listName}">
         <div class="d-flex w-100 justify-content-between">
           {{list.name}}
           <small  ng-if="list.name != 'Default'">
-            <!--button type="button" class="btn btn-sm btn-outline-success" 
-              ng-click="showList(list.$id)" ng-if="list.secret">
-              Show
+            <button type="button" class="btn btn-sm btn-outline-success" 
+              ng-click="makeSecretList(list, false)" ng-if="list.secret">
+              Make Visible
             </button> 
             <button type="button" class="btn btn-sm btn-outline-dark" 
-              ng-click="hideList(list.$id)" ng-if="!list.secret">
-              Hide
-            </button--> 
+              ng-click="makeSecretList(list, true)" ng-if="!list.secret">
+              Make Secret
+            </button> 
             <button type="button" class="btn btn-sm btn-outline-danger" 
               ng-click="removeList(list.$id)">
               Del

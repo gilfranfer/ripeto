@@ -94,7 +94,7 @@
       <div id="openTaskToggle" class="collapse show">
   		<li class="list-group-item list-group-item-action flex-column align-items-start" 
           ng-repeat="task in openTasks | orderBy:tasksOrder:reverseOrder | filter: {name: taskName}"
-          ng-if="activeTasksList == 'All' || task.inList == activeTasksList""> 
+          ng-if="(activeTasksList == 'All' && !task.secret) || task.inList == activeTasksList""> 
         
         <div class="d-flex w-100 justify-content-between">
           <a class="text-dark mb-1" ng-href="#!/task/{{task.$id}}">
@@ -131,7 +131,7 @@
       <div id="closedTaskToggle" class="collapse">
       <li class="list-group-item list-group-item-action flex-column align-items-start" 
           ng-repeat="task in closedTasks | orderBy:tasksOrder:reverseOrder | filter: {name: taskName}"
-          ng-if="activeTasksList == 'All' || task.inList == activeTasksList"> 
+          ng-if="(activeTasksList == 'All' && !task.secret)  || task.inList == activeTasksList"> 
         
         <div class="d-flex w-100 justify-content-between">
           <a class="text-dark mb-1" ng-href="#!/task/{{task.$id}}">

@@ -8,7 +8,7 @@ ripetoApp.factory( 'AuthenticationSvc',
 		var loginSuccessPage = '/tasks';
 
 		auth.$onAuthStateChanged( function(authUser){
-    		if(authUser && !$rootScope.currentUser){
+    		if(authUser){
 				console.log("AuthSvc - Initialization");
 				$rootScope.currentUser = $firebaseObject(usersFolder.child(authUser.uid));
 				$rootScope.userTasksRef = usersFolder.child(authUser.uid).child('tasks');
@@ -17,6 +17,8 @@ ripetoApp.factory( 'AuthenticationSvc',
 				//ConfigurationSvc.upgradeUserConfig( currentUser );
 			}else{
 				console.log("AuthSvc - No User Authenticated");
+				//$rootScopeappMessages.errorMessage = "Reload page to refresh session";
+				//$location.path( "/error" );
 				cleanRootScope();
 			}
 		} );
