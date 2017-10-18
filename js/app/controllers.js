@@ -38,10 +38,11 @@ ripetoApp.controller('TasksCntrl',
 		var usersFolder = firebase.database().ref().child('users');
 
 		auth.$onAuthStateChanged( function(authUser){
-    		if(authUser && (!$rootScope.userLists || !$rootScope.openTasks ) ){
+    		if(authUser /*&& (!$rootScope.userLists || !$rootScope.openTasks )*/ ){
 				console.log("TskCntrl - Creating Task References");
 
-				let userListsQuery = usersFolder.child(authUser.uid).child('lists').orderByChild("name");
+				//Load only lists tha are not "Secret"
+				let userListsQuery = usersFolder.child(authUser.uid).child('lists').orderByChild("secret").equalTo(false);
 				let openTasksQuery = usersFolder.child(authUser.uid).child('tasks').orderByChild("status").equalTo("open");
 				let openTasksArray = $firebaseArray( openTasksQuery );
 				let userListsArray = $firebaseArray( userListsQuery );
@@ -170,22 +171,26 @@ ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray', '$f
 
 		$scope.regex = "[a-zA-Z0-9\\s]{4,25}";
 		let whichUser = $rootScope.currentUser.$id;
-		var listsRef = firebase.database().ref().child('users')
+		let listsRef = firebase.database().ref().child('users')
 							.child(whichUser).child('lists');
-		
+		let tasksRef = firebase.database().ref().child('users')
+							.child(whichUser).child('tasks');
+	
+		let allUserLists = $firebaseArray( listsRef );
+		$rootScope.alluserLists = allUserLists;
+
 		listsRef.on('child_removed', function(data) {
 			moveTasksToDefaultList(data.val().name);
 		});
 
 		var moveTasksToDefaultList = function(origList){
-			var list = $firebaseArray($rootScope.userTasksRef.orderByChild("inList").equalTo(origList));
+			let tasksToUpdate = $firebaseArray(tasksRef.orderByChild("inList").equalTo(origList));
 			
-			list.$loaded()
-			.then(function(data) {
+			tasksToUpdate.$loaded().then(function(data) {
 				console.log("Moving Tasks to Default List from: "+origList);
-				list.forEach(function(element, index) {
+				tasksToUpdate.forEach(function(element, index) {
 					element.inList = "Default";
-				    list.$save(index);
+				    tasksToUpdate.$save(index);
 				});
 			})
 			.catch(function(error) {
@@ -194,8 +199,8 @@ ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray', '$f
 		};
 		
 		$scope.createNewList = function(){
-			$rootScope.userLists.$add({
-				name: $scope.listName,
+			allUserLists.$add({
+				name: $scope.listName, secret: false,
 				date: firebase.database.ServerValue.TIMESTAMP
 			}).then( function(){
 				$scope.successmsg = $scope.listName+" list was created";
@@ -204,19 +209,49 @@ ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray', '$f
 		};
 		
 		$scope.removeList = function(listId){
-			var refDel = listsRef.child(listId);
-			var record = $firebaseObject(refDel);
-		    
+			//TODO: I think there is another way to do this deleation
+			let refDel = listsRef.child(listId);
+			let record = $firebaseObject(refDel);
+		    refreshActiveTaskList(record.name);
+
 		    record.$loaded().then(function() {
+		    	let msg = record.name + " list was deleted"
 				record.$remove().then(function(ref) {
-					$rootScope.activeTasksList = "All"
-			    	$scope.successmsg = record.name + " list was deleted";
+					refreshActiveTaskList(record.name);
+			    	$scope.successmsg = msg;
 			    }, function(error) {
 					$scope.errormsg = error;
 				});
-				
-		    });
-		    
+		    }); 
+		};
+
+		/*When the active List is the one we are deleating or making secret,
+		  then we need to set the active list to "Default", to avoid displaying it.*/
+		var refreshActiveTaskList = function(listname){
+			if($rootScope.activeTasksList == listname){
+				$rootScope.activeTasksList = "Default"
+			}			    	
+		};
+		/* When a list is marked as Secret, two things happen:
+			1. The list object is marked in DB with secret:true
+			2. All the Tasks inList will be marked with secret:true
+		*/
+		$scope.makeSecretList = function(list, makeSecret){
+
+			listsRef.child(list.$id).update({secret:makeSecret});			
+			let tasksToUpdate = $firebaseArray(tasksRef.orderByChild("inList").equalTo(list.name));
+			refreshActiveTaskList(list.name);
+					
+			tasksToUpdate.$loaded().then(function(data) {
+				tasksToUpdate.forEach(function(element, index) {
+					element.secret = makeSecret;
+				    tasksToUpdate.$save(index);
+				});
+			})
+			.catch(function(error) {
+				console.log("Error:", error);
+			});
+
 		};
 		
 	}
