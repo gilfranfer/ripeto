@@ -27,7 +27,7 @@ ripetoApp.controller('TasksCntrl',
 	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray','$firebaseObject', 'ngDialog', 
 	function($scope, $rootScope, $firebaseAuth, $firebaseArray, $firebaseObject, ngDialog){
 		
-		$rootScope.tasksOrder = "name";
+		$rootScope.tasksOrder = "date";
 		$rootScope.reverseOrder = false;
 		if( $rootScope.activeTasksList  == undefined){	
 			$rootScope.activeTasksList = "All";
