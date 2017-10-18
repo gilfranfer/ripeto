@@ -59,11 +59,11 @@
   <!-- Order By and direction -->
   <div class="col text-right">
     <div class="btn-group " data-toggle="buttons">
-      <label class="btn btn-sm btn-dark active" 
+      <label class="btn btn-sm btn-dark" 
               ng-click="orderTaskBy('name')">
         <input type="radio" name="options">Name
       </label>
-      <label class="btn btn-sm btn-dark" 
+      <label class="btn btn-sm btn-dark active" 
               ng-click="orderTaskBy('date')">
         <input type="radio" name="options">Date
       </label>
@@ -87,7 +87,7 @@
 		<ul class="list-group">
       <!-- Default li for toggle -->
       <li class="list-group-item list-group-item-dark list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#openTaskToggle" aria-controls="openTaskToggle" aria-expanded="true" aria-label="">
-         <span class="badge badge-danger"> {{openTasks.length}} </span> 
+         <!--span class="badge badge-danger"> {{openTasks.length}} </span--> 
          Open Tasks
       </li>
       <!-- Tasks for the active list -->
