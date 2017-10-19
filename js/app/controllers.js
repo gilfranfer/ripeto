@@ -190,6 +190,7 @@ ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray', '$f
 				console.log("Moving Tasks to Default List from: "+origList);
 				tasksToUpdate.forEach(function(element, index) {
 					element.inList = "Default";
+					element.secret = false;
 				    tasksToUpdate.$save(index);
 				});
 			})
