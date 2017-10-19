@@ -147,7 +147,8 @@
           </small>
         </div>
         <p class="mb-1">
-          Created on {{task.date | date: "MMM dd yyyy hh:mm:ss"}}
+          Created on {{task.date | date: "MMM dd yyyy hh:mm:ss"}} <br>
+          Closed on {{task.closed | date: "MMM dd yyyy hh:mm:ss"}}
         </p>
         <small>from {{task.inList}} List</small>
       </li>
