@@ -1,14 +1,8 @@
 <!-- Create and Timer Section -->
 <section class="row">
-  <!-- Timer Card
-  <div class="col-lg mt-4">
-    <div class="card h-100">
-      <div class="card-header">Timer</div>
-      <div class="car-body p-4">
-
-      </div>
-    </div><!--card-->
-  </div>
+  <!-- Timer Card -->
+  <div class="col-lg mt-4" ng-include="'views/timer.html'"></div>
+  <div class="col-lg mt-4" ng-include="'views/timerSummary.html'"></div>
   <!-- Create Card -->
   <div class="col-lg mt-4">
     <div class="card h-100">
@@ -62,6 +56,10 @@
         </a>
       </div>
     </div>
+    <button class="btn btn-sm btn-primary" ng-controller="TimerCntrl"
+      ng-if="'All' != activeTasksList" ng-click="test()">
+      Clock
+    </button>
   </div>
   <!-- Order By and direction -->
   <div class="col text-right">

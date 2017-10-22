@@ -2,15 +2,15 @@ ripetoApp.controller('AuthenticationCntrl',
 	['$scope', '$rootScope', 'AuthenticationSvc', 'ConfigurationSvc',
 
 	function($scope, $rootScope, AuthenticationSvc, ConfigurationSvc){
-		
+
 		$scope.login = function(){
 			AuthenticationSvc.loginUser($scope.user);
 		};
-		
+
 		$scope.logout = function(){
 			AuthenticationSvc.logout();
 		};
-		
+
 		$scope.register = function(){
 			AuthenticationSvc.register($scope.regUser, ConfigurationSvc.getAppVersion());
 		};
@@ -18,18 +18,18 @@ ripetoApp.controller('AuthenticationCntrl',
 		$scope.clearErrors = function () {
 			$rootScope.appMessages = { };
 		};
-		
+
 		$scope.clearErrors()
 	}]//function
 );
 
 ripetoApp.controller('TasksCntrl',
-	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray','$firebaseObject', 'ngDialog', 
+	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray','$firebaseObject', 'ngDialog',
 	function($scope, $rootScope, $firebaseAuth, $firebaseArray, $firebaseObject, ngDialog){
-		
+
 		$rootScope.tasksOrder = "date";
 		$rootScope.reverseOrder = false;
-		if( $rootScope.activeTasksList  == undefined){	
+		if( $rootScope.activeTasksList  == undefined){
 			$rootScope.activeTasksList = "All";
 		}
 
@@ -48,7 +48,7 @@ ripetoApp.controller('TasksCntrl',
 				let userListsArray = $firebaseArray( userListsQuery );
 				$rootScope.openTasks = openTasksArray;
 				$rootScope.userLists = userListsArray;
-			
+
 				/*userTasksArray.$loaded().then( function(data){
 					console.log("Loaded: User Tasks");
 					$rootScope.updateBadge();
@@ -57,9 +57,9 @@ ripetoApp.controller('TasksCntrl',
 				openTasksArray.$watch( function(data){
 					//console.log("Watch: Event on Open Tasks");
 					//$rootScope.updateBadge();
-				} );	
+				} );
 			}
-		}); 
+		});
 
 		//Custom functions
 		$scope.createTask = function(){
@@ -74,7 +74,7 @@ ripetoApp.controller('TasksCntrl',
 				name: $scope.taskName,
 				status: 'open',
 				inList: list,
-				date: firebase.database.ServerValue.TIMESTAMP				
+				date: firebase.database.ServerValue.TIMESTAMP
 			};
 
 			$rootScope.openTasks.$add( taskObject ).then( function(){
@@ -87,7 +87,7 @@ ripetoApp.controller('TasksCntrl',
 			usersFolder.child($rootScope.currentUser.$id).child('tasks').child(id).update(
 					{status:'closed', closed: firebase.database.ServerValue.TIMESTAMP});
 		};
-		
+
 		$scope.deleteTask = function(id){
 			var record = $firebaseObject(usersFolder.child($rootScope.currentUser.$id).child('tasks').child(id));
 		    record.$remove().then(function(ref) {
@@ -97,17 +97,17 @@ ripetoApp.controller('TasksCntrl',
 			});
 			//$rootScope.openTasks.$remove(key);
 		};
-		
+
 		$scope.reopenTask = function(id){
 			usersFolder.child($rootScope.currentUser.$id).child('tasks').child(id).update(
 					{status:'open' ,closed: null});
 		};
-			  
-		// Closed tasks wil be loaded on demand.  
+
+		// Closed tasks wil be loaded on demand.
 	    $scope.loadClosedTaks = function(bool) {
     		if( $rootScope.currentUser && !$rootScope.closedTasks ){
 				let userTasksRef = usersFolder.child($rootScope.currentUser.$id).child('tasks');
-				let closedTasksQuery = userTasksRef.orderByChild("status").equalTo("closed"); 
+				let closedTasksQuery = userTasksRef.orderByChild("status").equalTo("closed");
 				let closedTasksArray = $firebaseArray( closedTasksQuery );
 				$rootScope.closedTasks = closedTasksArray;
 				closedTasksArray.$watch( function(data){
@@ -124,7 +124,7 @@ ripetoApp.controller('TasksCntrl',
 		$scope.orderTaskBy = function(value) {
 			$rootScope.tasksOrder = value;
 		};
-		
+
 		$scope.setActiveList = function(name) {
 			$rootScope.activeTasksList = name;
 		};
@@ -146,7 +146,7 @@ ripetoApp.controller('TaskDetailCntrl',
 		    if(!data.name){
 		    	//Task was not found
 		    	$rootScope.appMessages.errorMessage = "The task doesn't exist";
-				$location.path( "/error" );	
+				$location.path( "/error" );
 		    }
 		    $scope.currentTask = currentTask;
 		  })
@@ -175,7 +175,7 @@ ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray', '$f
 							.child(whichUser).child('lists');
 		let tasksRef = firebase.database().ref().child('users')
 							.child(whichUser).child('tasks');
-	
+
 		let allUserLists = $firebaseArray( listsRef );
 		$rootScope.alluserLists = allUserLists;
 
@@ -185,7 +185,7 @@ ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray', '$f
 
 		var moveTasksToDefaultList = function(origList){
 			let tasksToUpdate = $firebaseArray(tasksRef.orderByChild("inList").equalTo(origList));
-			
+
 			tasksToUpdate.$loaded().then(function(data) {
 				console.log("Moving Tasks to Default List from: "+origList);
 				tasksToUpdate.forEach(function(element, index) {
@@ -198,7 +198,7 @@ ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray', '$f
 				console.log("Error:", error);
 			});
 		};
-		
+
 		$scope.createNewList = function(){
 			allUserLists.$add({
 				name: $scope.listName, secret: false,
@@ -208,7 +208,7 @@ ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray', '$f
 				$scope.listName = "";
 			});
 		};
-		
+
 		$scope.removeList = function(listId){
 			//TODO: I think there is another way to do this deleation
 			let refDel = listsRef.child(listId);
@@ -223,7 +223,7 @@ ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray', '$f
 			    }, function(error) {
 					$scope.errormsg = error;
 				});
-		    }); 
+		    });
 		};
 
 		/*When the active List is the one we are deleating or making secret,
@@ -231,7 +231,7 @@ ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray', '$f
 		var refreshActiveTaskList = function(listname){
 			if($rootScope.activeTasksList == listname){
 				$rootScope.activeTasksList = "Default"
-			}			    	
+			}
 		};
 		/* When a list is marked as Secret, two things happen:
 			1. The list object is marked in DB with secret:true
@@ -239,10 +239,10 @@ ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray', '$f
 		*/
 		$scope.makeSecretList = function(list, makeSecret){
 
-			listsRef.child(list.$id).update({secret:makeSecret});			
+			listsRef.child(list.$id).update({secret:makeSecret});
 			let tasksToUpdate = $firebaseArray(tasksRef.orderByChild("inList").equalTo(list.name));
 			refreshActiveTaskList(list.name);
-					
+
 			tasksToUpdate.$loaded().then(function(data) {
 				tasksToUpdate.forEach(function(element, index) {
 					element.secret = makeSecret;
@@ -254,7 +254,7 @@ ripetoApp.controller('ListsCntrl',['$scope', '$rootScope', '$firebaseArray', '$f
 			});
 
 		};
-		
+
 	}
 ]);
 
@@ -263,5 +263,11 @@ ripetoApp.controller('ProfileCntrl', ['$routeParams', '$rootScope', 'Authenticat
 
 		var uid =$routeParams.uid;
 		$rootScope.profileData = AuthenticationSvc.loadUserProfileData(uid);
+	}
+]);
+
+ripetoApp.controller('TimerCntrl', ['$routeParams', '$rootScope', 'AuthenticationSvc',
+	function($routeParams, $rootScope, AuthenticationSvc){
+
 	}
 ]);
