@@ -23,7 +23,7 @@ ripetoApp.config(['$routeProvider',
 			// 		}
 			// 	}
 			// }).
-			when('/lists', {
+			when('/lists/:uid', {
 				templateUrl: 'views/lists.html',
 				controller:  'ListsCntrl',
 				resolve: {
@@ -50,6 +50,16 @@ ripetoApp.config(['$routeProvider',
 					}
 				}
 			}).
+			when('/timerdash/:uid', {
+				// templateUrl: 'views/timerDashboard.html',
+				// controller:  'TimerCntrl',
+				// resolve: {
+				// 	currentAuth: function(AuthenticationSvc){
+				// 		return AuthenticationSvc.isUserLoggedIn();
+				// 	}
+				// }
+				redirectTo: 'error'
+			}).
 			when('/error', {
 				templateUrl: 'views/errors/general.html'
 			}).
@@ -62,30 +72,66 @@ ripetoApp.config(['$routeProvider',
 	}
 ]);
 
-/*
-ripetoApp.config(['ngDialogProvider', function (ngDialogProvider) {
-            ngDialogProvider.setDefaults({
-                className: 'ngdialog-theme-default',
-                plain: false,
-                showClose: false,
-                closeByDocument: false,
-                closeByEscape: true,
-                appendTo: false,
-                preCloseCallback: function () {
-                    console.log('default pre-close callback');
-                }
-            });
-}]);*/
-        
 ripetoApp.run( ['$rootScope', '$location', function($rootScope,$location){
 
 	$rootScope.$on('$routeChangeError', function( event, next, previous, error){
 		if(error == 'AUTH_REQUIRED'){
 			$location.path('/error-login');
-		}else{		
-			$rootScope.appMessages.errorMessage = error;	
+		}else{
+			$rootScope.appMessages.errorMessage = error;
 			$location.path('/error');
 		}
 	});
 
 }]);
+
+ripetoApp.factory( 'ConfigurationSvc',
+	['$rootScope','$firebaseObject','$firebaseAuth',
+
+	function($rootScope,$firebaseObject,$firebaseAuth){
+		var currentAppVersion = "0.1.1"
+
+		var putTasksOnDefaultList = function(userData){
+			if (userData.tasks === undefined ){
+				console.log("No Tasks to Update");
+			}else{
+				var count = 0;
+				Object.keys(userData.tasks).map(
+					function (key) {
+						if( userData.tasks[key].inList === undefined){
+							userData.tasks[key].inList = "Default";
+						}
+						return userData.tasks[key];
+					});
+				console.log(count + " Tasks updated");
+			}
+		};
+
+		return{
+			upgradeUserConfig: function( user ){
+
+				user.$loaded().then( function(data) {
+				    if ( user.config === undefined
+				    		|| user.config.appVersion !== currentAppVersion ){
+						console.log("User needs some updates");
+						//Update App Version on Conf Folder
+						user.config = {appVersion:currentAppVersion};
+						//Create Default Task List (Consider to check if lists folder is empty )
+						user.lists = { "default": {name:"Default", date:firebase.database.ServerValue.TIMESTAMP} };
+						putTasksOnDefaultList(user);
+						user.$save();
+					}else{
+						console.log("User is up to date "+ currentAppVersion );
+					}
+				}).catch(function(error) {
+					console.error("Error:", error);
+				});
+
+				return "";
+			},
+			getAppVersion: function(){
+				return currentAppVersion;
+			}
+		};
+	}
+]);

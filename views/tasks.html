@@ -45,13 +45,13 @@
         </a>
         <!-- The active list should not appear in the dropdown,
             because it is already displayed in the main button -->
-        <a class="dropdown-item" ng-click="setActiveList(list.name  )"
+        <a class="dropdown-item" ng-click="setActiveList(list.name)"
           ng-repeat="list in userLists | orderBy:name"
           ng-if="list.name != activeTasksList" >
           {{list.name}}
         </a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" ng-href="#!/lists">
+        <a class="dropdown-item" ng-href="#!/lists/{{currentUser.$id}}">
           Manage Lists
         </a>
       </div>
@@ -74,11 +74,11 @@
       </label>
     </div>
     <div class="btn-group " data-toggle="buttons">
-      <label class="btn btn-sm btn-success active"
+      <label class="btn btn-sm btn-success"
               ng-click="reverseDisplay(false)">
         <input type="radio" name="options">Asc
       </label>
-      <label class="btn btn-sm btn-success"
+      <label class="btn btn-sm btn-success active"
               ng-click="reverseDisplay(true)">
         <input type="radio" name="options">Desc
       </label>
