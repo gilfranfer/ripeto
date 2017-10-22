@@ -1,8 +1,8 @@
 <section id="editTask-section" class="row">
   <div class="col-md"></div>
   <div class="col-md-8">
-    
-    <form class="withSpaceUp" name="editTaskForm" novalidate ng-submit="updateTask()">
+
+    <form class="mt-3" name="editTaskForm" novalidate ng-submit="updateTask()">
       <h3 class="form-group">Task Details</h3>
       <!-- Name row -->
       <div class="form-row">
@@ -24,10 +24,10 @@
               in {{currentTask.inList}} List
             </button>
             <div class="dropdown-menu">
-              <!-- The active list should not appear in the dropdown, 
+              <!-- The active list should not appear in the dropdown,
                   because it is already displayed in the main button -->
               <a class="dropdown-item" ng-click="currentTask.inList = list.name"
-                ng-repeat="list in userLists | orderBy:name" 
+                ng-repeat="list in userLists | orderBy:name"
                 ng-if="list.name != currentTask.inList" >
                 {{list.name}}
               </a>
@@ -42,7 +42,7 @@
               with {{currentTask.status}} status
             </button>
             <div class="dropdown-menu">
-              <!-- The active status should not appear in the dropdown, 
+              <!-- The active status should not appear in the dropdown,
                   because it is already displayed in the main button -->
               <a class="dropdown-item" ng-click="currentTask.status = 'open'"
                 ng-if="currentTask.status != 'open'" >
@@ -61,7 +61,7 @@
         <div class="col form-group">
           <label for="createdOn">Created on</label>
           <input type="text" name="createdOn" disabled
-            class="form-control form-control-lg" 
+            class="form-control form-control-lg"
             value="{{currentTask.date | date: 'MMM dd yyyy hh:mm:ss'}}"
             ng-required="true" ng-enabled="false">
         </div>
@@ -72,7 +72,7 @@
           <label for="taskdesc">Description</label>
           <textarea name="taskdesc" placeholder="Give more details about your task"
                 class="form-control form-control-lg"
-                ng-model="currentTask.description" ng-required="false">      
+                ng-model="currentTask.description" ng-required="false">
           </textarea>
         </div>
       </div>
@@ -88,7 +88,7 @@
       <!-- Buttons row -->
       <div class="form-row">
           <div class="form-group col-md-6">
-            <button type="submit" class="btn btn-lg btn-block btn-success"  
+            <button type="submit" class="btn btn-lg btn-block btn-success"
                 role="button" ng-disabled="editTaskForm.$invalid">
               Save
             </button>
