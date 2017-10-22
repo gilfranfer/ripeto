@@ -1,7 +1,7 @@
 <!-- Create and Timer Section -->
 <section class="row">
   <!-- Timer Card -->
-  <div class="col-lg mt-4" ng-include="'views/timer.html'"></div>
+  <!-- <div class="col-lg mt-4" ng-include="'views/timer.html'"></div> -->
   <div class="col-lg mt-4" ng-include="'views/timerSummary.html'"></div>
   <!-- Create Card -->
   <div class="col-lg mt-4">
@@ -31,7 +31,7 @@
 <!-- Ordering Section -->
 <section class="row mt-4">
   <!-- Dropdown with User Task Lists -->
-  <div class="col-4 text-left">
+  <div class="col text-left">
     <div class="btn-group">
       <button type="button" class="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {{activeTasksList}} List
@@ -57,7 +57,7 @@
       </div>
     </div>
     <button class="btn btn-sm btn-primary" ng-controller="TimerCntrl"
-      ng-if="'All' != activeTasksList" ng-click="test()">
+      ng-if="'All' != activeTasksList" ng-click="clockIn(activeTasksList)">
       Clock
     </button>
   </div>

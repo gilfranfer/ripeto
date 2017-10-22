@@ -3,59 +3,59 @@
 const TIMER_HISTORY = document.querySelector("#timers-history");
 const GLOBAL_TIMER = document.querySelector("#global-timer");
 const RUNNING_ACTIVITY = document.querySelector("#running-activity");
-const ACT_DISPLAY_AREA = document.querySelector("#activities-list-area");
+//const ACT_DISPLAY_AREA = document.querySelector("#activities-list-area");
 const TIMER_TOTALS = document.querySelector("#timers-totals");
 
 var userActivitiesList = undefined;
 
 function init(){
 TIMER_HISTORY.innerHTML = "";
-ACT_DISPLAY_AREA.innerHTML = "";
 TIMER_TOTALS.innerHTML = "";
-userActivitiesList = getActivitiesForUser(null);
-displayActivityButtons(userActivitiesList);
+//ACT_DISPLAY_AREA.innerHTML = "";
+//userActivitiesList = getActivitiesForUser(null);
+//displayActivityButtons(userActivitiesList);
 displayActivityTotals(userActivitiesList);
 }
 
-function getActivitiesForUser(userId){
-let activities;
-if( userId ){
-  //getFromDatabase()
-}else{
-  activities = createtMockActivities();
-}
-return activities;
-}
+// function getActivitiesForUser(userId){
+// let activities;
+// if( userId ){
+//   //getFromDatabase()
+// }else{
+//   activities = createtMockActivities();
+// }
+// return activities;
+// }
+//
+// function createtMockActivities(){
+// let lists = [
+//   {name:"Work"},
+//   {name:"Meeting"},
+//   {name:"Personal"},
+//   {name:"Break"} ];
+// return lists;
+// }
 
-function createtMockActivities(){
-let lists = [
-  {name:"Work"},
-  {name:"Meeting"},
-  {name:"Personal"},
-  {name:"Break"} ];
-return lists;
-}
+// // This function will be deprecated after introducing Angular
+// function displayActivityButtons(list){
+// list.forEach( function(value){
+//   let button = document.createElement("button");
+//   //button.setAttribute("id", "activity-"+value.name);
+//   button.setAttribute("class", "btn-activity");
+//   button.setAttribute("onclick", "clockIn('"+value.name+"')");
+//   button.append( value.name );
+//   ACT_DISPLAY_AREA.append(button);
+// });
+// }
 
-// This function will be deprecated after introducing Angular
-function displayActivityButtons(list){
-list.forEach( function(value){
-  let button = document.createElement("button");
-  //button.setAttribute("id", "activity-"+value.name);
-  button.setAttribute("class", "btn-activity");
-  button.setAttribute("onclick", "clockIn('"+value.name+"')");
-  button.append( value.name );
-  ACT_DISPLAY_AREA.append(button);
-});
-}
-
-function displayActivityTotals(list){
-list.forEach( function(value){
-  let li = document.createElement("li");
-  li.setAttribute("id", "timer-total-"+value.name);
-  li.append(value.name+": 00:00:00");
-  TIMER_TOTALS.append(li);
-});
-}
+// function displayActivityTotals(list){
+// list.forEach( function(value){
+//   let li = document.createElement("li");
+//   li.setAttribute("id", "timer-total-"+value.name);
+//   li.append(value.name+": 00:00:00");
+//   TIMER_TOTALS.append(li);
+// });
+// }
 
 init();
 
@@ -162,57 +162,39 @@ timerView.innerHTML = timeString;
 }
 
 function resetAll(){
-/*
-GLOBAL_TIMER.innerHTML = "00:00:00";
-CATEGORY_TIMER.innerHTML = "00:00:00";
-ACTIVE_CAT_LABEL.innerHTML = " on "+ DEFAULT_CATEGORY;
-//make dynamic
-document.querySelector("#total-Default").innerHTML ="";
-document.querySelector("#total-Work").innerHTML ="";
-document.querySelector("#total-Break").innerHTML ="";
-*/
-//stopRunning();
-clockOut();
-init();
-timersTotalsMap = new Map();
-timerHistory = new Array();
+  /*
+  GLOBAL_TIMER.innerHTML = "00:00:00";
+  CATEGORY_TIMER.innerHTML = "00:00:00";
+  ACTIVE_CAT_LABEL.innerHTML = " on "+ DEFAULT_CATEGORY;
+  //make dynamic
+  document.querySelector("#total-Default").innerHTML ="";
+  document.querySelector("#total-Work").innerHTML ="";
+  document.querySelector("#total-Break").innerHTML ="";
+  */
+  //stopRunning();
+  clockOut();
+  init();
+  timersTotalsMap = new Map();
+  timerHistory = new Array();
 }
 </script>
-<header class="master-head">
-  <h1>TimeMe!</h1>
-  <p>Clock the time you spend on your activities</p>
-</header>
-<main>
-  <section id="timers">
+
     <span id="global-timer" class="timer timer-large">00:00:00</span>
-    <br>
     <span id="running-activity">Not Running</span>
-  </section>
-  <br/>
-  <section id="buttons" class"column">
-    <div id="activities-list-area">
-      <!--
+
+    <!-- <div id="activities-list-area">
       <button class="btn" onclick="clockIn('Default')">
         Default
       </button>
-       -->
     </div>
     <button class="btn" onclick="clockOut()">Stop</button>
-    <!--button class="btn" onclick="printAllTimers()">Print Timers</button-->
     <button class="btn" onclick="resetAll()">Reset All</button>
-  </section>
-  <br><br>
-  <section id="summary" class="column">
+-->
     <div>
       Totals:
-      <ul id="timers-totals">
-        <!-- <li id="timer-total-"></li> -->
-      </ul>
+      <ul id="timers-totals"></ul>
     </div>
     <div>
       History:
-      <ul id="timers-history">
-      </ul>
+      <ul id="timers-history"></ul>
     </div>
-  </section>
-</main>
