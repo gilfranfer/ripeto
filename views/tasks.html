@@ -1,34 +1,41 @@
-<!-- Create Section -->
-<section class="jumbotron">
-  <!-- Greeting -->
-  <h1 class="display-4">Hi {{currentUser.firstname}} !!</h1>
-  <!--p class="lead" ng-if="totalOpenTasks>0">
-    You have some tasks waiting to be completed.
-  </p>
-  <p class="lead" ng-if="totalOpenTasks<=0">
-    You don't have any pending task.
-  </p-->
-  <hr class="my-4">
-  <!-- Create form -->
-  <form class="" name="addTaskForm" novalidate ng-submit="createTask()">
-    <div class="form-row">
-      <div class="col">
-        <input type="text" name="taskName" class="form-control form-control-lg"
-          placeholder="Search or add a Task" ng-model="taskName"
-          ng-required="true"/>
+<!-- Create and Timer Section -->
+<section class="row">
+  <!-- Timer Card
+  <div class="col-lg mt-4">
+    <div class="card h-100">
+      <div class="card-header">Timer</div>
+      <div class="car-body p-4">
+
       </div>
-      <div class="col-2">
-        <button type="submit" class="btn btn-lg btn-primary btn-block"
-              ng-disabled="addTaskForm.$invalid">
-          +
-        </button>
+    </div><!--card-->
+  </div>
+  <!-- Create Card -->
+  <div class="col-lg mt-4">
+    <div class="card h-100">
+      <div class="card-header">Search or Create</div>
+      <div class="car-body p-4">
+        <form class="" name="addTaskForm" novalidate ng-submit="createTask()">
+          <div class="form-row">
+            <div class="col">
+              <input type="text" name="taskName" class="form-control form-control-lg"
+                placeholder="Type something" ng-model="taskName"
+                ng-required="true"/>
+            </div>
+            <div class="col-2">
+              <button type="submit" class="btn btn-lg btn-primary btn-block"
+                    ng-disabled="addTaskForm.$invalid">
+                +
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
-    </div>
-  </form>
+    </div><!--card-->
+  </div>
 </section>
 
 <!-- Ordering Section -->
-<section class="row mb-2">
+<section class="row mt-4">
   <!-- Dropdown with User Task Lists -->
   <div class="col-4 text-left">
     <div class="btn-group">
@@ -82,7 +89,7 @@
 </section>
 
 <!-- Open Tasks Section -->
-<section class="row">
+<section class="row mt-2">
   <div class="col">
 		<ul class="list-group">
       <!-- Default li for toggle -->
@@ -117,7 +124,7 @@
 </section>
 
 <!-- Closed Tasks Section -->
-<section class="row mt-3" >
+<section class="row mt-4" >
   <div class="col">
     <ul class="list-group">
       <!-- Default li for toggle -->
