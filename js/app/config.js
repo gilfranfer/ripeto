@@ -23,7 +23,7 @@ ripetoApp.config(['$routeProvider',
 			// 		}
 			// 	}
 			// }).
-			when('/lists/:uid', {
+				when('/lists/:uid', {
 				templateUrl: 'views/lists.html',
 				controller:  'ListsCntrl',
 				resolve: {
@@ -41,7 +41,7 @@ ripetoApp.config(['$routeProvider',
 					}
 				}
 			}).
-			when('/task/:tid', {
+			when('/task/:uid/:tid', {
 				templateUrl: 'views/taskDetails.html',
 				controller:  'TaskDetailCntrl',
 				resolve: {

@@ -102,7 +102,7 @@
           ng-if="(activeTasksList == 'All' && !task.secret) || task.inList == activeTasksList">
 
         <div class="d-flex w-100 justify-content-between">
-          <a class="text-dark mb-1" ng-href="#!/task/{{task.$id}}">
+          <a class="text-dark mb-1" ng-href="#!/task/{{currentUser.$id}}/{{task.$id}}">
             <h3>{{task.name}}</h3>
           </a>
           <small>

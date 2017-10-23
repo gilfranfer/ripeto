@@ -105,8 +105,8 @@ ripetoApp.controller('TaskDetailCntrl',
 	function($scope, $rootScope, $location, $routeParams, $firebaseObject) {
 		$rootScope.appMessages = {};
 
+		let whichUser = $routeParams.uid;
 		let whichTask = $routeParams.tid;
-		let whichUser = $rootScope.currentUser.$id;
 		let usersFolder = firebase.database().ref().child('users');
 		let currentTask = $firebaseObject(usersFolder.child(whichUser).child('tasks').child(whichTask));
 		currentTask.$loaded()
