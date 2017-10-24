@@ -16,8 +16,14 @@
         </div>
       </div>
       <div class="col">
-        <button class="btn btn-block btn-dark" ng-click="clockOut()">Pause</button>
-        <button class="btn btn-block btn-danger" ng-click="resetAll()">Reset</button>
+        <button class="btn btn-block btn-success" ng-controller="TimerCntrl" 
+          ng-disabled="'All' == activeTasksList" ng-click="clockIn(activeTasksList)">
+          Clock
+        </button>
+        <button class="btn btn-block btn-danger" ng-click="clockOut()">Pause</button>
+        <button class="btn btn-block btn-dark" ng-click="resetAll()">
+          Reset
+        </button>
       </div>
     </div>
   </div>
