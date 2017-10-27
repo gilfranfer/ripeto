@@ -4,41 +4,41 @@ let TIMER_HISTORY = document.querySelector("#timers-history");
 let TIMER_TOTALS = document.querySelector("#timers-totals");
 let ONE_SECOND = 1000;
 
-		//Timer Related
-		var refreshInterval;
-		var currentTimer;
-		var timersTotalsMap;
-		var timerHistory;
+//Timer Related
+var refreshInterval;
+var currentTimer;
+var timersTotalsMap;
+var timerHistory;
 
-		var init = function(){
-			TIMER_HISTORY.innerHTML = "";
-			TIMER_TOTALS.innerHTML = "";
-			timersTotalsMap = new Map();
-			timerHistory = new Array();
-		};
+var init = function(){
+	TIMER_HISTORY.innerHTML = "";
+	TIMER_TOTALS.innerHTML = "";
+	timersTotalsMap = new Map();
+	timerHistory = new Array();
+};
 
-		if( !timersTotalsMap ){console.log(timersTotalsMap);
-			console.log("Entering to Timer controller");
-			timersTotalsMap = new Map();
-			timerHistory = new Array();
-		}
+if( !timersTotalsMap ){console.log(timersTotalsMap);
+	console.log("Entering to Timer controller");
+	timersTotalsMap = new Map();
+	timerHistory = new Array();
+}
 
+var getCurrentTimer = function(){
+	return currentTimer;
+};
 
-		var getCurrentTimer = function(){
-			return currentTimer;
-		};
+/* This function will be executed to start counting time for a list or task.
+First we need to end the running timer (if any) using the clockOut function.
+Then we can update the RUNNING_ACTIVITY element with a new description.
+Start running the new timer
+*/
+$scope.clockIn = function(activity){
+	clockOut();
+	RUNNING_ACTIVITY.innerHTML = "Clocking "+activity;
+	startRunning( createNewTimerObject(activity) );
+	console.log("Clocking In "+ getCurrentTimer().name);
+};
 
-		/* This function will be executed to start counting time for a list or task.
-		First we need to end the running timer (if any) using the clockOut function.
-		Then we can update the RUNNING_ACTIVITY element with a new description.
-		Start running the new timer
-		*/
-		$scope.clockIn = function(activity){
-			clockOut();
-			RUNNING_ACTIVITY.innerHTML = "Clocking "+activity;
-			startRunning( createNewTimerObject(activity) );
-			console.log("Clocking In "+ getCurrentTimer().name);
-		};
 
 		/* Function to stop the running interval. If the currentTimer exists
 		we need to save the timer details and reset the text for GLOBAL_TIMER
