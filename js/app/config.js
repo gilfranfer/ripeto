@@ -1,4 +1,4 @@
-var ripetoApp = angular.module('ripetoApp',['ngRoute','firebase','ngDialog']);
+var ripetoApp = angular.module('ripetoApp',['ngRoute','firebase']);
 
 ripetoApp.config(['$routeProvider',
 	function($routeProvider){

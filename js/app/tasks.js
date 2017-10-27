@@ -1,6 +1,6 @@
 ripetoApp.controller('TasksCntrl',
-	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray','$firebaseObject', 'ngDialog',
-	function($scope, $rootScope, $firebaseAuth, $firebaseArray, $firebaseObject, ngDialog){
+	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray','$firebaseObject',
+	function($scope, $rootScope, $firebaseAuth, $firebaseArray, $firebaseObject){
 
 		$rootScope.tasksOrder = "date";
 		$rootScope.reverseOrder = true;
