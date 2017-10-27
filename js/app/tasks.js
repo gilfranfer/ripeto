@@ -24,7 +24,7 @@ ripetoApp.controller('TasksCntrl',
 				$rootScope.openTasks = openTasksArray;
 				$rootScope.userLists = userListsArray;
 
-				userListsArray.$loaded().then( function(data){ console.log(data); } );
+				//userListsArray.$loaded().then( function(data){ console.log(data); } );
 				//openTasksArray.$watch( function(data){} );
 			}
 		});

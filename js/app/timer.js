@@ -29,34 +29,53 @@ ripetoApp.controller('TimerCntrl', ['$scope', '$rootScope', 'TimerSvc',
 		*/
 		TimerSvc.init();
 
+		$scope.clockIn = function(){
+			if( !$rootScope.chronos.isRunning ){
+				TimerSvc.clockOut();				
+			}
+			TimerSvc.clockIn();
+		};
+
 		
 	}
 ]);
 
+//This Factory retunrs a set of functions to work with Timer features
 ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject','$firebaseAuth', 
 	function($rootScope,$firebaseObject,$firebaseAuth){
 		let ONE_SECOND = 1000;
 
-		//This Factory retunrs a set of functions to work with Timer features
-		//chronos attribute from rootScope will be the container for all the Timer values
+		
+		
 
 		var createEmptyTimeSet = function(){
 			console.log("Chronos: This is a new TimeSet!");
 			return {  };
 		};
 
-		var getActiveTimesetForUser = function(){ return null};
+		var getActiveTimesetFromDb = function(){ return null};
+
+		/* chronos object from rootScope will be the container for all the Timer values*/
+		var invokeChronos = function(){
+			console.log("Chronos Invokation");
+			return {
+				myname:"Chronos!", displayTimer:"00:00:00", 
+				refreshInterval: undefined,
+				timeset: getActiveTimesetFromDb()
+			};
+		};
 
 		return {
 			init: function(){
+				console.log("Chronos Init");
 				if( !$rootScope.chronos ){
-					let tset = getActiveTimesetForUser();
-					if ( tset ){
-						
+					let chronos = invokeChronos();
+					if ( chronos.timeset ){
+						//Add watch
 					}else{
-						tset = createEmptyTimeSet();
+						chronos.timeset = createEmptyTimeSet()
 					}
-					$rootScope.chronos = {myname:"Chronos!", displayTimer:"00:00:00", timerset: ts};
+					$rootScope.chronos = chronos;
 				}else{
 					console.log("Chronos: Still me, " + $rootScope.chronos.myname);
 				}
@@ -67,7 +86,11 @@ ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject','$firebaseAuth',
 			Start running the new timer
 			*/
 			clockIn: function(){
-
+				console.log("Clocking In " + $rootScope.activeTasksList);
+				//clockOut();
+				// RUNNING_ACTIVITY.innerHTML = "Clocking "+activity;
+				// startRunning( createNewTimerObject(activity) );
+				// console.log("Clocking In "+ getCurrentTimer().name);
 			}
 		};
 	} 

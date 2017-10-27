@@ -6,7 +6,7 @@
       <div class="col-lg">
         <h1 class="card-title">{{chronos.myname}}</h1>
         <h3 class="card-subtitle">{{chronos.displayTimer}}</h3>
-        <p class="card-text">{{chronos.timerset.description}}</p>
+        <p class="card-text">{{chronos.timeset.description}}</p>
     
         <!-- <span id="global-timer" class=""> {{timer.globalTimer}} </span>
         <span id="running-activity"> {{timer.description}} </span>
@@ -21,8 +21,8 @@
       </div>
       <div class="col-lg">
         <button class="btn btn-block btn-success"
-          ng-disabled="'All' == activeTasksList" ng-click="clockIn(activeTasksList)">
-          Clock
+          ng-disabled="'All' == activeTasksList" ng-click="clockIn()">
+          Clock in {{activeTasksList}}
         </button>
         <button class="btn btn-block btn-danger" ng-click="clockOut()">Pause</button>
         <button class="btn btn-block btn-dark" ng-click="resetAll()">
