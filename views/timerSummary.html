@@ -1,10 +1,14 @@
 
 <div class="card h-100" ng-controller="TimerCntrl">
-  <div class="card-header">Timer</div>
+  <div class="card-header">Timer</div>  
   <div class="car-body p-4">
     <div class="row">
-      <div class="col">
-        <span id="global-timer" class=""> {{timer.globalTimer}} </span>
+      <div class="col-lg">
+        <h1 class="card-title">{{chronos.myname}}</h1>
+        <h3 class="card-subtitle">{{chronos.displayTimer}}</h3>
+        <p class="card-text">{{chronos.timerset.description}}</p>
+    
+        <!-- <span id="global-timer" class=""> {{timer.globalTimer}} </span>
         <span id="running-activity"> {{timer.description}} </span>
         <div>
           Totals:
@@ -13,10 +17,10 @@
         <div>
           History:
           <ul id="timers-history"></ul>
-        </div>
+        </div> -->
       </div>
-      <div class="col">
-        <button class="btn btn-block btn-success" ng-controller="TimerCntrl" 
+      <div class="col-lg">
+        <button class="btn btn-block btn-success"
           ng-disabled="'All' == activeTasksList" ng-click="clockIn(activeTasksList)">
           Clock
         </button>
