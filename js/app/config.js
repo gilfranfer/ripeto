@@ -50,16 +50,6 @@ ripetoApp.config(['$routeProvider',
 					}
 				}
 			}).
-			when('/timerdash/:uid', {
-				// templateUrl: 'views/timerDashboard.html',
-				// controller:  'TimerCntrl',
-				// resolve: {
-				// 	currentAuth: function(AuthenticationSvc){
-				// 		return AuthenticationSvc.isUserLoggedIn();
-				// 	}
-				// }
-				redirectTo: 'error'
-			}).
 			when('/error', {
 				templateUrl: 'views/errors/general.html'
 			}).
