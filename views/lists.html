@@ -9,12 +9,12 @@
     <div class="form-row">
       <div class="col">
         <input type="text" name="listName" class="form-control form-control-lg"
-          placeholder="Search or add a List" ng-model="listName" 
+          placeholder="Search or add a List" ng-model="listName"
           ng-required="true" aria-describedby="nameHelp"/>
           <small id="nameHelp" class="form-text text-muted">with 4 to 25 non special Characters</small>
       </div>
       <div class="col-2">
-        <button type="submit" class="btn btnj btn-primary btn-block" 
+        <button type="submit" class="btn btn-primary btn-lg btn-block" 
               ng-disabled="addListForm.$invalid">
           +
         </button>
@@ -42,18 +42,18 @@
         <div class="d-flex w-100 justify-content-between">
           {{list.name}}
           <small  ng-if="list.name != 'Default'">
-            <button type="button" class="btn btn-sm btn-outline-success" 
+            <button type="button" class="btn btn-sm btn-outline-success"
               ng-click="makeSecretList(list, false)" ng-if="list.secret">
               Make Visible
-            </button> 
-            <button type="button" class="btn btn-sm btn-outline-dark" 
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-dark"
               ng-click="makeSecretList(list, true)" ng-if="!list.secret">
               Make Secret
-            </button> 
-            <button type="button" class="btn btn-sm btn-outline-danger" 
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-danger"
               ng-click="removeList(list.$id)">
               Del
-            </button> 
+            </button>
           </small>
         </div>
       </li>
@@ -64,4 +64,3 @@
       </a>
   </div>
 </section>
- 

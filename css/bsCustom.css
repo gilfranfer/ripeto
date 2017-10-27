@@ -1,12 +1,11 @@
 /* Space out content a bit */
   body {
-  padding-bottom: 1.5rem;
   min-height: 40rem;
-  padding-top: 4.5rem;
+  padding-top: 4rem;
 }
 
 
-/* Custom page header 
+/* Custom page header
 .header {
   padding-bottom: 1rem;
   border-bottom: .05rem solid #e5e5e5;
@@ -32,9 +31,6 @@
   text-align: center;
   border-bottom: .05rem solid #e5e5e5;
 }
-.jumbotron .btnj {
-  font-size: 1.5rem;
-}
 
 /* Supporting marketing content */
 .marketing {
@@ -44,14 +40,4 @@
 
 .marketing p + h4 {
   margin-top: 1.5rem;
-}
-
-
-/* Login Section */
-.withSpaceUp{
-  padding-top: 3rem;
-}
-
-.withSpaceDown{
-  padding-bottom: 3rem;
 }

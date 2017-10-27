@@ -1,36 +1,37 @@
-<!-- Create Section -->
-<section class="jumbotron">
-  <!-- Greeting -->
-  <h1 class="display-4">Hi {{currentUser.firstname}} !!</h1>
-  <!--p class="lead" ng-if="totalOpenTasks>0">
-    You have some tasks waiting to be completed.
-  </p>
-  <p class="lead" ng-if="totalOpenTasks<=0">
-    You don't have any pending task.
-  </p-->
-  <hr class="my-4">
-  <!-- Create form -->
-  <form class="" name="addTaskForm" novalidate ng-submit="createTask()">
-    <div class="form-row">
-      <div class="col">
-        <input type="text" name="taskName" class="form-control form-control-lg"
-          placeholder="Search or add a Task" ng-model="taskName" 
-          ng-required="true"/>
+<!-- Create and Timer Section -->
+<section class="row">
+  <!-- Timer Card -->
+  <!-- <div class="col-lg mt-4" ng-include="'views/timer.html'"></div> 
+  <div class="col-lg mt-4" ng-include="'views/timerSummary.html'"></div>-->
+  <!-- Create Card -->
+  <div class="col-lg mt-4">
+    <div class="card h-100">
+      <div class="card-header">Search or Create</div>
+      <div class="car-body p-4">
+        <form class="" name="addTaskForm" novalidate ng-submit="createTask()">
+          <div class="form-row">
+            <div class="col">
+              <input type="text" name="taskName" class="form-control form-control-lg"
+                placeholder="Type something" ng-model="taskName"
+                ng-required="true"/>
+            </div>
+            <div class="col-2">
+              <button type="submit" class="btn btn-lg btn-primary btn-block"
+                    ng-disabled="addTaskForm.$invalid">
+                +
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
-      <div class="col-2">
-        <button type="submit" class="btn btnj btn-primary btn-block" 
-              ng-disabled="addTaskForm.$invalid">
-          +
-        </button>
-      </div>
-    </div>
-  </form>
+    </div><!--card-->
+  </div>
 </section>
 
 <!-- Ordering Section -->
-<section class="row mb-2">
+<section class="row mt-4">
   <!-- Dropdown with User Task Lists -->
-  <div class="col-4 text-left">
+  <div class="col text-left">
     <div class="btn-group">
       <button type="button" class="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {{activeTasksList}} List
@@ -42,15 +43,15 @@
           ng-if="'All' != activeTasksList" >
           All
         </a>
-        <!-- The active list should not appear in the dropdown, 
+        <!-- The active list should not appear in the dropdown,
             because it is already displayed in the main button -->
-        <a class="dropdown-item" ng-click="setActiveList(list.name  )"
-          ng-repeat="list in userLists | orderBy:name" 
+        <a class="dropdown-item" ng-click="setActiveList(list.name)"
+          ng-repeat="list in userLists | orderBy:name"
           ng-if="list.name != activeTasksList" >
           {{list.name}}
         </a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" ng-href="#!/lists">
+        <a class="dropdown-item" ng-href="#!/lists/{{currentUser.$id}}">
           Manage Lists
         </a>
       </div>
@@ -59,21 +60,21 @@
   <!-- Order By and direction -->
   <div class="col text-right">
     <div class="btn-group " data-toggle="buttons">
-      <label class="btn btn-sm btn-dark" 
+      <label class="btn btn-sm btn-dark"
               ng-click="orderTaskBy('name')">
         <input type="radio" name="options">Name
       </label>
-      <label class="btn btn-sm btn-dark active" 
+      <label class="btn btn-sm btn-dark active"
               ng-click="orderTaskBy('date')">
         <input type="radio" name="options">Date
       </label>
-    </div>  
+    </div>
     <div class="btn-group " data-toggle="buttons">
-      <label class="btn btn-sm btn-success active" 
+      <label class="btn btn-sm btn-success"
               ng-click="reverseDisplay(false)">
         <input type="radio" name="options">Asc
       </label>
-      <label class="btn btn-sm btn-success" 
+      <label class="btn btn-sm btn-success active"
               ng-click="reverseDisplay(true)">
         <input type="radio" name="options">Desc
       </label>
@@ -82,22 +83,22 @@
 </section>
 
 <!-- Open Tasks Section -->
-<section class="row">
+<section class="row mt-2">
   <div class="col">
 		<ul class="list-group">
       <!-- Default li for toggle -->
       <li class="list-group-item list-group-item-dark list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#openTaskToggle" aria-controls="openTaskToggle" aria-expanded="true" aria-label="">
-         <!--span class="badge badge-danger"> {{openTasks.length}} </span--> 
+         <!--span class="badge badge-danger"> {{openTasks.length}} </span-->
          Open Tasks
       </li>
       <!-- Tasks for the active list -->
       <div id="openTaskToggle" class="collapse show">
-  		<li class="list-group-item list-group-item-action flex-column align-items-start" 
+  		<li class="list-group-item list-group-item-action flex-column align-items-start"
           ng-repeat="task in openTasks | orderBy:tasksOrder:reverseOrder | filter: {name: taskName}"
-          ng-if="(activeTasksList == 'All' && !task.secret) || task.inList == activeTasksList""> 
-        
+          ng-if="(activeTasksList == 'All' && !task.secret) || task.inList == activeTasksList">
+
         <div class="d-flex w-100 justify-content-between">
-          <a class="text-dark mb-1" ng-href="#!/task/{{task.$id}}">
+          <a class="text-dark mb-1" ng-href="#!/task/{{currentUser.$id}}/{{task.$id}}">
             <h3>{{task.name}}</h3>
           </a>
           <small>
@@ -117,22 +118,22 @@
 </section>
 
 <!-- Closed Tasks Section -->
-<section class="row withSpaceUp" >
+<section class="row mt-4" >
   <div class="col">
     <ul class="list-group">
       <!-- Default li for toggle -->
       <li class="list-group-item list-group-item-danger list-group-item-action flex-column align-items-start toggler" data-toggle="collapse" data-target="#closedTaskToggle" aria-controls="closedTaskToggle" aria-expanded="false" aria-label=""
       ng-click="loadClosedTaks()">
          <span class="badge badge-dark" ng-show="closedTasks">
-          {{closedTasks.length}} </span> 
+          {{closedTasks.length}} </span>
          Closed Tasks
       </li>
       <!-- Tasks for the active list -->
       <div id="closedTaskToggle" class="collapse">
-      <li class="list-group-item list-group-item-action flex-column align-items-start" 
+      <li class="list-group-item list-group-item-action flex-column align-items-start"
           ng-repeat="task in closedTasks | orderBy:tasksOrder:reverseOrder | filter: {name: taskName}"
-          ng-if="(activeTasksList == 'All' && !task.secret)  || task.inList == activeTasksList"> 
-        
+          ng-if="(activeTasksList == 'All' && !task.secret)  || task.inList == activeTasksList">
+
         <div class="d-flex w-100 justify-content-between">
           <a class="text-dark mb-1" ng-href="#!/task/{{task.$id}}">
             <h3>{{task.name}}</h3>
@@ -143,7 +144,7 @@
             </button>
             <button type="button" class="btn btn-sm btn-outline-primary" ng-click="reopenTask(task.$id)">
               Res
-            </button> 
+            </button>
           </small>
         </div>
         <p class="mb-1">

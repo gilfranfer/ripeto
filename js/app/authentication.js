@@ -1,8 +1,33 @@
-ripetoApp.factory( 'AuthenticationSvc', 
+ripetoApp.controller('AuthenticationCntrl',
+	['$scope', '$rootScope', 'AuthenticationSvc', 'ConfigurationSvc',
+
+	function($scope, $rootScope, AuthenticationSvc, ConfigurationSvc){
+
+		$scope.login = function(){
+			AuthenticationSvc.loginUser($scope.user);
+		};
+
+		$scope.logout = function(){
+			AuthenticationSvc.logout();
+		};
+
+		$scope.register = function(){
+			AuthenticationSvc.register($scope.regUser, ConfigurationSvc.getAppVersion());
+		};
+
+		$scope.clearErrors = function () {
+			$rootScope.appMessages = { };
+		};
+
+		$scope.clearErrors()
+	}]//function
+);
+
+ripetoApp.factory( 'AuthenticationSvc',
 	['$rootScope','$location','$firebaseObject','$firebaseAuth',
-	
+
 	function($rootScope, $location,$firebaseObject,$firebaseAuth){
-		
+
 		var auth = $firebaseAuth();
 		var usersFolder = firebase.database().ref().child('users');
 		var loginSuccessPage = '/tasks';
@@ -22,7 +47,7 @@ ripetoApp.factory( 'AuthenticationSvc',
 				cleanRootScope();
 			}
 		} );
-			
+
 		var cleanRootScope = function(){
 			for (var prop in $rootScope) {
 			    if (prop.substring(0,1) !== '$') {
@@ -65,7 +90,7 @@ ripetoApp.factory( 'AuthenticationSvc',
 								lastlogin: firebase.database.ServerValue.TIMESTAMP,
 								//Consider to move this to a ConfService
 								config: { appVersion: currentAppVersion },
-								lists: { "default": {name:"Default", date:firebase.database.ServerValue.TIMESTAMP}}
+								lists: { "default": {name:"Default", secret:false, date:firebase.database.ServerValue.TIMESTAMP}}
 							});
 							$location.path( loginSuccessPage );
 						}
@@ -74,67 +99,5 @@ ripetoApp.factory( 'AuthenticationSvc',
 					});
 			}
 		};//return
-	}
-]);
-
-ripetoApp.factory( 'ConfigurationSvc', 
-	['$rootScope','$firebaseObject','$firebaseAuth', 
-	
-	function($rootScope,$firebaseObject,$firebaseAuth){
-		var currentAppVersion = "0.1.1"
-		
-		var putTasksOnDefaultList = function(userData){
-			if (userData.tasks === undefined ){
-				console.log("No Tasks to Update");
-			}else{
-				var count = 0;
-				Object.keys(userData.tasks).map(
-					function (key) { 
-						if( userData.tasks[key].inList === undefined){
-							userData.tasks[key].inList = "Default";
-						}
-						return userData.tasks[key];	
-					});
-				console.log(count + " Tasks updated");
-			}
-		};
-		
-		return{
-			upgradeUserConfig: function( user ){
-				
-				user.$loaded().then( function(data) {
-				    if ( user.config === undefined 
-				    		|| user.config.appVersion !== currentAppVersion ){
-						console.log("User needs some updates");
-						//Update App Version on Conf Folder
-						user.config = {appVersion:currentAppVersion};
-						//Create Default Task List (Consider to check if lists folder is empty )
-						user.lists = { "default": {name:"Default", date:firebase.database.ServerValue.TIMESTAMP} };
-						putTasksOnDefaultList(user);
-						user.$save();
-					}else{
-						console.log("User is up to date "+ currentAppVersion );	
-					}
-				}).catch(function(error) {
-					console.error("Error:", error);
-				});
-				
-				return "";
-			},
-			getAppVersion: function(){
-				return currentAppVersion;
-			}
-		};
-	}
-]);
-
-ripetoApp.factory( 'TasksSvc', 
-	['$rootScope','$location','$firebaseObject','$firebaseAuth', 
-	
-	function($rootScope, $location,$firebaseObject,$firebaseAuth){
-		
-		return{
-			
-		};
 	}
 ]);
