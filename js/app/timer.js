@@ -68,36 +68,7 @@ ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject','$firebaseAuth',
 			*/
 			clockIn: function(){
 
-			},
-
-
-			
-		$scope.clockIn = function(activity){
-			clockOut();
-			RUNNING_ACTIVITY.innerHTML = "Clocking "+activity;
-			startRunning( createNewTimerObject(activity) );
-			console.log("Clocking In "+ getCurrentTimer().name);
-		};
-
-		/* Function to stop the running interval. If the currentTimer exists
-		we need to save the timer details and reset the text for GLOBAL_TIMER
-		and the RUNNING_ACTIVITY description */
-		var clockOut = function(){
-			stopRunning();
-			if( getCurrentTimer() ){
-			  //TODO:save active timer data
-			  console.log("Clocking Out "+ getCurrentTimer().name);
-			  saveTimerOnHistoryAndDisplay( getCurrentTimer() );
-			  GLOBAL_TIMER.innerHTML = "00:00:00";
-			  RUNNING_ACTIVITY.innerHTML = "Not Running";
-			  currentTimer = null;
 			}
-		};
-
-
-
-
-
 		};
 	} 
 ]);
