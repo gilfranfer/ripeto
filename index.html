@@ -27,53 +27,31 @@
   	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 
-  	<!-- Datepicker
-  	<link rel="stylesheet" href="css/jquery-ui.css">
-  	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
-
   	<!-- Angular and Firebase -->
   	<script src="js/lib/angular.min.js"></script>
   	<script src="js/lib/angular-route.min.js"></script>
   	<script src="js/lib/angular-animate.min.js"></script>
 
-  	<!-- ngDialog -->
-  	<link rel="stylesheet" href="css/ngDialog.min.css">
-  	<link rel="stylesheet" href="css/ngDialog-theme-default.min.css">
-  	<script src="js/lib/ngDialog.min.js"></script>
-
   	<!-- Replace with your firebase config bellow-->
   	<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
   	<script>
   	  //Prod
-  	  // var config = {
-  	  // 	apiKey: "AIzaSyABQ6T4lpA4hvqIIOpHgGMFbZnQek-ZMsA",
-  	  // 	authDomain: "ripeto-prd.firebaseapp.com",
-  	  // 	databaseURL: "https://ripeto-prd.firebaseio.com",
-  	  // 	projectId: "ripeto-prd",
-  	  // 	storageBucket: "ripeto-prd.appspot.com",
-  	  // 	messagingSenderId: "209179056459"
-  	  // };
-      //Dev
-      var config = {
-        apiKey: "AIzaSyAwohj3pfuiAP9-vRJh_2Zuu-b-gI1YpEs",
-        authDomain: "ripeto-dev-30ca8.firebaseapp.com",
-        databaseURL: "https://ripeto-dev-30ca8.firebaseio.com",
-        projectId: "ripeto-dev-30ca8",
-        storageBucket: "",
-        messagingSenderId: "2399181429"
-      };
+  	  var config = {
+  	  	apiKey: "AIzaSyABQ6T4lpA4hvqIIOpHgGMFbZnQek-ZMsA",
+  	  	authDomain: "ripeto-prd.firebaseapp.com",
+  	  	databaseURL: "https://ripeto-prd.firebaseio.com",
+  	  	projectId: "ripeto-prd",
+  	  	storageBucket: "ripeto-prd.appspot.com",
+  	  	messagingSenderId: "209179056459"
+  	  };
   	  firebase.initializeApp(config);
   	</script>
   	<!-- Replace with your firebase config above-->
   	<script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
 
   	<script src="js/app/config.js"></script>
-  	<!-- <script src="js/app/controllers.js"></script>
-  	<script src="js/app/services.js"></script> -->
     <script src="js/app/authentication.js"></script>
   	<script src="js/app/tasks.js"></script>
   	<script src="js/app/lists.js"></script>
-  	<script src="js/app/timer.js"></script>
   </body>
 </html>
