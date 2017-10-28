@@ -1,9 +1,9 @@
 /*
 A TimeSet will represent a specific period of time that the user wants to monitor.
 for example a working day, or an entire week. Each TimeSet will contain a
-group of timers, and a list of events.
+group of timers, and a list of timers.
 A Timer will represent a List or Category, and will contain the total time
-for all the events in the same List. For example a Timer for Work related Tasks,
+for all the timers in the same List. For example a Timer for Work related Tasks,
 another for Meetings or Personal activities.
 An Event will represent an specific period of time.
 
@@ -13,12 +13,12 @@ TimeSet{
 	start: datetime ,
 	end: endtime,
 	status: Waiting / Running / Closed , - "To identify if this set is active or not"
-	whichtime: which timer is running,
+	whichtimer: which timer is running,
 	totalTime: timeinMilis,
 	timers: {[
 		{name: "List or Category name", start: datetime, totalTime: timeinMilis },
 	]},
-	events:  {[
+	timers:  {[
 		{name: "Task / activity Name",
 		belongsTo: "Timer name",
 		start: datetime,
@@ -32,27 +32,29 @@ ripetoApp.controller('TimerCntrl', ['$scope', '$rootScope', 'TimerSvc',
 		TimerSvc.init();
 
 		/* This function will be executed to start counting time for a list or task.
-		First we need to end the running timer (if any), then we can create a new 
+		First we need to chedk in firebase if the user has a Time set running or not.
+		Then we will stop the runnig timer (if any), then we can create a new 
 		timer and star running it */
 		$scope.clockIn = function(){
 			let tset = $rootScope.chronos.timeset ;
-			//Do we have a TimeSet for this Timer? Firs time we will not
-			if ( !tset ){
+			//Do we have a TimeSet for this Timer? First time we will not (unless one was found in DB)
+			if ( tset ){
+				console.log("TimerCntrl: Timeset already exist");				
+			}else{
 				console.log("TimerCntrl: We need a new Timeset");
 				tset = TimerSvc.createBaseTimeSet();
 				$rootScope.chronos.timeset = tset;
-			}else{
-				console.log("TimerCntrl: Timeset already exist");				
+				//Persist to DB
 			}
 
 			//Clockout Runnig Timer (if any)
 			if( tset.status === "running" ){
-				console.log("TimerCntrl: There is a running Timeset");
+				console.log("TimerCntrl: Stop the running Timer for this TimeSet");
 				TimerSvc.clockOut();
 			}
 			if( tset.status === "waiting" ){
 				console.log("TimerCntrl: Starting Timeset");
-				TimerSvc.startRunning($rootScope.chronos);
+				TimerSvc.startRunning($rootScope.chronos, $rootScope.activeTasksList);
 			}
 
 		};
@@ -91,14 +93,6 @@ ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject','$firebaseAuth',
 			//updateTimerView(GLOBAL_TIMER,formattedTime);
 		};
 
-		var createNewTimerObject = function(activity){
-			if( !timersTotalsMap.has(activity) ){
-			  timersTotalsMap.set(activity,{name:activity,totalTime:0});
-			}
-			let timerObj = {startTime: new Date(), name:activity, elapsed:0};
-			return timerObj;
-		};
-
 		return {
 			init: function(){
 				console.log("Chronos: Init");
@@ -125,16 +119,27 @@ ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject','$firebaseAuth',
 					status: "waiting",
 					totalTime: 0,
 					timers: new Map(),
-					events: new Array(),
+					timers: new Array(),
 				};
 			},
 
-			/* Set currentTimer to the new timer obeject, and prepare a refresh interval
+			/* At this point a Timest already exist
+			Set currentTimer to the new timer obeject, and prepare a refresh interval
 			that will executed the updateActiveTimer functionevery second */
-			startRunning: function(chronos){
-				//chronos.currentTimer = createNewTimerObject(activity);
-				chronos.refreshInterval = setInterval( updateActiveTimer, ONE_SECOND);
-				console.log(chronos);
+			startRunning: function(chronos,listname){
+				if(!chronos.timeset){
+					console.error("Chronos: There is no Timeset!!!");
+				}else{
+					let startdate = new Date();
+					chronos.timeset.status =  "running";
+					chronos.timeset.activetimer  = {startTime:startdate, name:listname, elapsed:0};
+
+					if( !chronos.timeset.timers.has(activetimer.name) ){
+				 		chronos.timeset.timers.set(activetimer.name,{name:listname,totalTime:0});
+					}
+					chronos.refreshInterval = setInterval( updateActiveTimer, ONE_SECOND);
+					console.log(chronos);
+				}
 			},
 			clockOut: function(){
 				console.log("Clocking Out " + $rootScope.activeTasksList);
