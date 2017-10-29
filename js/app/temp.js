@@ -92,48 +92,48 @@ var updateTimerView = function(timerView, timeString){
 };
 
 
-		/* Function to stop the running interval. If the currentTimer exists
-		we need to save the timer details and reset the text for GLOBAL_TIMER
-		and the RUNNING_ACTIVITY description */
-		var clockOut = function(){
-			stopRunning();
-			if( getCurrentTimer() ){
-			  //TODO:save active timer data
-			  console.log("Clocking Out "+ getCurrentTimer().name);
-			  saveTimerOnHistoryAndDisplay( getCurrentTimer() );
-			  GLOBAL_TIMER.innerHTML = "00:00:00";
-			  RUNNING_ACTIVITY.innerHTML = "Not Running";
-			  currentTimer = null;
-			}
-		};
+/* Function to stop the running interval. If the currentTimer exists
+we need to save the timer details and reset the text for GLOBAL_TIMER
+and the RUNNING_ACTIVITY description */
+var clockOut = function(){
+	stopRunning();
+	if( getCurrentTimer() ){
+	  //TODO:save active timer data
+	  console.log("Clocking Out "+ getCurrentTimer().name);
+	  saveTimerOnHistoryAndDisplay( getCurrentTimer() );
+	  GLOBAL_TIMER.innerHTML = "00:00:00";
+	  RUNNING_ACTIVITY.innerHTML = "Not Running";
+	  currentTimer = null;
+	}
+};
 
-		//Clear the refresh interval if any
-		stopRunning = function(){
-			if ( refreshInterval ){
-				clearInterval(refreshInterval);
-			}
-			refreshInterval = undefined;
-		};
+//Clear the refresh interval if any
+stopRunning = function(){
+	if ( refreshInterval ){
+		clearInterval(refreshInterval);
+	}
+	refreshInterval = undefined;
+};
 
-		/*Validate if some time was actually captured by the timer */
-		var saveTimerOnHistoryAndDisplay = function(timer){
-			if(timer.elapsed){
-			  //update Total for Activity
-			  let tmap = timersTotalsMap.get(timer.name);
-			  tmap.totalTime += timer.elapsed;
-			  console.log(tmap);
+/*Validate if some time was actually captured by the timer */
+var saveTimerOnHistoryAndDisplay = function(timer){
+	if(timer.elapsed){
+	  //update Total for Activity
+	  let tmap = timersTotalsMap.get(timer.name);
+	  tmap.totalTime += timer.elapsed;
+	  console.log(tmap);
 
-				//let li = document.querySelector("#timer-total-"+tmap.name);
-			  //li.innerHTML = tmap.name +": "+ formatElapsedTime(tmap.totalTime)
+		//let li = document.querySelector("#timer-total-"+tmap.name);
+	  //li.innerHTML = tmap.name +": "+ formatElapsedTime(tmap.totalTime)
 
-				//update timer history
-			  timerHistory.push(timer);
-				console.log(timerHistory);
-			  li = document.createElement("li");
-			  li.append(timer.name +" - "+ formatElapsedTime(timer.elapsed) ) ;
-			  TIMER_HISTORY.append(li);
-			}
-		};
+		//update timer history
+	  timerHistory.push(timer);
+		console.log(timerHistory);
+	  li = document.createElement("li");
+	  li.append(timer.name +" - "+ formatElapsedTime(timer.elapsed) ) ;
+	  TIMER_HISTORY.append(li);
+	}
+};
 
 		var resetAll = function() {
 		  clockOut();

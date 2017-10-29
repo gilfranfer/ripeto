@@ -20,11 +20,11 @@ Chronos{
 			timesets: [
 				{name: "Task | activity Name",
 				belongsToList: "List name",
-				start: datetime,
+				start: datetime, end: datetime
 				time: timeinMilis }
 			],
 			listtotals: [
-				{name: "List or Category name", start: datetime, totalTime: timeinMilis },
+				{listname: "List or Category name", start: datetime, totalTime: timeinMilis },
 			]
 		}
 	]
@@ -40,30 +40,42 @@ ripetoApp.controller('TimerCntrl', ['$scope', '$rootScope', 'TimerSvc',
 		Then we will stop the runnig timer (if any), then we can create a new 
 		timer and star running it */
 		$scope.clockIn = function(){
-			let timer = $rootScope.chronos.timer ;
-			//Do we have a Timer? First time we will not (unless one was found in DB)
-			if ( timer ){
-				console.log("TimerCntrl: Timer already exist");
-			}else{
-				console.log("TimerCntrl: We need a new Timer");
-				timer = TimerSvc.createBaseTimer();
-				$rootScope.chronos.timer = timer;
-				//Persist to DB
-			}
-
+			console.log("TimerCntrl - Clocking In!!");
+			$rootScope.chronos.timer = TimerSvc.getTimer($rootScope.chronos);
+			document.querySelector("#global-timer").innerHTML = "00:00:00";
+			
 			//Clockout Runnig Timer (if any)
-			if( timer.status === "running" ){
-				console.log("TimerCntrl: Stop the running timeset for this Timer");
-				TimerSvc.clockOut();
+			if( $rootScope.chronos.timer.status === "running" ){
+				$scope.clockOut();
 			}
-			if( timer.status === "waiting" ){
+			//
+			if( $rootScope.chronos.timer.status === "waiting" ){
 				TimerSvc.startRunning($rootScope.chronos, $rootScope.activeTasksList);
+				//console.log("TimerCntrl - running the following timer: ");
+				//console.log($rootScope.chronos.timer);
 			}
-
 		};
 
 		/* */
-		$scope.clockOut = function(){};
+		$scope.clockOut = function(){
+			if ( $rootScope.chronos.timer && $rootScope.chronos.timer.status == "running"){
+				console.log("TimerCntrl: Clocking Out!!");
+				
+				let timeset = $rootScope.chronos.timer.activetimeset;
+				timeset.end = new Date();
+				TimerSvc.stopRunning($rootScope.chronos);
+				// console.log("TimerCntrl: Chronos after Stop:");
+				// console.log($rootScope.chronos);
+				TimerSvc.updateTimesetHistory(timeset);
+				TimerSvc.updateListTotals(timeset);
+				// console.log("TimerCntrl: Chronos after updates:");
+				// console.log($rootScope.chronos);
+			}else{
+				console.log("TimerCntrl: Nothing to stop!!!");				
+			}
+		};
+
+		$scope.newTimer = function(){};
 
 	}
 ]);
@@ -118,6 +130,25 @@ ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject','$firebaseAuth',
 			return (value<10)?"0"+value:value;
 		};
 
+		var createTimeset = function(listname,startdate){
+			return {name: listname, belongsToList: listname, startTime: new Date(), elapsed:0};
+		};
+
+		var createBaseTimer = function(){
+			let date = new Date();
+			return { 
+				name: "Basic Timer",
+				description: date.toString(),
+				start: date,
+				end: undefined,
+				status: "waiting",
+				totalTime: 0,
+				listtotals: new Map(),
+				timesets: new Array(),
+				activetimeset: undefined
+			};
+		};
+
 		return {
 			init: function(){
 				console.log("Chronos: Init");
@@ -134,40 +165,51 @@ ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject','$firebaseAuth',
 					console.log("Chronos: Was already alive");
 				}
 			},
-			createBaseTimer: function(){
-				let date = new Date();
-				return { 
-					name: "My Set",
-					description: date.toString(),
-					start: date,
-					end: undefined,
-					status: "waiting",
-					totalTime: 0,
-					listtotals: new Map(),
-					timesets: new Array(),
-					activetimeset: undefined
-				};
+			getTimer: function(chronos){
+				//Do we have a Timer? First time we will not (unless one was found in DB)
+				if ( chronos.timer ){
+					console.log("TimerSvc: Timer already exist");
+				}else{
+					console.log("TimerSvc: Creating Base Timer");
+					chronos.timer = createBaseTimer();
+					//Persist to DB
+				}
+				return chronos.timer;
 			},
 			/* At this point a Timer already exist */
 			startRunning: function(chronos,listname){
-				if(!chronos.timer){
-					//This should not happen
-					console.error("Chronos: There is no Timer!!!");
-				}else{
-					//Normal flow
-					console.log("TimerCntrl: Starting timer");
-					let startdate = new Date();
+				if(!chronos.timer){	//This should not happen
+					console.error("TimerSvc - There is no Timer!!!");
+				}else{ //Normal flow
 					chronos.timer.status =  "running";
-					chronos.timer.activetimeset  = {name: listname, belongsToList: listname, startTime: startdate, elapsed:0};
-
-					if( !chronos.timer.listtotals.has(listname) ){
-				 		chronos.timer.listtotals.set(listname,{list:listname,totalTime:0});
-					}
+					chronos.timer.activetimeset  = createTimeset(listname);
 					chronos.refreshInterval = setInterval( updateActiveTimeset, ONE_SECOND);
 				}
 			},
-			clockOut: function(){
-				console.log("Clocking Out " + $rootScope.activeTasksList);
+			stopRunning: function(chronos){
+				clearInterval(chronos.refreshInterval);
+				chronos.refreshInterval = undefined; //Maybe this is not required
+				chronos.timer.status =  "waiting";
+				chronos.timer.activetimeset = undefined;
+			},
+			updateTimesetHistory: function(timeset){
+				if(timeset.elapsed){
+				  $rootScope.chronos.timer.timesets.push(timeset);
+				}
+			},
+			updateListTotals: function(timeset){
+				if(timeset.elapsed){
+					let totals = $rootScope.chronos.timer.listtotals;
+					if( !totals.has(timeset.belongsToList) ){
+		 				totals.set(timeset.belongsToList, 
+		 					{ listname: timeset.belongsToList, totalTime: 0, start:timeset.start}
+		 				);
+					}
+					//update Total for Activity
+					let tmap = totals.get(timeset.belongsToList);
+					tmap.totalTime += timeset.elapsed;
+				}
+				
 			}
 		};
 	} 
