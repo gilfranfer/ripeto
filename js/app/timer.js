@@ -1,29 +1,32 @@
 /*
-A TimeSet will represent a specific period of time that the user wants to monitor.
-for example a working day, or an entire week. Each TimeSet will contain a
-group of timers, and a list of timers.
-A Timer will represent a List or Category, and will contain the total time
-for all the timers in the same List. For example a Timer for Work related Tasks,
+Choronos wll be a JS object and will not be persisted in DB.
+Only the timer object inside Chronos will be persisted in DB.
+- A timer will represent a period of time that the user wants to monitor, for example a working day, or an entire week. 
+- Each timer will contain a list of timesets, that represent an specific period of time.
+- List totals will represent a List or Category, and will contain the total time
+for all the timesets that belongs to the same List. For example a Timer for Work related Tasks,
 another for Meetings or Personal activities.
-An Event will represent an specific period of time.
 
-TimeSet{
-	name: String, - "ex Monday at Office"
-	description: String, - "ex Set to track time spent at office this Monday"
-	start: datetime ,
-	end: endtime,
-	status: Waiting / Running / Closed , - "To identify if this set is active or not"
-	whichtimer: which timer is running,
-	totalTime: timeinMilis,
-	timers: {[
-		{name: "List or Category name", start: datetime, totalTime: timeinMilis },
-	]},
-	timers:  {[
-		{name: "Task / activity Name",
-		belongsTo: "Timer name",
-		start: datetime,
-		time: timeinMilis }
-	]},
+Chronos{
+	totalformattedtime: '00:00:00',
+	Timer{
+		name: String, - "ex Monday at Office"
+		description: String, - "ex Set to track time spent at office this Monday"
+		start: datetime ,
+		end: endtime,
+		status: Waiting / Running / Closed , - "To identify if this set is active or not"
+		whichtimer: which timer is running,
+		totalTime: timeinMilis,
+		timesets:  {[
+			{name: "Task / activity Name",
+			belongsToList: "List name",
+			start: datetime,
+			time: timeinMilis }
+		]},
+		listtotals: {[
+			{name: "List or Category name", start: datetime, totalTime: timeinMilis },
+		]}
+	}
 }
 */
 ripetoApp.controller('TimerCntrl', ['$scope', '$rootScope', 'TimerSvc',
@@ -32,34 +35,32 @@ ripetoApp.controller('TimerCntrl', ['$scope', '$rootScope', 'TimerSvc',
 		TimerSvc.init();
 
 		/* This function will be executed to start counting time for a list or task.
-		First we need to chedk in firebase if the user has a Time set running or not.
+		First we need to check in firebase if the user has a Time set running or not.
 		Then we will stop the runnig timer (if any), then we can create a new 
 		timer and star running it */
 		$scope.clockIn = function(){
-			let tset = $rootScope.chronos.timeset ;
-			//Do we have a TimeSet for this Timer? First time we will not (unless one was found in DB)
-			if ( tset ){
-				console.log("TimerCntrl: Timeset already exist");				
+			let timer = $rootScope.chronos.timer ;
+			//Do we have a Timer? First time we will not (unless one was found in DB)
+			if ( timer ){
+				console.log("TimerCntrl: Timer already exist");
 			}else{
-				console.log("TimerCntrl: We need a new Timeset");
-				tset = TimerSvc.createBaseTimeSet();
-				$rootScope.chronos.timeset = tset;
+				console.log("TimerCntrl: We need a new Timer");
+				timer = TimerSvc.createBaseTimer();
+				$rootScope.chronos.timer = timer;
 				//Persist to DB
 			}
 
 			//Clockout Runnig Timer (if any)
-			if( tset.status === "running" ){
-				console.log("TimerCntrl: Stop the running Timer for this TimeSet");
+			if( timer.status === "running" ){
+				console.log("TimerCntrl: Stop the running timeset for this Timer");
 				TimerSvc.clockOut();
 			}
-			if( tset.status === "waiting" ){
-				console.log("TimerCntrl: Starting Timeset");
+			if( timer.status === "waiting" ){
 				TimerSvc.startRunning($rootScope.chronos, $rootScope.activeTasksList);
 			}
 
 		};
 
-		
 	}
 ]);
 
@@ -75,22 +76,42 @@ ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject','$firebaseAuth',
 			return {
 				formattedTotalTime:"00:00:00", 
 				refreshInterval: undefined
-				//,timeset: createBaseTimeSet()
 			};
 		};
 
 		/* check in firebase if the user has an a timeset with status different than closed */
-		var getActiveTimesetFromDb = function(){ return null};
+		var getActiveTimerFromDb = function(){ return null};
 
 		/*This is the method that get called by INTERVAL on the specified time (1 sec).
 		It will updated the elapsed time on the current activity Timer, and refresh view*/
-		var updateActiveTimer = function() {
-			console.log("A second passed");
-			//getCurrentTimer().elapsed = new Date() -  getCurrentTimer().startTime;
-			//let formattedTime = formatElapsedTime(getCurrentTimer().elapsed);
-			//console.log("Update Timer: "+ formattedTime);
-			//console.log(getCurrentTimer());
-			//updateTimerView(GLOBAL_TIMER,formattedTime);
+		var updateActiveTimeset = function() {
+			let current = $rootScope.chronos.timer.activetimeset;
+			current.elapsed = new Date() - current.startTime;
+			$rootScope.chronos.formattedTotalTime = formatElapsedTime(current.elapsed);
+			$rootScope.chronos.timer.activetimeset = current;
+			//Updating view. For some Reason Angular biding didnt work.
+			document.querySelector("#global-timer").innerHTML = $rootScope.chronos.formattedTotalTime;
+		};
+
+		/* Receives miliseconds and prepares a String that has the visual
+		representation of the elapsed time in HH:MM:SS format */
+		var formatElapsedTime = function(timeinMilis){
+			let hours =0, minutes=0, seconds=0;
+
+			hours = Math.floor( (timeinMilis/1000)/60/60);
+			minutes = Math.floor( (timeinMilis/1000)/60) - (hours * 60);
+			seconds = Math.floor( (timeinMilis/1000)  - ( ((hours * 60) + minutes) * 60) );
+
+			formattedTime =
+			    leadingZero(hours) + ":" +
+			    leadingZero(minutes) + ":" +
+			    leadingZero(seconds);
+			return formattedTime;
+		};
+
+		/* Get a number and add the 0 to the right if less than 10*/
+		var leadingZero = function(value){
+			return (value<10)?"0"+value:value;
 		};
 
 		return {
@@ -98,10 +119,10 @@ ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject','$firebaseAuth',
 				console.log("Chronos: Init");
 				if( !$rootScope.chronos ){
 					let chronos = invokeChronos();
-					let dbTimeset = getActiveTimesetFromDb();
-					if ( dbTimeset ){
-						console.log("Chronos: FOund a TimeSet in the DB");
-						chronos.timeset = dbTimeset;
+					let dbTimer = getActiveTimerFromDb();
+					if ( dbTimer ){
+						console.log("Chronos: FOund a Timer in the DB");
+						chronos.timer = dbTimer;
 						//Add watch
 					}
 					$rootScope.chronos = chronos;
@@ -109,7 +130,7 @@ ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject','$firebaseAuth',
 					console.log("Chronos: Was already alive");
 				}
 			},
-			createBaseTimeSet: function(){
+			createBaseTimer: function(){
 				let date = new Date();
 				return { 
 					name: "My Set",
@@ -118,27 +139,27 @@ ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject','$firebaseAuth',
 					end: undefined,
 					status: "waiting",
 					totalTime: 0,
-					timers: new Map(),
-					timers: new Array(),
+					listtotals: new Map(),
+					timesets: new Array(),
+					activetimeset: undefined
 				};
 			},
-
-			/* At this point a Timest already exist
-			Set currentTimer to the new timer obeject, and prepare a refresh interval
-			that will executed the updateActiveTimer functionevery second */
+			/* At this point a Timer already exist */
 			startRunning: function(chronos,listname){
-				if(!chronos.timeset){
-					console.error("Chronos: There is no Timeset!!!");
+				if(!chronos.timer){
+					//This should not happen
+					console.error("Chronos: There is no Timer!!!");
 				}else{
+					//Normal flow
+					console.log("TimerCntrl: Starting timer");
 					let startdate = new Date();
-					chronos.timeset.status =  "running";
-					chronos.timeset.activetimer  = {startTime:startdate, name:listname, elapsed:0};
+					chronos.timer.status =  "running";
+					chronos.timer.activetimeset  = {name: listname, belongsToList: listname, startTime: startdate, elapsed:0};
 
-					if( !chronos.timeset.timers.has(activetimer.name) ){
-				 		chronos.timeset.timers.set(activetimer.name,{name:listname,totalTime:0});
+					if( !chronos.timer.listtotals.has(listname) ){
+				 		chronos.timer.listtotals.set(listname,{list:listname,totalTime:0});
 					}
-					chronos.refreshInterval = setInterval( updateActiveTimer, ONE_SECOND);
-					console.log(chronos);
+					chronos.refreshInterval = setInterval( updateActiveTimeset, ONE_SECOND);
 				}
 			},
 			clockOut: function(){
