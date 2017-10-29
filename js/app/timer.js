@@ -1,32 +1,33 @@
 /*
-Choronos wll be a JS object and will not be persisted in DB.
-Only the timer object inside Chronos will be persisted in DB.
+Choronos wll be the main container in the DB for all the timers.
 - A timer will represent a period of time that the user wants to monitor, for example a working day, or an entire week. 
-- Each timer will contain a list of timesets, that represent an specific period of time.
-- List totals will represent a List or Category, and will contain the total time
-for all the timesets that belongs to the same List. For example a Timer for Work related Tasks,
-another for Meetings or Personal activities.
+- Each timer will contain a list of timesets, that represent an specific period of time. The timer will be created
+each time the user clicks the "Clock in" button, and will end with the "Clock out". ( or clocking in another list)
+- List totals will represent a List or Category, and will contain the total time for all the timesets that belongs to 
+the same List. For example a Timer for Work related Tasks, another for Meetings or Personal activities.
 
 Chronos{
-	totalformattedtime: '00:00:00',
-	Timer{
-		name: String, - "ex Monday at Office"
-		description: String, - "ex Set to track time spent at office this Monday"
-		start: datetime ,
-		end: endtime,
-		status: Waiting / Running / Closed , - "To identify if this set is active or not"
-		whichtimer: which timer is running,
-		totalTime: timeinMilis,
-		timesets:  {[
-			{name: "Task / activity Name",
-			belongsToList: "List name",
-			start: datetime,
-			time: timeinMilis }
-		]},
-		listtotals: {[
-			{name: "List or Category name", start: datetime, totalTime: timeinMilis },
-		]}
-	}
+	totalformattedtime: '00:00:00', //To update the view
+	timers:[ 
+		TimerID: {
+			name: "ex Monday at Office",
+			description: "ex Timer to track time spent at office this Monday",
+			start: datetime, 
+			end: endtime,
+			status: waiting | running | closed , //"To identify if this set is active or not"
+			activetimeset: {name: "Task", belongsToList: "List name", start: datetime, elapsed: timeinMilis},
+			totalTime: timeinMilis,
+			timesets: [
+				{name: "Task | activity Name",
+				belongsToList: "List name",
+				start: datetime,
+				time: timeinMilis }
+			],
+			listtotals: [
+				{name: "List or Category name", start: datetime, totalTime: timeinMilis },
+			]
+		}
+	]
 }
 */
 ripetoApp.controller('TimerCntrl', ['$scope', '$rootScope', 'TimerSvc',
@@ -60,6 +61,9 @@ ripetoApp.controller('TimerCntrl', ['$scope', '$rootScope', 'TimerSvc',
 			}
 
 		};
+
+		/* */
+		$scope.clockOut = function(){};
 
 	}
 ]);

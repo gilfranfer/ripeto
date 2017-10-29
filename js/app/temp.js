@@ -39,6 +39,58 @@ $scope.clockIn = function(activity){
 	console.log("Clocking In "+ getCurrentTimer().name);
 };
 
+/* Set currentTimer to the new timer obeject, and prepare a refresh interval
+that will executed the updateActiveTimer functionevery second */
+var startRunning = function(timerObj) {
+ currentTimer = timerObj;
+ refreshInterval = setInterval( updateActiveTimer, ONE_SECOND);
+};
+
+/*This is the method that get called by interval on the specified time (1 sec).
+It will updated the elapsed time on the current activity Timer, and refresh
+the user viee. */
+var updateActiveTimer = function() {
+	getCurrentTimer().elapsed = new Date() -  getCurrentTimer().startTime;
+	let formattedTime = formatElapsedTime(getCurrentTimer().elapsed);
+	//console.log("Update Timer: "+ formattedTime);
+	//console.log(getCurrentTimer());
+	updateTimerView(GLOBAL_TIMER,formattedTime);
+};
+
+/* Receives miliseconds and prepares a String that has the visual
+representation of the elapsed time in HH:MM:SS format */
+var formatElapsedTime = function(timeinMilis){
+	let hours =0, minutes=0, seconds=0;
+
+	hours = Math.floor( (timeinMilis/1000)/60/60);
+	minutes = Math.floor( (timeinMilis/1000)/60) - (hours * 60);
+	seconds = Math.floor( (timeinMilis/1000)  - ( ((hours * 60) + minutes) * 60) );
+
+	formattedTime =
+	    leadingZero(hours) + ":" +
+	    leadingZero(minutes) + ":" +
+	    leadingZero(seconds);
+	return formattedTime;
+};
+
+/* Get a number and add the 0 to the right if less than 10*/
+var leadingZero = function(value){
+	return (value<10)?"0"+value:value;
+};
+
+/* A timer object consists off:*/
+var createNewTimerObject = function(activity){
+	if( !timersTotalsMap.has(activity) ){
+	  timersTotalsMap.set(activity,{name:activity,totalTime:0});
+	}
+	let timerObj = {startTime: new Date(), name:activity, elapsed:0};
+	return timerObj;
+};
+
+var updateTimerView = function(timerView, timeString){
+	timerView.innerHTML = timeString;
+};
+
 
 		/* Function to stop the running interval. If the currentTimer exists
 		we need to save the timer details and reset the text for GLOBAL_TIMER
@@ -63,39 +115,6 @@ $scope.clockIn = function(activity){
 			refreshInterval = undefined;
 		};
 
-		/* Set currentTimer to the new timer obeject, and prepare a refresh interval
-		that will executed the updateActiveTimer functionevery second */
-		var startRunning = function(timerObj) {
-		 currentTimer = timerObj;
-		 refreshInterval = setInterval( updateActiveTimer, ONE_SECOND);
-	 };
-
-		/*This is the method that get called by interval on the specified time (1 sec).
-		It will updated the elapsed time on the current activity Timer, and refresh
-		the user viee. */
-		var updateActiveTimer = function() {
-			getCurrentTimer().elapsed = new Date() -  getCurrentTimer().startTime;
-			let formattedTime = formatElapsedTime(getCurrentTimer().elapsed);
-			//console.log("Update Timer: "+ formattedTime);
-			//console.log(getCurrentTimer());
-			updateTimerView(GLOBAL_TIMER,formattedTime);
-		};
-
-		var updateTimerView = function(timerView, timeString){
-			timerView.innerHTML = timeString;
-		};
-
-		/* A timer object consists off:
-
-		*/
-		var createNewTimerObject = function(activity){
-			if( !timersTotalsMap.has(activity) ){
-			  timersTotalsMap.set(activity,{name:activity,totalTime:0});
-			}
-			let timerObj = {startTime: new Date(), name:activity, elapsed:0};
-			return timerObj;
-		};
-
 		/*Validate if some time was actually captured by the timer */
 		var saveTimerOnHistoryAndDisplay = function(timer){
 			if(timer.elapsed){
@@ -114,27 +133,6 @@ $scope.clockIn = function(activity){
 			  li.append(timer.name +" - "+ formatElapsedTime(timer.elapsed) ) ;
 			  TIMER_HISTORY.append(li);
 			}
-		};
-
-		/* Receives miliseconds and prepares a String that has the visual
-		representation of the elapsed time in HH:MM:SS format */
-		var formatElapsedTime = function(timeinMilis){
-			let hours =0, minutes=0, seconds=0;
-
-			hours = Math.floor( (timeinMilis/1000)/60/60);
-			minutes = Math.floor( (timeinMilis/1000)/60) - (hours * 60);
-			seconds = Math.floor( (timeinMilis/1000)  - ( ((hours * 60) + minutes) * 60) );
-
-			formattedTime =
-			    leadingZero(hours) + ":" +
-			    leadingZero(minutes) + ":" +
-			    leadingZero(seconds);
-			return formattedTime;
-		};
-
-		/* Get a number and add the 0 to the right if less than 10*/
-		var leadingZero = function(value){
-			return (value<10)?"0"+value:value;
 		};
 
 		var resetAll = function() {

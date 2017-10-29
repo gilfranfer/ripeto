@@ -4,19 +4,18 @@
   <div class="car-body p-4">
     <div class="row">
       <div class="col-lg">
-        <h1 class="card-subtitle" id="global-timer">{{chronos.formattedTotalTime}}</h1>
-
-        <h3 class="card-title" ng-show="!chronos.timeset">
+        <h1 class="card-title" id="global-timer">{{chronos.formattedTotalTime}}</h1>
+        <h3 class="card-subtitle" ng-show="!chronos.timer">
           Nothing is running!
         </h3>
-        <h3 class="card-title" ng-show="chronos.timeset.status == 'running'">
-          Clocking {{chronos.timeset.whichtimer}}
+        <h3 class="card-subtitle" ng-show="chronos.timer.status == 'running'">
+          Clocking {{chronos.timer.activetimeset.name}}
         </h3>
-        <h3 class="card-title" ng-show="chronos.timeset.status == 'waiting'">
-          {{chronos.timeset.whichtimer}} is waiting
+        <h3 class="card-subtitle" ng-show="chronos.timer.status == 'waiting'">
+          {{chronos.timer.activetimeset.name}} is waiting
         </h3>
 
-        <p class="card-text">from set {{chronos.timeset.name}}</p>
+        <p class="card-text" ng-show="chronos.timer">from timer {{chronos.timer.name}}</p>
     
         <!-- <span id="global-timer" class=""> {{timer.globalTimer}} </span>
         <span id="running-activity"> {{timer.description}} </span>
@@ -34,10 +33,10 @@
           ng-disabled="'All' == activeTasksList" ng-click="clockIn()">
           Clock in {{activeTasksList}}
         </button>
-        <button class="btn btn-block btn-danger" ng-click="clockOut()">Pause</button>
-        <button class="btn btn-block btn-dark" ng-click="resetAll()">
+        <button class="btn btn-block btn-danger" ng-click="clockOut()">Clock out</button>
+        <!-- <button class="btn btn-block btn-dark" ng-click="resetAll()">
           Reset
-        </button>
+        </button> -->
       </div>
     </div>
   </div>
