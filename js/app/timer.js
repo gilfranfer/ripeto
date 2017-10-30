@@ -14,7 +14,8 @@ Chronos{
 			description: "ex Timer to track time spent at office this Monday",
 			start: datetime, 
 			end: endtime,
-			status: waiting | running | closed , //"To identify if this set is active or not"
+			status: open | closed , //"To identify if this set is active or not"
+			isRunnig: true | false
 			activetimeset: {name: "Task", belongsToList: "List name", start: datetime, elapsed: timeinMilis},
 			totalTime: timeinMilis,
 			timesets: [
@@ -39,15 +40,15 @@ ripetoApp.controller('TimerCntrl', ['$scope', '$rootScope', 'TimerSvc',
 		timer and star running it */
 		$scope.clockIn = function(){
 			console.log("TimerCntrl - Clocking In!!");
-			$rootScope.chronos.timer = TimerSvc.getTimer($rootScope.chronos);
 			document.querySelector("#global-timer").innerHTML = "00:00:00";
+			$rootScope.chronos.timer = TimerSvc.getTimer($rootScope.chronos);
 			
 			//Clockout Runnig Timer (if any)
-			if( $rootScope.chronos.timer.status === "running" ){
+			if( $rootScope.chronos.timer.isRunning ){
 				$scope.clockOut();
 			}
 			//
-			if( $rootScope.chronos.timer.status === "waiting" ){
+			if( !$rootScope.chronos.timer.isRunning){
 				TimerSvc.startRunning($rootScope.chronos, $rootScope.activeTasksList);
 				//console.log("TimerCntrl - running the following timer: ");
 				//console.log($rootScope.chronos.timer);
@@ -79,11 +80,12 @@ ripetoApp.controller('TimerCntrl', ['$scope', '$rootScope', 'TimerSvc',
 ]);
 
 //This Factory retunrs a set of functions to work with Timer features
-ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject','$firebaseAuth', 
-	function($rootScope,$firebaseObject,$firebaseAuth){
+ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject', 
+	function($rootScope,$firebaseObject){
 		
 		let ONE_SECOND = 1000;
-		
+		var usersFolder = firebase.database().ref().child('users');
+
 		/* chronos object from rootScope will be the container for all the Timer values*/
 		var invokeChronos = function(){
 			console.log("Chronos Invokation");
@@ -91,11 +93,6 @@ ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject','$firebaseAuth',
 				formattedTotalTime:"00:00:00", 
 				refreshInterval: undefined
 			};
-		};
-
-		/* check in firebase if the user has an a timeset with status different than closed */
-		var getActiveTimerFromDb = function(){ 
-
 		};
 
 		/*This is the method that get called by INTERVAL on the specified time (1 sec).
@@ -138,42 +135,54 @@ ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject','$firebaseAuth',
 			let date = new Date();
 			return { 
 				name: "Basic Timer",
-				description: date.toString(),
-				start: date,
-				end: undefined,
-				status: "waiting",
+				description: date.toString(),	
+				status: "open",
+				isRunning: false,
 				totalTime: 0,
+				start: date.getTime(),
+				end: null,
 				listtotals: new Map(),
 				timesets: new Array(),
-				activetimeset: undefined
+				activetimeset: null
 			};
 		};
 
 		return {
-			/*Init will be called by Task Controller onAuthStateChanged*/
-			init: function(userid){
-				console.log("Chronos: Init for user:"+userid);
+			/*Init will be called by Task Controller onAuthStateChanged. 
+			dbTimer is a possible Timer obejct from firebase*/
+			init: function(dbTimer){
+				console.log("Chronos: Init");
 				if( !$rootScope.chronos ){
 					let chronos = invokeChronos();
-					let dbTimer = getActiveTimerFromDb();
-					if ( dbTimer ){
-						console.log("Chronos: FOund a Timer in the DB");
-						chronos.timer = dbTimer;
-						//Add watch
-					}
 					$rootScope.chronos = chronos;
 				}else{
 					console.log("Chronos: Was already alive");
+				}
+
+				if ( dbTimer.status == 'open' ){
+					console.log("Chronos: Found a Timer in the DB");
+					$rootScope.chronos.timer = dbTimer;
+					//Add watch
+				}else{
+					console.log("Chronos: Nothing from DB");
 				}
 			},
 			getTimer: function(chronos){
 				//Do we have a Timer? First time we will not (unless one was found in DB)
 				if ( chronos.timer ){
-					console.log("TimerSvc: Timer already exist");
+					console.log("TimerSvc: Timer already exist?");
 				}else{
 					console.log("TimerSvc: Creating Base Timer");
 					chronos.timer = createBaseTimer();
 					//Persist to DB
+					// chronos.timer.listtotals.set("Default List", 
+		 		// 			{ listname: "Default List", totalTime: 0, start:new Date()} );
+		 		// 	chronos.timer.listtotals.set("Second List", 
+		 		// 			{ listname: "Second List", totalTime: 10, start:new Date()} );
+
+					var timersRef = usersFolder.child($rootScope.currentUser.$id).child('timers');
+					var newTimerRef = timersRef.push();
+					newTimerRef.set(chronos.timer);
 				}
 				return chronos.timer;
 			},
@@ -182,7 +191,7 @@ ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject','$firebaseAuth',
 				if(!chronos.timer){	//This should not happen
 					console.error("TimerSvc - There is no Timer!!!");
 				}else{ //Normal flow
-					chronos.timer.status =  "running";
+					chronos.timer.isRunning =  true;
 					chronos.timer.activetimeset  = createTimeset(listname);
 					chronos.refreshInterval = setInterval( updateActiveTimeset, ONE_SECOND);
 				}
@@ -190,7 +199,7 @@ ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject','$firebaseAuth',
 			stopRunning: function(chronos){
 				clearInterval(chronos.refreshInterval);
 				chronos.refreshInterval = undefined; //Maybe this is not required
-				chronos.timer.status =  "waiting";
+				chronos.timer.isRunning =  false;
 				chronos.timer.activetimeset = undefined;
 			},
 			updateTimesetHistory: function(timeset){

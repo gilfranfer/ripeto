@@ -10,7 +10,7 @@
           Clocking {{chronos.timer.activetimeset.name}}
         </p>
         <p class="card-text" ng-show="activeTasksList != 'All' && 
-          (!chronos.timer || chronos.timer.status != 'running' || (chronos.timer.status == 'running' && chronos.timer.activetimeset.name != activeTasksList ) ) ">
+          (!chronos.timer || !chronos.timer.isRunning || (chronos.timer.isRunning && chronos.timer.activetimeset.name != activeTasksList ) ) ">
           {{activeTasksList}} is waiting to clock
         </p>
       </div>

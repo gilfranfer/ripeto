@@ -24,7 +24,16 @@ ripetoApp.controller('TasksCntrl',
 				$rootScope.openTasks = openTasksArray;
 				$rootScope.userLists = userListsArray;
 
-				TimerSvc.init(authUser.uid);
+				//Get Timer and Init
+				let dbTimer = $firebaseObject( usersFolder.child(authUser.uid).child('timers').orderByChild("status").equalTo("open"));
+				dbTimer.$loaded()
+				  .then(function(data) {
+					TimerSvc.init(data);
+				  })
+				  .catch(function(error) {
+				    console.log("DBTIMER error:"+ error);
+				  });
+
 				//userListsArray.$loaded().then( function(data){ console.log(data); } );
 				//openTasksArray.$watch( function(data){} );
 			}
