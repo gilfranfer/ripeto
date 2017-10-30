@@ -1,6 +1,6 @@
 ripetoApp.controller('TasksCntrl',
-	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray','$firebaseObject',
-	function($scope, $rootScope, $firebaseAuth, $firebaseArray, $firebaseObject){
+	['$scope', '$rootScope', '$firebaseAuth', '$firebaseArray','$firebaseObject', 'TimerSvc',
+	function($scope, $rootScope, $firebaseAuth, $firebaseArray, $firebaseObject, TimerSvc){
 
 		$rootScope.tasksOrder = "date";
 		$rootScope.reverseOrder = true;
@@ -24,6 +24,7 @@ ripetoApp.controller('TasksCntrl',
 				$rootScope.openTasks = openTasksArray;
 				$rootScope.userLists = userListsArray;
 
+				TimerSvc.init(authUser.uid);
 				//userListsArray.$loaded().then( function(data){ console.log(data); } );
 				//openTasksArray.$watch( function(data){} );
 			}

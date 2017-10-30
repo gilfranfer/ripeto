@@ -30,11 +30,9 @@ Chronos{
 	]
 }
 */
-ripetoApp.controller('TimerCntrl', ['$scope', '$rootScope', 'TimerSvc',
+ripetoApp.controller('TimerCntrl', ['$scope', '$rootScope', 'TimerSvc', 
 	function($scope, $rootScope,TimerSvc){
 		
-		TimerSvc.init();
-
 		/* This function will be executed to start counting time for a list or task.
 		First we need to check in firebase if the user has a Time set running or not.
 		Then we will stop the runnig timer (if any), then we can create a new 
@@ -69,7 +67,7 @@ ripetoApp.controller('TimerCntrl', ['$scope', '$rootScope', 'TimerSvc',
 				TimerSvc.updateTimesetHistory(timeset);
 				TimerSvc.updateListTotals(timeset);
 				// console.log("TimerCntrl: Chronos after updates:");
-				// console.log($rootScope.chronos);
+				console.log($rootScope.chronos.timer);
 			}else{
 				console.log("TimerCntrl: Nothing to stop!!!");				
 			}
@@ -96,7 +94,9 @@ ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject','$firebaseAuth',
 		};
 
 		/* check in firebase if the user has an a timeset with status different than closed */
-		var getActiveTimerFromDb = function(){ return null};
+		var getActiveTimerFromDb = function(){ 
+
+		};
 
 		/*This is the method that get called by INTERVAL on the specified time (1 sec).
 		It will updated the elapsed time on the current activity Timer, and refresh view*/
@@ -150,8 +150,9 @@ ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject','$firebaseAuth',
 		};
 
 		return {
-			init: function(){
-				console.log("Chronos: Init");
+			/*Init will be called by Task Controller onAuthStateChanged*/
+			init: function(userid){
+				console.log("Chronos: Init for user:"+userid);
 				if( !$rootScope.chronos ){
 					let chronos = invokeChronos();
 					let dbTimer = getActiveTimerFromDb();
