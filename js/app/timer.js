@@ -141,10 +141,16 @@ ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject',
 				totalTime: 0,
 				start: date.getTime(),
 				end: null,
-				listtotals: new Map(),
-				timesets: new Array(),
+				listtotals: new Map(), //We might not need this one
+				timesets: new Array(), //We might not need this one
 				activetimeset: null
 			};
+		};
+
+		var persistTimer = function(timer){
+			//Persist to DB
+			var timersRef = usersFolder.child($rootScope.currentUser.$id).child('timers');
+			timersRef.push().set(timer);
 		};
 
 		return {
@@ -174,15 +180,7 @@ ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject',
 				}else{
 					console.log("TimerSvc: Creating Base Timer");
 					chronos.timer = createBaseTimer();
-					//Persist to DB
-					// chronos.timer.listtotals.set("Default List", 
-		 		// 			{ listname: "Default List", totalTime: 0, start:new Date()} );
-		 		// 	chronos.timer.listtotals.set("Second List", 
-		 		// 			{ listname: "Second List", totalTime: 10, start:new Date()} );
-
-					var timersRef = usersFolder.child($rootScope.currentUser.$id).child('timers');
-					var newTimerRef = timersRef.push();
-					newTimerRef.set(chronos.timer);
+					persistTimer(chronos.timer);
 				}
 				return chronos.timer;
 			},
