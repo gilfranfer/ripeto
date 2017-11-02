@@ -31,9 +31,37 @@ Chronos{
 	]
 }
 */
-ripetoApp.controller('TimerCntrl', ['$scope', '$rootScope', 'TimerSvc', 
-	function($scope, $rootScope,TimerSvc){
+ripetoApp.controller('TimerCntrl', ['$scope', '$rootScope', 'TimerSvc','$firebaseAuth', '$firebaseArray','$firebaseObject', 
+	function($scope, $rootScope,TimerSvc, $firebaseAuth, $firebaseArray, $firebaseObject){
 		
+		//Firebase stuff
+		var auth = $firebaseAuth();
+		var usersFolder = firebase.database().ref().child('users');
+
+		auth.$onAuthStateChanged( function(authUser){
+    		if(authUser){
+				console.log("TimerCntrl - Auth change");
+
+				//Load only lists tha are not "Secret"
+				let activeTimerRef = usersFolder.child(authUser.uid).child('chronos').child('activeTimer');
+				let activeTimer = $firebaseObject( activeTimerRef );
+
+				activeTimer.$loaded()
+				  .then(function(activeTimer) {
+				  	// console.log("Active Timer:");
+				  	// console.log(data);
+					TimerSvc.init(data);
+				  })
+				  .catch(function(error) {
+				    console.log("DBTIMER error:"+ error);
+				  });
+
+				//userListsArray.$loaded().then( function(data){ console.log(data); } );
+				//openTasksArray.$watch( function(data){} );
+			}
+		});
+
+
 		/* This function will be executed to start counting time for a list or task.
 		First we need to check in firebase if the user has a Time set running or not.
 		Then we will stop the runnig timer (if any), then we can create a new 
@@ -148,9 +176,16 @@ ripetoApp.factory( 'TimerSvc', ['$rootScope','$firebaseObject',
 		};
 
 		var persistTimer = function(timer){
-			//Persist to DB
 			var timersRef = usersFolder.child($rootScope.currentUser.$id).child('timers');
-			timersRef.push().set(timer);
+			var newTimerRef = timersRef.push();
+			newTimerRef.set(timer);
+
+		};
+
+		var persistTimeset = function(timer){
+			//Persist to DB
+			var timesetRef = usersFolder.child($rootScope.currentUser.$id).child('timers');
+			timesetRef.push().set(timer);
 		};
 
 		return {
